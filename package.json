@@ -1,6 +1,6 @@
 {
   "name": "cod4x-webadmin",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node ./bin/www"
