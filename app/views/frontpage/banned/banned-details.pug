@@ -99,7 +99,7 @@ block content
 											textarea#message.form-control.input-sm.html-editor(rows='25' name='message', required)
 										.form-group
 											input(type='hidden', name='banid', value=results.getbanned._id)
-											input(type='hidden', name='notifymessage', class="notifymessage", value=t('frontpages:banned.banned_details_notify_msg')' '+results.getbanned.player_name)
+											input(type='hidden', name='notifymessage', class="notifymessage", value=t('frontpages:banned.banned_details_notify_msg')+' '+results.getbanned.player_name)
 											input(type='hidden', name='_csrf', value=csrfToken)
 											button.btn.bgm-bluegray.btn-block.waves-effect(type='submit') #{t('frontpages:banned.banned_details_btn_send')}
 block extrajs

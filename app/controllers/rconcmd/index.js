@@ -420,7 +420,7 @@ module.exports = {
 							}).then(function(returninfo){										
 								if (req.body.rcon_cmd=='kick'){
 									if ( typeof results.getcommand.send_back_message_to_server !== 'undefined' && results.getcommand.send_back_message_to_server==true){
-										var cmdinform = 'say '+main_lng('rcon_commands:RconAdminAction.kick_msg_game_server', {get_PlayerName: req.body.rcon_player, get_AdminName: req.user.local.user_name, get_Reason: setdefault_reaso});
+										var cmdinform = 'say '+main_lng('rcon_commands:RconAdminAction.kick_msg_game_server', {get_PlayerName: req.body.rcon_player, get_AdminName: req.user.local.user_name, get_Reason: setdefault_reason});
 										return rcon.command(cmdinform);
 									}
 								}
@@ -909,7 +909,7 @@ module.exports = {
 													if (req.body.message){
 														setdefault_reason = req.body.message;
 														var cmd = 'kick'+' '+req.body.rcon_player+' '+setdefault_reason;
-														var	rcon = require('srcds-rcon')({address:servers.ip+':'+servers.port,password: servers.rcon_password});
+														var	rcon = require('srcds-rcon')({address:results.servers.ip+':'+results.servers.port,password: results.servers.rcon_password});
 														rcon.connect()
 														.then(function(connected){
 															return rcon.command(cmd);
@@ -951,7 +951,7 @@ module.exports = {
 											if (req.body.message){
 												setdefault_reason = req.body.message;
 												var cmd = 'kick'+' '+req.body.rcon_player+' '+setdefault_reason;
-												var	rcon = require('srcds-rcon')({address:servers.ip+':'+servers.port,password: servers.rcon_password});
+												var	rcon = require('srcds-rcon')({address:results.servers.ip+':'+results.servers.port,password: results.servers.rcon_password});
 												rcon.connect()
 												.then(function(connected){
 													return rcon.command(cmd);
@@ -1217,7 +1217,7 @@ module.exports = {
 					.then(function(server_admins) {
 						if (server_admins){
 							if (req.user.local.user_role >= results.requiredpower.minimum_power_for_player_unban){
-								var	rcon = require('srcds-rcon')({address:servers.ip+':'+servers.port,password: servers.rcon_password});
+								var	rcon = require('srcds-rcon')({address:server_admins.ip+':'+server_admins.port,password: server_admins.rcon_password});
 								rcon.connect()
 								.then(function(connected){
 									if ( typeof results.getcommand.send_back_message_to_server !== 'undefined' && results.getcommand.send_back_message_to_server==true){
@@ -1302,7 +1302,7 @@ module.exports = {
 					.then(function(server_admins) {
 						if (server_admins){
 							if (req.user.local.user_role >= results.requiredpower.minimum_power_for_player_unban){
-								var	rcon = require('srcds-rcon')({address:servers.ip+':'+servers.port,password: servers.rcon_password});
+								var	rcon = require('srcds-rcon')({address:server_admins.ip+':'+server_admins.port,password: server_admins.rcon_password});
 								rcon.connect()
 								.then(function(connected){
 									if ( typeof results.getcommand.send_back_message_to_server !== 'undefined' && results.getcommand.send_back_message_to_server==true){

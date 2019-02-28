@@ -289,19 +289,19 @@ block content
 													each row in results.tempbans
 														if (row.category_alias=="minute")
 															if (row.time_number == 1)
-																time_label=t('rcon_commands:input_select_time.m')
+																- var time_label=t('rcon_commands:input_select_time.m')
 															else
-																time_label=t('rcon_commands:input_select_time.mm')
+																- var time_label=t('rcon_commands:input_select_time.mm')
 														if (row.category_alias=="hour")
 															if (row.time_number == 1)
-																time_label=t('rcon_commands:input_select_time.h')
+																- var time_label=t('rcon_commands:input_select_time.h')
 															else
-																time_label=t('rcon_commands:input_select_time.hh')
+																- var time_label=t('rcon_commands:input_select_time.hh')
 														if (row.category_alias=="day")
 															if (row.time_number == 1)
-																time_label=t('rcon_commands:input_select_time.d')
+																- var time_label=t('rcon_commands:input_select_time.d')
 															else
-																time_label=t('rcon_commands:input_select_time.dd')
+																- var time_label=t('rcon_commands:input_select_time.dd')
 														option(value=row.short_label) #{row.time_number} #{time_label}
 								else
 									input(type='hidden', name='tempbanduration', value=results.rcon_extra.default_tempban_time+'m')
@@ -332,20 +332,20 @@ block content
 												option(value="") #{t('frontpages:server.server_input_select_time_interval')}
 												each row in results.tempbans
 													if (row.category_alias=="minute")
-															if (row.time_number == 1)
-																time_label=t('rcon_commands:input_select_time.m')
-															else
-																time_label=t('rcon_commands:input_select_time.mm')
+														if (row.time_number == 1)
+															- var time_label=t('rcon_commands:input_select_time.m')
+														else
+															- var time_label=t('rcon_commands:input_select_time.mm')
 													if (row.category_alias=="hour")
 														if (row.time_number == 1)
-															time_label=t('rcon_commands:input_select_time.h')
+															- var time_label=t('rcon_commands:input_select_time.h')
 														else
-															time_label=t('rcon_commands:input_select_time.hh')
+															- var time_label=t('rcon_commands:input_select_time.hh')
 													if (row.category_alias=="day")
 														if (row.time_number == 1)
-															time_label=t('rcon_commands:input_select_time.d')
+															- var time_label=t('rcon_commands:input_select_time.d')
 														else
-															time_label=t('rcon_commands:input_select_time.dd')
+															- var time_label=t('rcon_commands:input_select_time.dd')
 													option(value=row.short_label) #{row.time_number} #{time_label}
 								.form-group
 									.fg-line.form-group
@@ -374,20 +374,20 @@ block content
 												option(value="") #{t('frontpages:server.server_input_select_time_interval')}
 												each row in results.tempbans
 													if (row.category_alias=="minute")
-															if (row.time_number == 1)
-																time_label=t('rcon_commands:input_select_time.m')
-															else
-																time_label=t('rcon_commands:input_select_time.mm')
+														if (row.time_number == 1)
+															- var time_label=t('rcon_commands:input_select_time.m')
+														else
+															- var time_label=t('rcon_commands:input_select_time.mm')
 													if (row.category_alias=="hour")
 														if (row.time_number == 1)
-															time_label=t('rcon_commands:input_select_time.h')
+															- var time_label=t('rcon_commands:input_select_time.h')
 														else
-															time_label=t('rcon_commands:input_select_time.hh')
+															- var time_label=t('rcon_commands:input_select_time.hh')
 													if (row.category_alias=="day")
 														if (row.time_number == 1)
-															time_label=t('rcon_commands:input_select_time.d')
+															- var time_label=t('rcon_commands:input_select_time.d')
 														else
-															time_label=t('rcon_commands:input_select_time.dd')
+															- var time_label=t('rcon_commands:input_select_time.dd')
 													option(value=row.short_label) #{row.time_number} #{time_label}
 								.form-group
 									.fg-line.form-group
