@@ -1,0 +1,14 @@
+{
+    "local_login": {
+        "error_no_user": "Ne postoji korisnik s tim Email-om!",
+        "error_wrong_password": "Oops! Pogrešna zaporka!",
+        "error_user_exist": "Već postoji nalog s tim Email-om!"
+    },
+
+    "input_validation": {
+        "user_name": "Upišite Korisničko Ime!",
+        "email": "Pogrešan Email!",
+        "password": "Pogrešna zaporka, mora imati barem 6 karaktera!",
+        "confirmPassword": "Zaporke se ne podudaraju!"
+    }
+}

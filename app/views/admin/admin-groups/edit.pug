@@ -1,0 +1,35 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li
+				a(href='/admin/admin-groups') Admin Groups
+			li.active Edit
+		section#content
+			.container.container-alt
+				.row
+					.col-md-12
+						.card
+							.card-header
+								h2 Edit Admin Group
+									small Edit server admin group here
+							.card-body.card-padding
+								form(method='post', action='/admin/admin-groups/edit/update/'+results._id)
+										.form-group.fg-line
+											label(for='name')
+												span.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content='Group name must be unique' title="" data-original-title="Group Name")
+												|  * Group name
+											input#name.form-control.input-sm(type='text', name='name', required, value=results.name)
+										.form-group.fg-line
+											label(for='power')
+												span.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content='Group power must be unique and number' title="" data-original-title="Group Power")
+												|  * Power
+											input#power.form-control.input-sm(type='text', name='power', required, value=results.power)
+										.form-group
+											input(type='hidden', name='_csrf', value=csrfToken)
+											button.btn.btn-primary.pull-right.waves-effect(type='submit') Edit Server
+								.clearfix

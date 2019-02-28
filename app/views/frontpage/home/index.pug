@@ -1,0 +1,118 @@
+extends ../../layout/home
+
+block content
+	section#content
+		.container
+			.block-header
+				h2
+					i.zmdi.zmdi-apps
+					|  #{websitename}
+			.row
+				.col-md-9.col-sm-6
+					if (success_messages.length > 0)
+						.row
+							.col-sm-12.col-md-12.m-t-30
+								.alert.alert-success
+									| #{success_messages}
+					if (error_messages.length > 0)
+						.row
+							.col-sm-12.col-md-12.m-t-30
+								.alert.alert-danger
+									| #{error_messages}
+					.row
+						each row in results.servers
+							.col-sm-6.col-md-4.animated.flipInX.forum-categories-block
+								.card
+									.card-header.forum-categories-block-header(class="bgm-"+row.color)
+										h2
+											a(href="/"+row.name_alias)
+												i(class='m-r-5 flag-icon flag-icon-'+row.country_shortcode)
+												|  #{row.name}
+											small
+												span.zmdi.zmdi-accounts 
+												|  #{t('frontpages:home.home_online_players')} #{row.online_players}
+												br
+												span.zmdi.zmdi-globe
+												|  #{row.ip}:#{row.port}
+												br
+												span.zmdi.zmdi-pin
+												|  #{t('frontpages:home.home_map')} #{row.map_playing}
+										a.bgm-lightblue.btn.btn-default.bg.btn-float.waves-effect.waves-circle.waves-float(href="/"+row.name_alias)
+											i.zmdi.zmdi-plus
+									.card-body.forum-categories-block-body.card-padding
+										span.lgi-heading.pull-left.m-r-5
+											span.zmdi.zmdi-refresh
+										small.lgi-text
+											if (row.is_stoped === false)
+												span.c.green
+													| #{t('frontpages:home.home_online')}
+												span.c.gray
+													| - #{t('frontpages:home.home_scanned')} #{moment(row.updatedAt).fromNow()}
+											else
+												span.c-red
+													| #{t('frontpages:home.home_server_offline')}
+				.col-md-3.col-sm-6
+					if (user)
+						if (user.local.user_role < 2)
+							.card
+								.card-header.bgm-lightblue
+									h2
+										| #{t('frontpages:home.home_admin_applications_title')}
+										small 
+											| #{t('frontpages:home.home_admin_applications_title_small')}
+									a.bgm-lightgreen.btn.btn-default.bg.btn-float.waves-effect.waves-circle.waves-float(href="/admin-applications")
+										i.zmdi.zmdi-comment-more
+								.card-body.card-padding
+									| #{t('frontpages:home.home_admin_aplications_text')}
+						if (user.local.user_role > 1)
+							if (results.adminconversations > 0)
+								.card
+									.card-body.card-padding.bgm-pink.c-white
+										a.c-white(href="/admin-conversations") 
+											span.zmdi.zmdi-info
+											|  #{t('frontpages:home.home_admin_applications_text_2')}
+					.card
+						.card-header
+							h2
+								| #{t('frontpages:home.home_admin_actions')}
+								small 
+									| #{t('frontpages:home.home_latest_admin_actions')}
+						.card-body
+							.list-group
+								each tempban in results.tempbans
+									a.list-group-item.media.animated.zoomIn(href='/members/'+tempban.admin_id)
+										.media-body
+											.lgi-heading
+												span(class="btn btn-circle m-r-15 btn-xs bgm-deeporange")
+													if (tempban.admin_command=='chat')
+														| VCM
+													else if (tempban.admin_command=='mute')
+														| VM
+													else
+														| TB
+												| #{tempban.player_name}
+											ul.lgi-attrs
+												li
+													| #{t('frontpages:home.home_by_admin')} #{tempban.admin_name}
+												li
+													| #{moment(tempban.createdAt).fromNow()}
+					.card
+						.card-header
+							h2
+								| #{t('frontpages:home.home_latest_permbans')}
+								small 
+									| #{t('frontpages:home.home_latest_permbans_text')}
+						.card-body
+							.list-group
+								each ban in results.serverbans
+									a.list-group-item.media.animated.zoomIn(href='/banlist/'+ban._id)
+										.media-body
+											.lgi-heading
+												span(class="btn btn-circle m-r-15 btn-xs bgm-red")
+													| PB
+												| #{ban.player_name}
+											ul.lgi-attrs
+												li
+													| #{t('frontpages:home.home_by_admin')} #{ban.admin_name}
+												li
+													| #{moment(ban.createdAt).fromNow()}

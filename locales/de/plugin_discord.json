@@ -1,0 +1,26 @@
+{
+    "cheater_reports_msg": {
+        "msg_title": "Neuer Cheater Bericht",
+        "message": "{{getUserName}} hat {{getReportedPlayer}} als Cheater gemeldet! Für weitere Informationen besuchen Sie bitte {{get_website}}!"
+    },
+
+    "unban_request_msg": {
+        "msg_title": "Neue unban Anfrage",
+        "message": "Neue unban-Anfrage von {{getUserName}} gesendet! Für weitere Informationen besuchen Sie bitte {{get_website}}!"
+    },
+
+    "new_admin_application_msg": {
+        "msg_title": "Neue Admin-Anwendung",
+        "message": "{{getUserName}} hat eine neue Admin-Anwendung gesendet! Für weitere Informationen besuchen Sie bitte {{get_website}}!"
+    },
+
+    "new_admin_added_msg": {
+        "msg_title": "Wir haben einen neuen Server-Admin",
+        "message": "Glückwunsch {{getUserName}} !!! Willkommen zu {{get_website}}!"
+    },
+
+    "new_admin_conversation": {
+        "msg_title": "Neue Admin-Unterhaltung wurde gestartet",
+        "message": "{{getUserName}} hat eine neue Admin-Konversation gestartet. Helfen Sie uns, die richtige Entscheidung zu treffen! Wenn Sie über Administratorrechte verfügen, besuchen Sie {{get_website}}!"
+    }
+}

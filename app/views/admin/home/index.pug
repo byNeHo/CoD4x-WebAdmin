@@ -1,0 +1,388 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li.active Admin
+		section#content
+			.container.container-alt
+				.row
+					.col-md-8
+						if (success_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-success
+										| #{success_messages}
+						if (error_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-danger
+										| #{error_messages}
+						if (info_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-warning
+										| #{info_messages}
+						.row
+							.card
+								.card-header
+									h2
+										span.zmdi.zmdi-tv-play
+										|  Manage Call of Duty Servers
+										small Manage your Call of Duty Servers, create, delete, download CoD4 servers
+									ul.actions
+										li.dropdown
+											a(href='', data-toggle='dropdown')
+												i.zmdi.zmdi-more-vert
+											ul.dropdown-menu.dropdown-menu-right
+												li
+													a(href='/admin/download-game-server-files') Download Server Files
+												li
+													a(href='/admin/extract-game-server-files') Extract Server Files
+								.card-body.card-padding
+									.row
+										ul.tab-nav(role='tablist')
+											li.active
+												a(href='#local_servers', aria-controls='local_servers', role='tab', data-toggle='tab')
+													| Local Game Servers
+													span.m-l-10.label.label-success=results.local_servers.length
+											li
+												a(href='#external_servers', aria-controls='external_servers', role='tab', data-toggle='tab')
+													| External Game Servers
+													span.m-l-10.label.label-warning=results.external_servers.length
+											li
+												a(href='#add_server', aria-controls='add_server', role='tab', data-toggle='tab')
+													| Add new Server
+										.tab-content
+											#local_servers.tab-pane.active(role='tabpanel')
+												.list-group.lg-odd-black
+													each row in results.local_servers
+														.list-group-item.media
+															.pull-left
+																if (row.is_stoped===true)
+																	a.btn.waves-effect.pull-right.m-r-15.btn.btn-xs.bgm-lightgreen(href="/admin/start-local-server/"+row.id)
+																		span.zmdi.zmdi-play
+																else 
+																	a.btn.waves-effect.pull-right.m-r-15.btn.btn-xs.bgm-red(href="/admin/stop-local-server/"+row.id)
+																		span.zmdi.zmdi-stop
+															.pull-right
+																.actions.dropdown
+																	a(href='', data-toggle='dropdown', aria-expanded='true')
+																		i.zmdi.zmdi-more-vert
+																	ul.dropdown-menu.dropdown-menu-right
+																		li
+																			a(href='/admin/servers/edit/'+row._id) Edit
+																		li
+																			a(href='/admin/servers/rconconsole/'+row._id) Rcon Console
+																		li.divider
+																		li
+																			a(href='/admin/servers/delete-local/'+row._id) Delete
+															.media-body
+																.lgi-heading
+																	| #{row.name} - #{row.ip}:#{row.port}
+											#external_servers.tab-pane(role='tabpanel')
+												.list-group.lg-odd-black
+													each row in results.external_servers
+														.list-group-item.media
+															.pull-left
+															.pull-right
+																.actions.dropdown
+																	a(href='', data-toggle='dropdown', aria-expanded='true')
+																		i.zmdi.zmdi-more-vert
+																	ul.dropdown-menu.dropdown-menu-right
+																		li
+																			a(href='/admin/servers/edit/'+row._id) Edit
+																		li
+																			a(href='/admin/servers/rconconsole/'+row._id) Rcon Console
+																		li.divider
+																		li
+																			a(href='/admin/servers/delete/'+row._id) Delete
+															.media-body
+																.lgi-heading
+																	| #{row.name} - #{row.ip}:#{row.port}
+											#add_server.tab-pane(role='tabpanel')
+												.col-md-3.text-center
+													if (addlocalServer==true)
+														a.admin-panel(href="#", data-toggle="modal" data-target="#myModalLocal")
+															span.zmdi.zmdi-plus.zmdi-hc-3x
+															br
+															| Add Local Server
+													else
+														a.admin-panel(href="#")
+															span.zmdi.zmdi-plus.zmdi-hc-3x
+															br
+															span.c-red
+																| Only Linux Compatible
+												.col-md-3.text-center
+													a.admin-panel(href="#", data-toggle="modal" data-target="#myModal")
+														span.zmdi.zmdi-plus.zmdi-hc-3x
+														br
+														| Add External Server
+												.clearfix
+							.clearfix
+						.row
+							.card
+								.card-header
+									h2
+										span.zmdi.zmdi-accounts-alt
+										|  Users
+										small Manage your Users, User Groups
+								.card-body.card-padding
+									.col-md-3.text-center
+										a.admin-panel(href="/admin/manage-users")
+											span.zmdi.zmdi-account-box.zmdi-hc-3x
+											br
+											| Users
+									.col-md-3.text-center
+										a.admin-panel(href="/admin/admin-groups")
+											span.zmdi.zmdi-accounts.zmdi-hc-3x
+											br
+											| User Groups
+									.clearfix
+						.row
+							.card
+								.card-header
+									h2
+										span.zmdi.zmdi-apps
+										|  Website Settings
+										small CoD4x-WebaAdmin website Settings
+								.card-body.card-padding
+									.row
+										.col-md-3.text-center
+											a.admin-panel(href="/admin/plugins")
+												span.zmdi.zmdi-folder-star.zmdi-hc-3x
+												br
+												| Plugins
+										.col-md-3.text-center
+											a.admin-panel(href="/admin/maps")
+												span.zmdi.zmdi-map.zmdi-hc-3x
+												br
+												| CoD4 Maps
+										.col-md-3.text-center
+											a.admin-panel(href="/admin/rcon-settings")
+												span.zmdi.zmdi-settings.zmdi-hc-3x
+												br
+												| Commands Settings
+										.col-md-3.text-center
+											a.admin-panel(href="/admin/tempban-durations")
+												span.zmdi.zmdi-time.zmdi-hc-3x
+												br
+												| Tempban Durations
+									.clearfix
+						.row
+							.card
+								.card-header
+									h2
+										span.zmdi.zmdi-play
+										|  Plugin Julia Settings
+										small CoD4x-WebaAdmin Plugin Julia, this options are only available if u load plugin Julia on your Game Servers
+								.card-body.card-padding
+									.row
+										.col-md-3.text-center
+											a.admin-panel(href="/admin/server-commands")
+												span.zmdi.zmdi-code-setting.zmdi-hc-3x
+												br
+												| Server Commands
+									.clearfix
+						.row
+							.card
+								.card-header
+									h2
+										span.zmdi.zmdi-archive
+										|  Advanced
+										small CoD4x-WebaAdmin backup your database or restore it to the latest backed up version
+								.card-body.card-padding
+									.row
+										.col-md-3.text-center
+											a.admin-panel(href="/admin/backup-mongodb")
+												span.zmdi.zmdi-archive.zmdi-hc-3x
+												br
+												| Backup DB
+										.col-md-3.text-center
+											a.admin-panel(href="/admin/restore-mongodb")
+												span.zmdi.zmdi-assignment-return.zmdi-hc-3x
+												br
+												| Restore DB from Backup
+										.col-md-3.text-center
+											a.admin-panel(href="/sitemap.xml", target="_blank")
+												span.zmdi.zmdi-file.zmdi-hc-3x
+												br
+												| Sitemap
+									.clearfix
+					.col-md-4
+						.row
+							.col-sm-12.col-md-12
+								.card
+									.card-header
+										h2
+											span.zmdi.zmdi-time.m-r-15
+											| CronJob Logs
+									.card-body
+										.pre-scrollable.p-15(style="height:300px")
+											.lg-odd-black
+												each row in results.sysinfo
+													.list-group-item
+														.m-b-15
+															.span.badge.bgm-green.f-12.m-r-15 Success
+															span.f-12
+																| #{row.logline}
+														.c-gray.f-11.text-right
+															| #{moment(row.createdAt).format('MMMM Do YYYY, h:mm')}
+										.clearfix
+						.row
+							.col-sm-12.col-md-12
+								.card
+									.card-header
+										h2
+											span.zmdi.zmdi-github
+											|  CoD4x WebAdmin version check
+										ul.actions
+											li
+												a(href='/admin/check-github-relase')
+													i.zmdi.zmdi-refresh-alt
+									.card-body
+										if (results.appversion.local_version!=results.appversion.github_version)
+											.alert.alert-danger
+												.m-b-20
+													| You are running
+													br
+													| CoD4x-WebaAdmin #{results.appversion.local_version}
+												div
+													| A new version (#{results.appversion.github_version}) has been released. Consider upgrading your
+													br
+													br
+													a.alert-link(href="https://forum.cirkus-serveri.com/topic/19/upgrading-your-cod4x-webadmin-application")
+														| CoD4xWebAdmin application
+										else
+											.alert.alert-success
+												.m-b-20
+													| You are running
+													br
+													| CoD4x-WebAdmin #{results.appversion.local_version}
+												div
+													i.zmdi.zmdi-shield-check
+													|  You are 
+													strong up-to-date
+										.p-20
+											p Always make sure that your CoD4x-WebAdmin application is up to date for the latest security patches and bug fixes.
+											div
+												i.zmdi.zmdi-shield-check
+												|  CoD4xWebAdmin 
+												a(href="https://forum.cirkus-serveri.com", target="_blank") Forum
+												|  |  
+												a(href="https://github.com/byNeHo/CoD4x-WebAdmin", target="_blank") Github
+										.clearfix
+						if ( typeof results.cod4xversion.github_version !== 'undefined' && results.cod4xversion.github_version )
+							.row
+								.col-sm-12.col-md-12
+									.card
+										.card-header.bgm-lightgreen
+											h2
+												span.zmdi.zmdi-refresh-sync
+												|  CoD4x Server Files
+										.card-body.card-padding
+											.m-b-20
+												| Latest CoD4x Server version on Github
+												br
+												br
+												span.strong Version:
+												|  #{results.cod4xversion.github_version}
+												br
+												span.strong Prerelase: 
+												if (results.cod4xversion.prerelease === true)
+													span.c-indigo True
+												else
+													span.c-indigo False
+												br
+												span.strong Last scan: 
+												| #{moment(results.cod4xversion.updatedAt).fromNow()}
+											div
+												i.zmdi.zmdi-shield-check
+												|  CoD4x 
+												a(href="https://cod4x.me/index.php?/forums/", target="_blank") Forum
+												|  |  
+												a(href="https://github.com/callofduty4x/CoD4x_Server", target="_blank") Github
+											.clearfix
+		#myModal.modal.fade(role='dialog')
+			.modal-dialog
+				.modal-content
+					.modal-header
+						button.close(type='button', data-dismiss='modal') ×
+						h4.modal-title Add new External Server
+					.modal-body
+						form(method='post', action='/admin/servers/new/save')
+							.form-group.fg-line
+								label(for='color')
+									|  Card Background Color
+								.select
+									select.form-control(name='color', required)
+										option(value='') choose
+										each row in results.colors
+											option(value=row.name) #{row.name}
+							.form-group.fg-line
+								label
+									|  * Server IP
+								input.form-control.input-sm(type='text', name='ip', required)
+							.form-group.fg-line
+								label
+									|  * Server Port
+								input.form-control.input-sm(type='text', name='port', required)
+							.form-group.fg-line
+								label
+									|  Rcon Password
+								input.form-control.input-sm(type='password', name='rcon_password')
+							.form-group.fg-line
+								label
+									span.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content='Identkey used with CoD4x plugin screenshots for sending screenshots from game server to the website. After you add a new server go to edit server on the right side there are some instructions. If you would like to recive screenshots separated for every server create unique Identkeys for every server' title="" data-original-title="Screenshot identkey")
+									|  Screenshot identkey
+								input.form-control.input-sm(type='text', name='screenshot_identkey')
+							.form-group.fg-line
+								label
+									span.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content='Identkey used with CoD4x plugin Julia for sending data from game server to the website. After you add a new server go to edit server on the right side there are some instructions. If you would like to recive screenshots separated for every server create unique Identkeys for every server' title="" data-original-title="Julia identkey")
+									|  Julia identkey
+								input.form-control.input-sm(type='text', name='julia_identkey')
+							.form-group
+								input(type='hidden', name='_csrf', value=csrfToken)
+								button.btn.btn-primary.waves-effect(type='submit') Add new Server
+		#myModalLocal.modal.fade(role='dialog')
+			.modal-dialog
+				.modal-content
+					.modal-header
+						button.close(type='button', data-dismiss='modal') ×
+						h4.modal-title Add new Local Server
+					.modal-body
+						form(method='post', action='/admin/servers/newlocal/save')
+							.form-group.fg-line
+								label(for='color')
+									|  Card Background Color
+								.select
+									select.form-control(name='color', required)
+										option(value='') choose
+										each row in results.colors
+											option(value=row.name) #{row.name}
+							.form-group.fg-line
+								label
+									|  * Server Port
+								input.form-control.input-sm(type='text', name='port', required)
+							.form-group.fg-line
+								label
+									|  * Server Slots
+								input.form-control.input-sm(type='text', name='server_slots', required)
+							.form-group.fg-line
+								label
+									|  Rcon Password
+								input.form-control.input-sm(type='password', name='rcon_password')
+							.form-group.fg-line
+								label(for='screenshot_identkey')
+									span.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content='Identkey used with CoD4x plugin screenshots for sending screenshots from game server to the website. After you add a new server go to edit server on the right side there are some instructions. If you would like to recive screenshots separated for every server create unique Identkeys for every server' title="" data-original-title="Screenshot identkey")
+									|  Screenshot identkey
+								input#screenshot_identkey.form-control.input-sm(type='text', name='screenshot_identkey')
+							.form-group.fg-line
+								label
+									span.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content='Identkey used with CoD4x plugin Julia for sending data from game server to the website. After you add a new server go to edit server on the right side there are some instructions. If you would like to recive screenshots separated for every server create unique Identkeys for every server' title="" data-original-title="Julia identkey")
+									|  Julia identkey
+								input.form-control.input-sm(type='text', name='julia_identkey')
+							.form-group
+								input(type='hidden', name='_csrf', value=csrfToken)
+								button.btn.btn-primary.waves-effect(type='submit') Add new Server

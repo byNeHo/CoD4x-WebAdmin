@@ -1,0 +1,17 @@
+{  
+    "main_navigation": {
+        "home": "Naslovna",
+        "members": "Članovi",
+        "banlist": "Ban Lista",
+        "players_data": "Podaci o Igračima",
+        "latest_notifications":"Najnovije Obavijesti",
+        "view_all":"Prikaži Sve",
+        "login":"Prijavi Se",
+        "register":"Registriraj Se",
+        "admin":"Admin",
+        "profile":"Profil",
+        "logout":"Odjavi Se",
+        "my_profile":"Moj Profil",
+        "cheater_reports":"Cheater Izvješća"
+    }
+}

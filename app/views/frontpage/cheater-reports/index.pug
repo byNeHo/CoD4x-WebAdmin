@@ -1,0 +1,71 @@
+extends ../../layout/home
+
+block content
+	ol.breadcrumb
+		li
+			a(href='/') #{t('navigation:main_navigation.home')}
+		li.active #{t('frontpages:chetaer_reports.chetaer_reports_bc_active')}
+	section#content
+		.container.container-alt
+			.block-header
+				h2
+					| #{t('frontpages:chetaer_reports.chetaer_reports_h2')}
+					small #{t('frontpages:chetaer_reports.chetaer_reports_h2_small')}
+			if (success_messages.length > 0)
+				.row
+					.col-sm-12.col-md-12.m-t-30
+						.alert.alert-success
+							| #{success_messages}
+			if (error_messages.length > 0)
+				.row
+					.col-sm-12.col-md-12.m-t-30
+						.alert.alert-danger
+							| #{error_messages}
+			if (rconconsole_messages.length > 0)
+				.row
+					.col-sm-12.col-md-12.m-t-30
+						.alert.alert-info
+							| #{rconconsole_messages}
+			.card
+				.card-header
+					h2 #{t('frontpages:chetaer_reports.chetaer_reports_card_h2')}
+						small #{t('frontpages:chetaer_reports.chetaer_reports_card_h2_small')}
+				if (results.admincheaterreports.length > 0)	
+					.list-group.lg-odd-black
+						each adminnotification in results.admincheaterreports
+							.list-group-item.media
+								.checkbox.pull-left
+									a(href='/members/'+adminnotification.sender_id._id)
+										img.lgi-img(src=adminnotification.sender_id.local.avatar_60, alt='img', data-toggle="tooltip", data-placement="top", title="", data-original-title=t('frontpages:chetaer_reports.chetaer_reports_card_tooltip')+' '+adminnotification.sender_id.local.user_name)
+								.pull-right
+									.actions.dropdown
+										a(href='', data-toggle='dropdown')
+											i.zmdi.zmdi-more-vert
+										ul.dropdown-menu.dropdown-menu-right.bgm-red
+											li
+												a(href='/cheater-report/delete/'+adminnotification.cheater_report_id._id)
+													span.zmdi.zmdi-thumb-up
+													|  #{adminnotification.cheater_report_id.player_name} #{t('frontpages:chetaer_reports.chetaer_reports_is_clean')}
+											li.divider
+											li
+												a(href='/rconcmd/cheater-report/permban/'+adminnotification.cheater_report_id._id)
+													span.zmdi.zmdi-thumb-down
+													|  #{t('frontpages:chetaer_reports.chetaer_reports_permabn')} #{adminnotification.cheater_report_id.player_name}
+								.media-body
+									.lgi-heading
+										span(class="btn m-r-15 btn-xs bgm-red")
+											| #{adminnotification.notification_msg}
+									ul.lgi-attrs
+										li 
+											| #{t('frontpages:chetaer_reports.chetaer_reports_reported_player')} 
+											strong.red #{adminnotification.cheater_report_id.player_name}
+										li 
+											| #{t('frontpages:chetaer_reports.chetaer_reports_reported_players_guid')} 
+											strong.red #{adminnotification.cheater_report_id.player_guid}
+										li
+											| #{t('frontpages:chetaer_reports.chetaer_reports_report_submited')} #{moment(adminnotification.createdAt).fromNow()}
+										li.lightbox
+											span(data-src=adminnotification.cheater_report_id.player_screenshot)
+												span.lightbox-item
+													span.zmdi.zmdi-camera
+													|  #{t('frontpages:chetaer_reports.chetaer_reports_screenshot')}

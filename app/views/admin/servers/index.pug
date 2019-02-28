@@ -1,0 +1,111 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li.active My Servers
+		section#content
+			.container.container-alt
+				.row
+					.col-md-12
+						if (success_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-success
+										| #{success_messages}
+						if (error_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-danger
+										| #{error_messages}
+						.card
+							.card-header
+								h2 My Servers
+									small Manage your servers here
+								a.btn.bgm-green.btn-float.waves-effect(data-toggle="modal" data-target="#myModal")
+									i.zmdi.zmdi-plus
+							.table-responsive.m-t-20
+								table.table.table-striped.m-t-20.m-b-20
+									thead
+										tr
+											th Server Name
+											th IP and Port
+											th Players
+											th Current Map
+											th
+									tbody
+										each row in results.servers
+											tr
+												td
+													a(href='/admin/servers/edit/'+row._id)
+														| #{row.name}
+													if (row.rcon_password)
+														a.m-l-15.btn.btn-xs.bgm-lightblue(href='/admin/servers/rconconsole/'+row._id)
+															i.zmdi.zmdi-code-setting
+															|  Rcon Console
+													form.pull-right(method='post', action='/admin/servers/ssh-command')
+														input(type='hidden', name='sshcommand', value='stop')
+														input(type='hidden', name='ssh_server_port', value=row.port)
+														input(type='hidden', name='_csrf', value=csrfToken)
+														button.waves-effect.pull-right.m-r-15.btn.btn-xs.bgm-red(type='submit')
+															span.zmdi.zmdi-stop
+													form.pull-right(method='post', action='/admin/servers/ssh-command')
+														input(type='hidden', name='sshcommand', value='restart')
+														input(type='hidden', name='ssh_server_port', value=row.port)
+														input(type='hidden', name='_csrf', value=csrfToken)
+														button.waves-effect.pull-right.m-r-15.btn.btn-xs.bgm-orange(type='submit')
+															span.zmdi.zmdi-refresh
+													form.pull-right(method='post', action='/admin/servers/ssh-command')
+														input(type='hidden', name='sshcommand', value='start')
+														input(type='hidden', name='ssh_server_port', value=row.port)
+														input(type='hidden', name='_csrf', value=csrfToken)
+														button.waves-effect.pull-right.m-r-15.btn.btn-xs.bgm-lightgreen(type='submit')
+															span.zmdi.zmdi-play
+												td
+													| #{row.ip}:#{row.port}
+												td
+													| #{row.online_players}
+												td
+													| #{row.map_playing}
+												td.text-right
+													a.btn.btn-danger.btn-xs(href='/admin/servers/delete/'+row._id) Delete
+		#myModal.modal.fade(role='dialog')
+			.modal-dialog
+				.modal-content
+					.modal-header
+						button.close(type='button', data-dismiss='modal') ×
+						h4.modal-title Add new Server
+					.modal-body
+						form(method='post', action='/admin/servers/new/save')
+							.form-group.fg-line
+								label(for='color')
+									|  Card Background Color
+								.select
+									select.form-control(name='color', required)
+										option(value='') choose
+										each row in results.colors
+											option(value=row.name) #{row.name}
+							.form-group
+								.checkbox
+									label
+										input(type="checkbox", name="external_ip", value="1")
+										span.input-helper
+										| External Server IP
+							.form-group.fg-line
+								label(for='ip')
+									|  * Server IP
+								input#ip.form-control.input-sm(type='text', name='ip', required)
+							.form-group.fg-line
+								label(for='port')
+									|  * Server Port
+								input#port.form-control.input-sm(type='text', name='port', required)
+							.form-group.fg-line
+								label(for='rcon_password')
+									|  Rcon Password
+								input#rcon_password.form-control.input-sm(type='password', name='rcon_password')
+							.form-group
+								input(type='hidden', name='_csrf', value=csrfToken)
+								button.btn.btn-primary.waves-effect(type='submit') Add new Server

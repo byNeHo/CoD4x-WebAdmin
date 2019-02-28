@@ -1,0 +1,135 @@
+{   
+    "general": {
+        "general_no_permission": "Nemate ovlasti za korištenje ove naredbe!",
+        "general_there_was_an_error": "Došlo je do greške: {{get_error}}",
+        "general_no_admin_rights_on_server": "Nemate Administratorska prava na ovom Serveru!",
+        "general_command_disabled_by_admin": "Ova komanda je zabranjena od strane Administratora!",
+        "is_imune": "{{get_AdminName}} je Administrator! Administratori su zaštićeni!",
+        "info_msg_sent_to_server": "Informativna poruka je poslana na Server!",
+        "default_reason": "razlog nije naveden",
+        "cmd_doesnt_exist": "Ova komanda ne postoji!",
+        "no_server_found": "Server nije pronađen!",
+        "already_banned_guid": "Ovaj GUID je već banan!"
+    },
+
+    "commands": {
+        "kick": "kik",
+        "kicked": "kikan",
+        "tempban": "tempban",
+        "tempbaned": "Privremeno Banan",
+        "permabn": "permban",
+        "permbaned": "Trajno Banan"
+    },
+
+    "input_select_time": {
+        "m": "minuta",
+        "h": "sat",
+        "d": "dan",
+        "mm": "minuta",
+        "hh": "sata",
+        "dd": "dana"
+    },
+
+    "RconConsoleCommand": {
+        "server_not_found": "Nije pronađen Server s tim ID-om!"
+    },
+
+    "RconMaprotate": {
+        "map_rotated": "Mapa uspješno rotirana!"
+    },
+
+    "RconGetssAll": {
+        "ss_all_executed": "Screenshot all naredba uspješno izvršena!"
+    },
+
+    "RconChangeMap": {
+        "map_changed_to_mapname": "Mapa je uspješno promijenjena na {{get_MapName}}!"
+    },
+
+    "RconTempban": {
+        "wrong_time_format": "Pogrešan format vremena za privremene banove!",
+        "tempban_msg_web": "{{get_PlayerName}} je uspješno Privremeno Banan ({{get_TimeNumber}} {{get_TimeCategory}}) s razlogom {{get_Reason}}",
+        "tempban_msg_game_server": "^6{{get_PlayerName}}^7 ^6Privremeno Banan ^7od strane Admina ^5{{get_AdminName}} ^7(^6{{get_TimeNumber}} {{get_TimeCategory}}^7) s razlogom: ^6{{get_Reason}}",
+        "is_already_banned": "{{get_PlayerName}} je već Trajno Banan!"
+    },
+
+    "RconAdminAction": {
+        "kick_msg_web": "{{get_PlayerName}} uspješno kikan s razlogom {{get_Reason}}",
+        "tell_msg_web": "Privatna poruka je uspješno poslana igraču {{get_PlayerName}}",
+        "screentell_msg_web": "Velika Privatna poruka je uspješno poslana igraču {{get_PlayerName}}",
+        "kick_msg_game_server": "^6{{get_PlayerName}} ^7 je ^5Kikan ^7od strane Admina ^5{{get_AdminName}}^7 s razlogom: ^5{{get_Reason}}"
+    },
+
+    "RconChatAction": {
+        "chat_and_voice_mute_rcon_command_reason": "{{get_PlayerGuid}} Kikani ste i imate Privremenu Zabranu na chat (rok trajanja: {{get_TimeNumber}} {{get_Category}}) s razlogom: ^5{{get_Reason}}",
+        "chat_and_voice_mute_server_message": "^6{{get_PlayerName}}^7 je Kikan i ima Privremenu Zabranu na chat u trajanju od (^5 {{get_TimeNumber}} {{get_Category}} ^7) od strane Admina ^5{{get_Admin}} ^7s razlogom {{get_Reason}}",
+        "voice_mute_rcon_command_reason": "{{get_PlayerGuid}} kikani ste i imate Privremenu Zabranu na glasovne poruke (rok trajanja: {{get_TimeNumber}} {{get_Category}}) s razlogom: ^5{{get_Reason}}",
+        "voice_mute_server_message": "^6{{get_PlayerName}} ^7je Kikan i ima Privremenu Zabranu na glasovne poruke (^5 {{get_TimeNumber}} {{get_Category}} ^7) od strane Admina ^5{{get_Admin}} ^7 s razlogom {{get_Reason}}",
+        "return_message_muted_voice": "{{get_PlayerName}} uspješno kikan/glasovne poruke privremeno isključene!",
+        "return_message_muted_chat": "{{get_PlayerName}} uspješno kikan/glasovne i chat poruke privremeno isključene!"
+    },
+
+    "Rcongetss": {
+        "max_ss_hourly": "Maksimalni broj slika po satu za korisnike: {{get_MaxNumber}}!"
+    },
+
+    "RconPermban": {
+        "default_reason_for_report": "cheat detektiran na slici!",
+        "rconconsole_messages_on_ban": "{{get_PlayerName}} uspješno Trajno Banan s razlogom: {{get_Reason}}!",
+        "rconconsole_cmdinform_on_ban": "^5{{get_PlayerName}}^7 je ^1Trajno Banan ^7od strane Admina ^5{{get_Admin}} ^7s razlogom: ^5{{get_Reason}}",
+        "no_ss_found": "Ova slika ne postoji, možda je uklonjena u međuvremenu!"
+    },
+
+    "RconPermbanNoImage": {
+        "rconconsole_messages_on_ban": "{{get_PlayerName}} uspješno Trajno Banan s razlogom: {{get_Reason}}!",
+        "rconconsole_cmdinform_on_ban": "^5{{get_PlayerName}}^7 je ^1Trajno Banan ^7od strane Admina ^5{{get_Admin}} ^7s razlogom: ^5{{get_Reason}}",
+        "no_reason_given_error": "Ne možeš Banati Trajno bez navedenog razloga!"
+    },
+
+    "RconPermbanOnReport": {
+        "send_info_msg_to_reporter": "Cheater Izvjestitelj je obaviješten da je taj igrač već Trajno Banan!",
+        "ty_to_reporter": "{{get_BannedName}} je Trajno Banan zahvaljujući dojavi od strane <span class=\"c-blue\">@{{get_ReporterName}}</span>. Hvala Vam na pomoći! Doista cijenimo vašu pomoć! Dobar posao!"
+    },
+
+    "RconUnban": {
+        "success_unban": "Uspješno Odbanan Igrač!",
+        "success_unban_server_msg": "^6{{unbaned_PlayerName}} ^7uspjesno Odbanan od strane Admina ^5{{unban_AdminName}}^7!",
+        "permban_not_found": "Ovaj Trajni Ban ne postoji, možda je uklonjen u međuvremenu!"
+    },
+    
+    "globalnotifications": {
+        "globalnotifications_display_responses_link_title_cheater_report_already_banned": "{{reported_PlayerName}} je već Trajno Banan!",
+        "globalnotifications_display_responses_link_text_cheater_report_already_banned": "Odgovor Admina na Vaše Cheater Izvješće",
+        "globalnotifications_display_responses_message_cheater_report_already_banned": "Hvala na Vašem doprinosu! Doista cijenimo vašu pomoć!",
+        "globalnotifications_display_responses_plus_message_cheater_report_already_banned": "<strong>{{reported_PlayerName}}</strong> je već Trajno Banan!",
+
+        "globalnotifications_display_responses_link_title_cheater_report_declined": "Odgovor na Cheater Izvješće",
+        "globalnotifications_display_responses_link_text_cheater_report_declined": "Odgovor Admina na Vaše Cheater Izvješće",
+        "globalnotifications_display_responses_message_cheater_report_declined": "Hvala što ste nas kontaktirali! Na temelju slike koju ste nam poslali nismo primjetili nikakve neregularnosti kod {{reported_PlayerName}}!",
+
+        "globalnotifications_display_responses_link_title_cheater_report_accepted": "Odgovor na Cheater Izvješće",
+        "globalnotifications_display_responses_link_text_cheater_report_accepted": "Odgovor Admina na Vaše Cheater Izvješće",
+        "globalnotifications_display_responses_message_cheater_report_accepted": "Na temelju slike koju ste nam poslali Trajno smo Banali igrača <strong>{{get_BannedPlayerName}}</strong>! Hvala na Vašem doprinosu! Doista cijenimo vašu pomoć!",
+        "globalnotifications_display_responses_plus_message_cheater_report_accepted": "<strong>{{get_BannedPlayerName}}</strong> je trajno Banan, ban možete pronaći ovdje <a href=\"/banlist\">Banlist</a>",
+
+        "globalnotifications_display_responses_link_title_unban_request_declined": "Unban Zahtjev je Odbijen",
+        "globalnotifications_display_responses_link_text_unban_request_declined": "Odgovor Admina na Vaš zahtjev za Unban",
+        "globalnotifications_display_responses_message_unban_request_declined": "Hvala što ste nas kontaktirali! Na temelju zahtjeva za Unban koji ste nam poslali odlučili smo ga ne prihvatiti. Trajni Ban neće biti uklonjen!",
+
+        "globalnotifications_display_responses_link_title_unban_request_accepted": "Unban Zahtjev je Prihvaćen",
+        "globalnotifications_display_responses_link_text_unban_request_accepted": "Odgovor Admina na Vaš zahtjev za Unban",
+        "globalnotifications_display_responses_message_unban_request_accepted": "Odlučili smo prihvatiti vaš Unban zahtjev! Sada se možete priključiti našim Serverima!",
+
+        "globalnotifications_display_responses_link_title_admin_application_declined": "Zahtjev za Adminska prava Odbijen",
+        "globalnotifications_display_responses_link_text_admin_application_declined": "Odgovor Admina na Vašu prijavu za Admina",
+        "globalnotifications_display_responses_message_admin_application_declined": "Nakon malog razgovora s postojećim administratorima na našim Serverima, odlučili smo da ne prihvatimo Vašu prijavu za Admina! Ova odluka nije trajna i može se promijeniti u budućnosti!",
+
+        "globalnotifications_display_responses_link_title_admin_application_accepted": "Zahtjev za Adminska prava Prihvaćen",
+        "globalnotifications_display_responses_link_text_admin_application_accepted": "Odgovor Admina na Vašu prijavu za Admina",
+        "globalnotifications_display_responses_message_admin_application_accepted": "Nakon malog razgovora s postojećim administratorima na našim Serverima, odlučili smo prihvatiti Vašu prijavu za Admina! Čestitamo dobrodošli na {{get_WebSite}}!",
+        
+        "globalnotifications_display_responses_link_title_admin_application_discussion": "O Vašoj Admin prijavi će se dodatno raspravljati",
+        "globalnotifications_display_responses_link_text_admin_application_discussion": "Odgovor Admina na Vašu prijavu za Admina",
+        "globalnotifications_display_responses_message_admin_application_discussion": "Imajte na umu da može potrajati nekoliko dana dok ne odlučimo o vašoj sudbini. O Admin prijavama koje se ne odobre odmah zbog očitih razloga vodi se dodatna rsprava s drugim administratorima na našim Serverima!"
+    }
+}

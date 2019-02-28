@@ -1,0 +1,51 @@
+extends ../../layout/home
+block extrastuff
+	meta(name='_csrf', content=csrfToken)
+	link(href='/vendors/bower_components/dropzone/dist/min/dropzone.min.css', rel='stylesheet')
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li.active CoD4 Maps
+		section#content
+			.container.container-alt
+				.row
+					.col-md-12
+						if (success_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-success
+										| #{success_messages}
+						if (error_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-danger
+										| #{error_messages}
+						.card
+							.card-header
+								h2 CoD4 Maps
+									small Manage maps here
+							.card-body
+								ul#users-container.users-container
+									each row in results
+										li.users-box.registered-user
+											img.user-picture(src='/img/maps/'+row.map_name+'.jpg', alt=row.map_name)
+											br
+											.user-info
+												div
+													a(href='/admin/maps/delete/'+row._id) Delete
+												.joindate
+													span #{row.display_map_name}
+								.clearfix
+						.card.m-t-20
+								.card-header
+									h2 Map Images
+										small.red Name the maps properly example (mp_crash, mp_backlot ...), otherwise the map image will be not visible on the Server Details page
+								.card-body.card-padding
+									#dropzone-upload.dropzone
+										.fallback
+											input(name='displayImage', type='file')
+block dropzonejs
+	script(src='/vendors/bower_components/dropzone/dist/min/dropzone.min.js')

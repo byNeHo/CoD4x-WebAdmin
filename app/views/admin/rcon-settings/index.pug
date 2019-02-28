@@ -1,0 +1,163 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li.active Rcon Commands Settings
+		section#content
+			.container.container-alt
+				.text-center
+					h2.f-400 Rcon Commands Settings 
+				.clearfix
+				.row.m-t-25
+					.col-md-12
+						if (success_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-success
+										| #{success_messages}
+						if (error_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-danger
+										| #{error_messages}
+						.row
+							.col-md-12
+								form(method='post', action='/admin/server-commands/edit/update/extra/'+results.extrarcon._id)
+									.card
+										.card-header
+											h2 Screenshots Settings
+										.card-body.card-padding
+												.row
+													.col-md-12
+														h5 Enable screenshots, set Minimum Admin Power to use unlimited Screenshots
+														.row
+															.col-md-3
+																.checkbox
+																	label
+																		input(type="checkbox", name="screenshots_enabled", checked=(results.extrarcon.screenshots_enabled))
+																		span.input-helper
+																		| Enabled
+															.col-md-4
+																.select.fg-line
+																	select.form-control(name='minimum_admin_power_for_screenshots')
+																		option(value=results.extrarcon.minimum_admin_power_for_screenshots) #{results.extrarcon.minimum_admin_power_for_screenshots}
+																		each row in results.admingroups
+																			option(value=row.power) #{row.power}
+												hr
+												.row
+													.col-md-12
+														h5 Enable screenshots for Registered Users, set maximum shots/hour
+														.row
+															.col-md-3
+																.checkbox
+																	label
+																		input(type="checkbox", name="screenshots_for_users_enabled", checked=(results.extrarcon.screenshots_for_users_enabled))
+																		span.input-helper
+																		| Enabled
+															.col-md-4
+																.fg-line
+																	input#name.form-control.input-sm(type='text', name='maximum_screenshots_for_users', value=results.extrarcon.maximum_screenshots_for_users)
+												hr
+												.row
+													.col-md-12
+														.checkbox
+															label
+																input(type="checkbox", name="enable_screenshot_all", checked=(results.extrarcon.enable_screenshot_all))
+																span.input-helper
+																| Enabled command Screenshot All
+									.card
+										.card-header
+											h2 Maps Settings
+										.card-body.card-padding
+											.row
+												.col-md-12
+													h5 Enable map change, set minimum admin power
+													.row
+														.col-md-3
+															.checkbox
+																label
+																	input(type="checkbox", name="enable_map_change", checked=(results.extrarcon.enable_map_change))
+																	span.input-helper
+																	| Enabled
+														.col-md-4
+															.select.fg-line
+																select.form-control(name='minimum_power_for_map_change')
+																	option(value=results.extrarcon.minimum_power_for_map_change) #{results.extrarcon.minimum_power_for_map_change}
+																	each row in results.admingroups
+																		option(value=row.power) #{row.power}
+											hr
+											.row
+												.col-md-12
+													h5 Enable map rotate, set minimum admin power
+													.row
+														.col-md-3
+															.checkbox
+																label
+																	input(type="checkbox", name="enable_maprotate", checked=(results.extrarcon.enable_maprotate))
+																	span.input-helper
+																	| Enabled
+														.col-md-4
+															.select
+																select.form-control(name='minimum_power_for_maprotate')
+																	option(value=results.extrarcon.minimum_power_for_maprotate) #{results.extrarcon.minimum_power_for_maprotate}
+																	each row in results.admingroups
+																		option(value=row.power) #{row.power}
+									.card
+										.card-header
+											h2 Unban/Tempban Settings
+										.card-body.card-padding
+											.row
+												.col-md-12
+													h5 Enable player unban, set minimum admin power
+													.row
+														.col-md-3
+															.checkbox
+																label
+																	input(type="checkbox", name="enable_player_unban", checked=(results.extrarcon.enable_player_unban))
+																	span.input-helper
+																	| Enabled
+														.col-md-4
+															.select
+																select.form-control(name='minimum_power_for_player_unban')
+																	option(value=results.extrarcon.minimum_power_for_player_unban) #{results.extrarcon.minimum_power_for_player_unban}
+																	each row in results.admingroups
+																		option(value=row.power) #{row.power}
+											hr
+											.row
+												.col-md-12
+													h5 Enable Tempban duration or set Default Time in minutes
+													.row
+														.col-md-3
+															.checkbox
+																label
+																	input(type="checkbox", name="enable_tempban_duration", checked=(results.extrarcon.enable_tempban_duration))
+																	span.input-helper
+																	| Enabled
+														.col-md-4
+															.fg-line
+																input.form-control(type="text", name="default_tempban_time", value=results.extrarcon.default_tempban_time)
+									.card
+										.card-header
+											h2 Cheater Reports Settings
+										.card-body.card-padding
+											.row
+												.col-md-4
+													label Minimum Power to manage Cheater Reports
+													.select.fg-line
+														select.form-control(name='minimum_power_for_cheater_reports')
+															option(value=results.extrarcon.minimum_power_for_cheater_reports) #{results.extrarcon.minimum_power_for_cheater_reports}
+															each row in results.admingroups
+																option(value=row.power) #{row.power}
+												.col-md-4
+													label Minimum Cheater Reports for Admin Apply
+													.fg-line
+														input.form-control(type="text", name="minimum_cheater_reports", value=results.extrarcon.minimum_cheater_reports)
+									.row.m-t-15
+										.col-md-12
+											input(type='hidden', name='_csrf', value=csrfToken)
+											button.btn.btn-primary.btn-block.waves-effect(type='submit') Save Settings
+										.clearfix

@@ -1,0 +1,199 @@
+extends ../../layout/home
+
+block content
+	
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/members') #{t('frontpages:members.members_tab_name_members')}
+			li.active #{results.user.local.user_name}
+		section#content
+			.container.container-alt
+				.block-header
+					h2 #{results.user.local.user_name}
+						small #{t('frontpages:members.members_admin_applications_title')} #{moment(results.user.updatedAt).fromNow()}
+				#profile-main.card
+					.pm-overview.c-overflow
+						.pmo-pic
+							.p-relative
+								img.img-responsive(src=results.user.local.avatar_512, alt='img')
+							.pmo-stat
+								h2.m-0.c-white #{results.user.local.user_role}
+								| #{t('frontpages:members.members_admin_applications_title_small')}
+
+						.pmo-block.pmo-contact.hidden-xs
+							h2 #{t('frontpages:members.members_admin_registered_accounts')}
+							ul
+								li
+									i.zmdi.zmdi-account
+									if ( typeof results.user.local.user_name === 'undefined' && !results.user.local.user_name )
+										span.red.zmdi.zmdi-close
+									if ( typeof results.user.local.user_name !== 'undefined' && results.user.local.user_name )
+										span.green.zmdi.zmdi-check-circle
+									|  #{t('frontpages:members.members_admin_local_account')}
+								li
+									i.zmdi.zmdi-facebook-box
+									if ( typeof results.user.facebook.name === 'undefined' && !results.user.facebook.name )
+										span.red.zmdi.zmdi-close
+									if ( typeof results.user.facebook.name !== 'undefined' && results.user.facebook.name )
+										span.green.zmdi.zmdi-check-circle
+									|  #{t('frontpages:members.members_admin_facebook_account')}
+								li
+									i.zmdi.zmdi-twitter-box
+									if ( typeof results.user.twitter.username === 'undefined' && !results.user.twitter.username )
+										span.red.zmdi.zmdi-close
+									if ( typeof results.user.twitter.username !== 'undefined' && results.user.twitter.username )
+										span.green.zmdi.zmdi-check-circle
+									|  #{t('frontpages:members.members_admin_twitter_account')}
+								li
+									i.zmdi.zmdi-google-plus-box
+									if ( typeof results.user.google.name === 'undefined' && !results.user.google.name )
+										span.red.zmdi.zmdi-close
+									if ( typeof results.user.google.name !== 'undefined' && results.user.google.name )
+										span.green.zmdi.zmdi-check-circle
+									|  #{t('frontpages:members.members_admin_google_account')}
+								li
+									i.zmdi.zmdi-steam-square
+									if ( typeof results.user.steam.username === 'undefined' && !results.user.steam.username )
+										span.red.zmdi.zmdi-close
+									if ( typeof results.user.steam.username !== 'undefined' && results.user.steam.username )
+										span.green.zmdi.zmdi-check-circle
+									|  #{t('frontpages:members.members_admin_steam_account')}
+					.pm-body.clearfix
+						.tab(role='tabpanel')
+							ul.tab-nav(role='tablist')
+								li.active
+									a(href='#server', aria-controls='server', role='tab', data-toggle='tab')
+										i.zmdi.zmdi-account.m-r-10
+										|  #{t('frontpages:members.members_about')} #{results.user.local.user_name}
+								if (results.user.local.user_role > 1)
+									li(role='presentation')
+										a(href='#tempbans', aria-controls='tempbans', role='tab', data-toggle='tab')
+											i.zmdi.zmdi-account-box-o.m-r-10
+											|  #{t('frontpages:members.members_recent_tempbans')}
+									li(role='presentation')
+										a(href='#permbans', aria-controls='permbans', role='tab', data-toggle='tab')
+											i.zmdi.zmdi-account-box-o.m-r-10
+											|  #{t('frontpages:members.members_recent_permbans')}
+									li(role='presentation')
+										a(href='#unbans', aria-controls='unbans', role='tab', data-toggle='tab')
+											i.zmdi.zmdi-account-box-o.m-r-10
+											|  #{t('frontpages:members.members_recent_unbans')}
+							.tab-content
+								#server.tab-pane.active.animated.fadeIn(role='tabpanel')
+									.pmb-block
+										if (success_messages.length > 0)
+											.alert.alert-success
+												|  #{success_messages}
+										if (error_messages.length > 0)
+											.alert.alert-danger
+												|  #{error_messages}
+										.pmbb-header
+											h2
+												i.zmdi.zmdi-account.m-r-10
+												|  #{t('frontpages:members.members_basic_information')}
+										.pmbb-body.p-l-30
+											.pmbb-view
+												dl.dl-horizontal
+													dt #{t('frontpages:members.members_name')}
+													dd #{results.user.local.user_name}
+												dl.dl-horizontal
+													dt #{t('frontpages:members.members_join_date')}
+													dd #{moment(results.user.createdAt).format('YYYY MMM Do')}
+												dl.dl-horizontal
+													dt #{t('frontpages:members.members_last_time_seen')}
+													dd #{moment(results.user.updatedAt).fromNow()}
+												dl.dl-horizontal
+													dt #{t('frontpages:members.members_admin_on_servers')}
+													dd 
+														ul.list-inline.commaseparated.pull-left
+															each item in results.user.local.admin_on_servers
+																li
+																	a(href="/"+item.name_alias)
+																		| #{item.name}
+										if ( typeof plusinfo !== 'undefined' && plusinfo )
+											.pmbb-header.m-t-25
+												h2
+													i.zmdi.zmdi-gamepad.m-r-10
+													|  #{t('frontpages:members.members_game_server_information')}
+											.pmbb-body.p-l-30
+												.pmbb-view
+													dl.dl-horizontal
+														dt #{t('frontpages:members.members_country')}
+														dd 
+															i(class='m-r-5 flag-icon flag-icon-'+plusinfo.player_country_short)
+															| #{plusinfo.player_country}
+													dl.dl-horizontal
+														dt #{t('frontpages:members.members_city')}
+														dd #{plusinfo.player_city}
+													dl.dl-horizontal
+														dt #{t('frontpages:members.members_last_time_seen_ingame')}
+														dd #{moment(plusinfo.updatedAt).fromNow()}
+													dl.dl-horizontal
+														dt #{t('frontpages:members.members_name_aliases')}
+														dd 
+															ul.list-inline.commaseparated.pull-left
+																each usedname in plusinfo.player_name_aliases
+																	li
+																		| #{usedname}
+								if (results.user.local.user_role > 1)
+									#tempbans.tab-pane.animated.fadeIn(role='tabpanel')
+										.pmb-block
+											.pmbb-header
+												h2 #{t('frontpages:members.members_recent_tempbans_by')} #{results.user.local.user_name}
+											.pmbb-body
+												.list-group.lg-odd-black
+													each tempban in results.tempbans
+														.list-group-item.media
+															.media-body
+																span.lgi-heading
+																	if (tempban.admin_command=="chat")
+																		span(class="btn btn-circle m-r-15 btn-xs bgm-lightgreen")
+																			| #{t('frontpages:members.members_chat_voice_mute')}
+																	else if (tempban.admin_command=="mute")
+																		span(class="btn btn-circle m-r-15 btn-xs bgm-indigo")
+																			| #{t('frontpages:members.members_voice_mute')}
+																	else
+																		span(class="btn btn-circle m-r-15 btn-xs bgm-deeporange")
+																			| #{tempban.admin_command}
+																	| #{tempban.player_name}
+																ul.lgi-attrs
+																	li #{tempban.game_server}
+																	li #{moment(tempban.createdAt).fromNow()}
+																	li #{t('frontpages:members.members_reason')} #{tempban.admin_message}
+												.clearfix
+									#permbans.tab-pane.animated.fadeIn(role='tabpanel')
+										.pmb-block
+											.pmbb-header
+												h2 #{t('frontpages:members.members_recent_permbans_by')} #{results.user.local.user_name}
+											.pmbb-body
+												.list-group.lg-odd-black
+													each permban in results.permbans
+														.list-group-item.media
+															.media-body
+																span.lgi-heading
+																	span(class="btn btn-circle m-r-15 btn-xs bgm-red")
+																		| #{permban.rcon_command}
+																	| #{permban.player_name}
+																ul.lgi-attrs
+																	li #{permban.server_name}
+																	li #{moment(permban.createdAt).fromNow()}
+																	li #{t('frontpages:members.members_reason')} #{permban.admin_message}
+												.clearfix
+									#unbans.tab-pane.animated.fadeIn(role='tabpanel')
+										.pmb-block
+											.pmbb-header
+												h2 #{t('frontpages:members.members_recent_unbans_by')} #{results.user.local.user_name}
+											.pmbb-body
+												.list-group.lg-odd-black
+													each unban in results.unbans
+														.list-group-item.media
+															.media-body
+																span.lgi-heading
+																	span(class="btn btn-circle m-r-15 btn-xs bgm-lightgreen")
+																		| #{unban.rcon_command}
+																	| #{unban.player_name}
+																ul.lgi-attrs
+																	li #{moment(unban.createdAt).fromNow()}
+												.clearfix

@@ -1,0 +1,26 @@
+{
+    "cheater_reports_msg": {
+        "msg_title": "Novi Cheater Izvještaj",
+        "message": "{{getUserName}} je prijavio igrača {{getReportedPlayer}} kao Cheatera! Za više detalja posjetite {{get_website}}!"
+    },
+
+    "unban_request_msg": {
+        "msg_title": "Novi Unban Zahtjev",
+        "message": "{{getUserName}} je poslao novi zahtjev za Unban! Za više detalja posjetite {{get_website}}!"
+    },
+
+    "new_admin_application_msg": {
+        "msg_title": "Nova prijava za Admina",
+        "message": "{{getUserName}} je poslao novu prijavu za Admina! Za više detalja posjetite {{get_website}}!"
+    },
+
+    "new_admin_added_msg": {
+        "msg_title": "Imamo novog Admina na našim Serverima",
+        "message": "Čestitamo {{getUserName}} !!! Dobrodošao na {{get_website}}!"
+    },
+
+    "new_admin_conversation": {
+        "msg_title": "Pokrenuta je nova Admin rasprava",
+        "message": "{{getUserName}} je pokrenuo novu Admin raspravu. Pomozite nam donijeti ispravnu odluku! Ukoliko imaš Adminska prava posjeti {{get_website}}!"
+    }
+}

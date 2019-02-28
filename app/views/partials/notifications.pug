@@ -1,0 +1,63 @@
+if (user)
+	if (globalnotifications.length < 1)
+		li.hidden-xs
+			a(href='/notifications')
+				i.him-icon.zmdi.zmdi-notifications
+	if (globalnotifications.length > 0)
+		li.dropdown
+			a(data-toggle='dropdown', href='')
+				i.him-icon.zmdi.zmdi-notifications
+				i.him-counts=globalnotifications.length
+			.dropdown-menu.dropdown-menu-lg.pull-right
+				.list-group.him-notification
+					.lg-header
+						| #{t('navigation:main_navigation.latest_notifications')}
+					.lg-body
+						each notification in globalnotifications.slice(0, 5)
+							if (notification.notification_type=="admin_application")
+								if (notification.admin_decision==0)
+									link_title=t('rcon_commands:globalnotifications.globalnotifications_display_responses_link_title_admin_application_declined')
+									link_text=t('rcon_commands:globalnotifications.globalnotifications_display_responses_link_text_admin_application_declined')
+								if (notification.admin_decision==1)
+									link_title=t('rcon_commands:globalnotifications.globalnotifications_display_responses_link_title_admin_application_accepted')
+									link_text=t('rcon_commands:globalnotifications.globalnotifications_display_responses_link_text_admin_application_accepted')
+								if (notification.admin_decision==2)
+									link_title=t('rcon_commands:globalnotifications.globalnotifications_display_responses_link_title_admin_application_discussion')
+									link_text=t('rcon_commands:globalnotifications.globalnotifications_display_responses_link_title_admin_application_discussion')
+							if (notification.notification_type=="cheater_report")
+								if (notification.admin_decision==0)
+									link_title=t('rcon_commands:globalnotifications.globalnotifications_display_responses_link_title_cheater_report_declined')
+									link_text=t('rcon_commands:globalnotifications.globalnotifications_display_responses_link_text_cheater_report_declined')
+								if (notification.admin_decision==1)
+									link_title=t('rcon_commands:globalnotifications.globalnotifications_display_responses_link_title_cheater_report_accepted')
+									link_text=t('rcon_commands:globalnotifications.globalnotifications_display_responses_link_text_cheater_report_accepted')
+								if (notification.admin_decision==2)
+									link_title=t('rcon_commands:globalnotifications.globalnotifications_display_responses_link_title_cheater_report_already_banned', {reported_PlayerName:notification.reported_player})
+									link_text=t('rcon_commands:globalnotifications.globalnotifications_display_responses_link_text_cheater_report_already_banned')
+							if (notification.notification_type=="unban_request")
+								if (notification.admin_decision==0)
+									link_title=t('rcon_commands:globalnotifications.globalnotifications_display_responses_link_title_unban_request_declined')
+									link_text=t('rcon_commands:globalnotifications.globalnotifications_display_responses_link_text_unban_request_declined')
+								if (notification.admin_decision==1)
+									link_title=t('rcon_commands:globalnotifications.globalnotifications_display_responses_link_title_unban_request_accepted')
+									link_text=t('rcon_commands:globalnotifications.globalnotifications_display_responses_link_text_unban_request_accepted')
+							a.list-group-item.media(href=notification.link_url)
+								.pull-left
+									img.lgi-img(src=notification.sender_id.local.avatar_60, alt=notification.sender_id.local.user_name)
+								.media-body
+									.lgi-heading=link_title
+									small.lgi-text=link_text
+					a.view-more(href='/notifications')
+						| #{t('navigation:main_navigation.view_all')}
+	if (user.local.user_role >= requiredpower.minimum_power_for_player_unban)
+		li.hidden-xs
+			a(href='/admin-notifications')
+				i.him-icon.zmdi.zmdi-alert-polygon
+				if (admin_notifications.length > 0)
+					i.him-counts #{admin_notifications.length}
+	if (user.local.user_role >= requiredpower.minimum_cheater_reports)
+		li.hidden-xs
+			a(href='/cheater-reports')
+				i.him-icon.zmdi.zmdi-account-calendar
+				if (cheater_reports.length > 0)
+					i.him-counts #{cheater_reports.length}

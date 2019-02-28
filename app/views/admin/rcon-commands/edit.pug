@@ -1,0 +1,72 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li
+				a(href='/admin/rcon-commands') Rcon Commands
+			li.active Edit
+		section#content
+			.container.container-alt
+				.row
+					.col-md-12
+						.card
+							.card-header.bgm-blue
+								h2 Rcon Command
+									small Edit command
+							.card-body.card-padding
+								form(method='post', action='/admin/rcon-commands/edit/update/'+results.rcon_command._id)
+									.row.m-b-25
+										.col-md-12
+											.checkbox
+												label
+													input(type="checkbox", name="send_back_message_to_server", checked=(results.rcon_command.send_back_message_to_server))
+													span.input-helper
+													| Send back message to the server after command executes (For example player kicked by admin with reason ...)
+									.row.m-b-25
+										.col-md-6
+											.form-group.fg-line
+												label(for='rcon_command')
+													|  Rcon Command
+												input#rcon_command.form-control.input-sm(type='text', name='rcon_command', value=results.rcon_command.rcon_command, placeholder="for example kick, permban, tempban ...", required)
+										.col-md-6
+											.form-group.fg-line
+												label(for='short_name')
+													|  Rcon Command Short name
+												input#short_name.form-control.input-sm(type='text', name='short_name', value=results.rcon_command.short_name, placeholder="for example K, PB, TB ...", required)
+									.row.m-b-25
+										.col-md-4
+											.form-group.fg-line
+												label(for='rcon_position')
+													|  Position
+												.select
+													select.form-control(name='rcon_position')
+														option(value=value=results.rcon_command.rcon_position) #{results.rcon_command.rcon_position}
+														each row in results.positions
+															option(value=row.name) #{row.name}
+										.col-md-4
+											.form-group.fg-line
+												label(for='min_power')
+													|  Minimum Power to execute this command
+												.select
+													select.form-control(name='min_power')
+														option(value=value=results.rcon_command.min_power) #{results.rcon_command.min_power}
+														each row in results.admingroups
+															option(value=row.power) #{row.name} (#{row.power})
+										.col-md-4
+											.form-group.fg-line
+												label(for='color')
+													|  Color of the command
+												.select
+													select.form-control(name='color')
+														option(value=value=results.rcon_command.color) #{results.rcon_command.color}
+														each row in results.colors
+															option(value=row.name) #{row.name}
+									.row.m-t-25
+										.col-sm-12.text-right
+											input(type='hidden', name='_csrf', value=csrfToken)
+											button.btn.btn-primary.waves-effect(type='submit') Edit Command
+									.clearfix

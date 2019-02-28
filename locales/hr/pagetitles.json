@@ -1,0 +1,24 @@
+{  
+    "pageTitle": {
+        "home": "Naslovna",
+        "members": "Članovi",
+        "banlist": "Trajno Bananih Igrači",
+        "players_data": "Podaci o Igračima",
+        "latest_notifications":"Najnovije Obavijesti",
+        "view_all":"Prikaži Sve",
+        "login":"Prijava",
+        "register":"Registracija",
+        "admin":"Admin",
+        "profile":"Profil",
+        "logout":"Odjavi Se",
+        "my_profile":"Moj Profil",
+        "cheater_reports":"Izvješća Cheatera",
+        "banbyID":"Trajno Banan Igrač",
+        "get_players":"Podaci o Igračima",
+        "getMyNotifications":"Admin Obavijesti",
+        "getCheaterReports":"Cheater Izvješća",
+        "getGlobalNotifications":"Moje Obavijesti",
+        "getAdminApp":"Admin Prijave",
+        "getConversations":"Admin Rasprave"
+    }
+}

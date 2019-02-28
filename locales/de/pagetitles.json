@@ -1,0 +1,24 @@
+{  
+    "pageTitle": {
+        "home": "Startseite",
+        "members": "Mitglieder",
+        "banlist": "Gebannte Spieler Liste",
+        "players_data": "Spielerdaten",
+        "latest_notifications":"Neueste Benachrichtigungen",
+        "view_all":"Alle ansehen",
+        "login":"Anmeldung",
+        "register":"Registrieren",
+        "admin":"Admin",
+        "profile":"Profil",
+        "logout":"Ausloggen",
+        "my_profile":"Mein Profil",
+        "cheater_reports":"Cheater Berichte",
+        "banbyID":"Gebannte Spieler",
+        "get_players":"Spielerdaten",
+        "getMyNotifications":"Server Admin Benachrichtigungen",
+        "getCheaterReports":"Cheater Berichte",
+        "getGlobalNotifications":"Meine Benachrichtigungen",
+        "getAdminApp":"Admin-Anwendung",
+        "getConversations":"Admin-Gespräche"
+    }
+}

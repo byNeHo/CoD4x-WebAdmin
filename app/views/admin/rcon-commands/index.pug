@@ -1,0 +1,60 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li.active Rcon Commands
+		section#content
+			.container
+				.row
+					.col-md-8.col-sm-12
+						if (success_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-success
+										| #{success_messages}
+						if (error_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-danger
+										| #{error_messages}
+						.card
+							.card-header
+								h2 Player related Rcon Commands
+									small Rcon Commands which can only be executed on Players (Commands visible on servers playerlist) 
+										strong.red (Kick, Tempban, Permban, Tell ...)
+								a.btn.bgm-green.btn-float.waves-effect(href='/admin/rcon-commands/new')
+										i.zmdi.zmdi-plus
+							.table-responsive.m-t-20
+								table.table.table-striped.m-t-20.m-b-20
+									thead
+										tr
+											th Rcon Command Name
+											th Min. Power
+											th Position / Send msg back to server
+											th
+									tbody
+										each row in results.rconcommands
+											tr
+												td
+													
+													a(href='/admin/rcon-commands/edit/'+row._id)
+														span(class="btn btn-xs bgm-"+row.color) #{row.short_name}
+														|  #{row.rcon_command}
+												td
+													| #{row.min_power}
+												td
+													| #{row.rcon_position} / 
+													if ( typeof row.send_back_message_to_server !== 'undefined' && row.send_back_message_to_server )
+														span.green
+															i.zmdi.zmdi-check-circle
+															|  yes
+													if ( typeof row.send_back_message_to_server === 'undefined')
+														span.red
+															i.zmdi.zmdi-close-circle-o
+															|  no
+												td.text-right
+													a.btn.btn-danger.btn-xs(href='/admin/rcon-commands/delete/'+row._id) Delete

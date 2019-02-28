@@ -1,0 +1,40 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li
+				a(href='/admin/tempban-durations') Tempban Durations
+			li.active Edit
+		section#content
+			.container.container-alt
+				.row
+					.col-md-12
+						.card
+							.card-header
+								h2 Edit Tempban Duration
+									small Edit Tempban Duration here
+							.card-body.card-padding
+								form(method='post', action='/admin/tempban-durations/edit/update/'+results._id)
+										.form-group.fg-line
+											label(for='category')
+												span.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content='Players can be tempbanned for more period types, we can tempban them for X minutes, hours, days' title="" data-original-title="Tempban Type")
+												|  * Tempban Type
+											.select
+												select.form-control(name='category', required)
+													option(value=results.powercategory) #{results.category}
+													option(value='Minute') Minute
+													option(value='Hour') Hour
+													option(value='Day') Day
+										.form-group.fg-line
+											label(for='time_number')
+												span.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content='After you choose the tempban type enter the number from what the admins can choose' title="" data-original-title="Tempban Period")
+												|  * Tempban Period
+											input#time_number.form-control.input-sm(type='text', name='time_number', required, value=results.time_number)
+										.form-group
+											input(type='hidden', name='_csrf', value=csrfToken)
+											button.btn.btn-primary.pull-right.waves-effect(type='submit') Edit Temban Duration
+								.clearfix

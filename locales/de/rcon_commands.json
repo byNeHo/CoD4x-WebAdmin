@@ -1,0 +1,135 @@
+{   
+    "general": {
+        "general_no_permission": "Sie haben keine Berechtigung, diesen Befehl zu verwenden!",
+        "general_there_was_an_error": "Es gab einen Fehler: {{get_error}}",
+        "general_no_admin_rights_on_server": "Sie haben keine Administratorrechte auf diesem Server!",
+        "general_command_disabled_by_admin": "Dieser Befehl ist vom Server Administrator deaktiviert!",
+        "is_imune": "{{get_AdminName}} ist Server Admin! Server-Admins sind geschützt!",
+        "info_msg_sent_to_server": "Informationsnachricht an den Server gesendet!",
+        "default_reason": "ohne Grund",
+        "cmd_doesnt_exist": "Dieser Befehl existiert nicht!",
+        "no_server_found": "Server nicht gefunden!",
+        "already_banned_guid": "Diese GUID ist bereits Gebannt!"
+    },
+
+    "commands": {
+        "kick": "kick",
+        "kicked": "kicked",
+        "tempban": "tempban",
+        "tempbaned": "Vorübergehend Gebannt",
+        "permabn": "permban",
+        "permbaned": "Dauerhaft Gebannt"
+    },
+
+    "input_select_time": {
+        "m": "Minute",
+        "h": "Stunde",
+        "d": "Tag",
+        "mm": "Minuten",
+        "hh": "Stunden",
+        "dd": "Tagen"
+    },
+
+    "RconConsoleCommand": {
+        "server_not_found": "Kein Server mit dieser ID gefunden!"
+    },
+
+    "RconMaprotate": {
+        "map_rotated": "Map erfolgreich gedreht!"
+    },
+
+    "RconGetssAll": {
+        "ss_all_executed": "Screenshot alle Spieler Befehl erfolgreich ausgeführt!"
+    },
+
+    "RconChangeMap": {
+        "map_changed_to_mapname": "Map erfolgreich geändert zu {{get_MapName}}!"
+    },
+
+    "RconTempban": {
+        "wrong_time_format": "Falsches Zeitformat für Tempbans!",
+        "tempban_msg_web": "{{get_PlayerName}} erfolgreich Vorübergehend Gebannt ({{get_TimeNumber}} {{get_TimeCategory}}) mit Grund {{get_Reason}}",
+        "tempban_msg_game_server": "^6{{get_PlayerName}}^7 ^6Vorübergehend Gebannt ^7Admin ^5{{get_AdminName}} ^7(^6{{get_TimeNumber}} {{get_TimeCategory}}^7) mit Grund: ^6{{get_Reason}}",
+        "is_already_banned": "{{get_PlayerName}} ist bereits Dauerhaft Gebannt!"
+    },
+
+    "RconAdminAction": {
+        "kick_msg_web": "{{get_PlayerName}} erfolgreich kicked mit Grund {{get_Reason}}",
+        "tell_msg_web": "Private Nachricht erfolgreich gesendet an {{get_PlayerName}}",
+        "screentell_msg_web": "Private Screen Nachricht erfolgreich gesendet an {{get_PlayerName}}",
+        "kick_msg_game_server": "^6{{get_PlayerName}} ^5kicked ^7Admin ^5{{get_AdminName}}^7 mit Grund: ^5{{get_Reason}}"
+    },
+
+    "RconChatAction": {
+        "chat_and_voice_mute_rcon_command_reason": "{{get_PlayerGuid}} Sie wurden kicked und der Chat wurde stummgeschaltet (Dauer: {{get_TimeNumber}} {{get_Category}}) mit Grund: ^5{{get_Reason}}",
+        "chat_and_voice_mute_server_message": "^6{{get_PlayerName}} ^7kicked und der Chat wurde stummgeschaltet (^5 {{get_TimeNumber}} {{get_Category}} ^7) Admin ^5{{get_Admin}} ^7 mit Grund {{get_Reason}}",
+        "voice_mute_rcon_command_reason": "{{get_PlayerGuid}} Sie wurden kicked und der Voice wurde stummgeschaltet (Dauer: {{get_TimeNumber}} {{get_Category}}) mit Grund: ^5{{get_Reason}}",
+        "voice_mute_server_message": "^6{{get_PlayerName}} ^7 kicked und der Voice wurde stummgeschaltet (^5 {{get_TimeNumber}} {{get_Category}} ^7) Admin ^5{{get_Admin}} ^7 mit Grund {{get_Reason}}",
+        "return_message_muted_voice": "{{get_PlayerName}} erfolgreich kicked/voice stummgeschaltet!",
+        "return_message_muted_chat": "{{get_PlayerName}} erfolgreich kicked/voice und chat stummgeschaltet!"
+    },
+
+    "Rcongetss": {
+        "max_ss_hourly": "Maximale Screenshots pro Stunde für normale Benutzer: {{get_MaxNumber}}!"
+    },
+
+    "RconPermban": {
+        "default_reason_for_report": "Cheat auf Screenshot entdeckt!",
+        "rconconsole_messages_on_ban": "{{get_PlayerName}} erfolgreich Dauerhaft Gebannt mit Grund: {{get_Reason}}!",
+        "rconconsole_cmdinform_on_ban": "^5{{get_PlayerName}}^7 ^1Dauerhaft Gebannt ^7Admin ^5{{get_Admin}} ^7mit Grund: ^5{{get_Reason}}",
+        "no_ss_found": "Dieser Screenshot existiert nicht, Vielleicht wurde es inzwischen entfernt"
+    },
+
+    "RconPermbanNoImage": {
+        "rconconsole_messages_on_ban": "{{get_PlayerName}} erfolgreich Dauerhaft Gebannt mit Grund: {{get_Reason}}!",
+        "rconconsole_cmdinform_on_ban": "^5{{get_PlayerName}}^7 ^1Dauerhaft Gebannt ^7Admin ^5{{get_Admin}} ^7mit Grund: ^5{{get_Reason}}",
+        "no_reason_given_error": "Sie können nicht ohne Grund Bannen!"
+    },
+
+    "RconPermbanOnReport": {
+        "send_info_msg_to_reporter": "Cheater Reporter informiert, dass dieser Spieler bereits Dauerhaft Gebannt ist!",
+        "ty_to_reporter": "{{get_BannedName}} ist Dauerhaft Gebannt dank an <span class=\"c-blue\">@{{get_ReporterName}}s</span> Cheater Report. Vielen Dank für Ihre Unterstützung! Wir freuen uns sehr über Ihre Hilfe! Gute Arbeit!"
+    },
+
+    "RconUnban": {
+        "success_unban": "Spieler erfolgreich unbanned!",
+        "success_unban_server_msg": "^6{{unbaned_PlayerName}} ^7ist erfolgreich unbanned von ^5{{unban_AdminName}}^7!",
+        "permban_not_found": "Dieses Dauerhafte Bann existiert nicht, Vielleicht wurde es inzwischen entfernt!"
+    },
+    
+    "globalnotifications": {
+        "globalnotifications_display_responses_link_title_cheater_report_already_banned": "{{reported_PlayerName}} bereits dauerhaft Gebannt!",
+        "globalnotifications_display_responses_link_text_cheater_report_already_banned": "Admin Antwort auf Ihrem Cheater Bericht",
+        "globalnotifications_display_responses_message_cheater_report_already_banned": "Vielen Dank für Ihre Unterstützung! Wir freuen uns sehr über Ihre Hilfe!",
+        "globalnotifications_display_responses_plus_message_cheater_report_already_banned": "<strong>{{reported_PlayerName}}</strong> ist bereits dauerhaft Gebannt!",
+
+        "globalnotifications_display_responses_link_title_cheater_report_declined": "Antwort auf Cheater Bericht",
+        "globalnotifications_display_responses_link_text_cheater_report_declined": "Admin-Antwort auf Ihren Cheater-Bericht",
+        "globalnotifications_display_responses_message_cheater_report_declined": "Danke, dass Sie uns kontaktiert haben! Anhand des Screenshots, was Sie an uns gesendet haben, scheint {{reported_PlayerName}} kein Betrüger zu sein!",
+
+        "globalnotifications_display_responses_link_title_cheater_report_accepted": "Antwort auf Cheater Bericht",
+        "globalnotifications_display_responses_link_text_cheater_report_accepted": "Admin-Antwort auf Ihren Cheater-Bericht",
+        "globalnotifications_display_responses_message_cheater_report_accepted": "Anhand des Screenshots, was Sie an uns gesendet haben, haben wir <strong>{{get_BannedPlayerName}}</strong> Dauerhaft Gebannt! Vielen Dank für Ihre Unterstützung! Wir freuen uns sehr über Ihre Hilfe! Gute Arbeit!",
+        "globalnotifications_display_responses_plus_message_cheater_report_accepted": "<strong>{{get_BannedPlayerName}}</strong> ist Dauerhaft Gebannt, das Bann finden Sie hier <a href=\"/banlist\">Banliste</a>",
+
+        "globalnotifications_display_responses_link_title_unban_request_declined": "Unban-Anfrage abgelehnt",
+        "globalnotifications_display_responses_link_text_unban_request_declined": "Admin-Antwort auf Ihre Unban-Anfrage",
+        "globalnotifications_display_responses_message_unban_request_declined": "Danke, dass Sie uns kontaktiert haben! Aufgrund der Unban Request, was Sie an uns gesendet haben, haben wir uns entschieden, es nicht anzunehmen. Das Dauerverbot wird nicht aufgehoben!",
+
+        "globalnotifications_display_responses_link_title_unban_request_accepted": "Unban-Anfrage akzeptiert",
+        "globalnotifications_display_responses_link_text_unban_request_accepted": "Admin-Antwort auf Ihre Unban-Anfrage",
+        "globalnotifications_display_responses_message_unban_request_accepted": "Wir haben uns entschieden, Ihre Unban-Anfrage anzunehmen! Sie können jetzt unseren Servern beitreten!",
+
+        "globalnotifications_display_responses_link_title_admin_application_declined": "Admin-Anwendung abgelehnt",
+        "globalnotifications_display_responses_link_text_admin_application_declined": "Admin-Antwort auf Ihre Admin-Anwendung",
+        "globalnotifications_display_responses_message_admin_application_declined": "Nach ein paar Gesprächen mit bestehenden Admins auf unseren Spieleservern haben wir uns entschieden, Ihre Admin-Anwendung nicht zu akzeptieren! Diese Entscheidung ist nicht dauerhaft und kann sich in Zukunft ändern, wenn Sie einen neuen Admin-Antrag einreichen!",
+
+        "globalnotifications_display_responses_link_title_admin_application_accepted": "Admin-Anwendung akzeptiert",
+        "globalnotifications_display_responses_link_text_admin_application_accepted": "Admin Antwort auf Ihre Admin Anwendung",
+        "globalnotifications_display_responses_message_admin_application_accepted": "Nach ein paar Gesprächen mit bestehenden Admins auf unseren Spielservern haben wir uns entschieden, Ihre Admin-Anwendung zu akzeptieren! Glückwunsch und willkommen zu {{get_WebSite}}!",
+        
+        "globalnotifications_display_responses_link_title_admin_application_discussion": "Admin-Anwendung wird besprochen",
+        "globalnotifications_display_responses_link_text_admin_application_discussion": "Admin Antwort auf Ihre Admin Anwendung",
+        "globalnotifications_display_responses_message_admin_application_discussion": "Bitte beachten Sie, dass es einige Tage dauern kann, bis wir über Ihr Schicksal entscheiden. Anwendungen, die aus offensichtlichen Gründen nicht sofort abgelehnt werden, werden mit anderen Admins besprochen!"
+    }
+}

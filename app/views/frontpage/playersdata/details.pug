@@ -1,0 +1,44 @@
+extends ../../layout/home
+
+block content
+	ol.breadcrumb
+		li
+			a(href='/') #{t('navigation:main_navigation.home')}
+		li
+			a(href='/players-data') #{t('navigation:main_navigation.players_data')}
+		li.active #{results.player.player_name} Data
+	section#content
+		.container.container-alt
+			.block-header
+				h2
+					span(class='m-r-5 flag-icon flag-icon-'+results.player.player_country_short)
+					| #{results.player.player_name}
+					small
+						| #{t('frontpages:players_data.players_data_lt_seen')} #{moment(results.player.updatedAt).fromNow()}
+			.row.wall
+				.col-md-8
+					.card
+						.card-body.card-padding
+							.pmo-contact
+								ul
+									li.ng-binding
+										i.zmdi.zmdi-pin-account
+										|  #{results.player.player_name}
+									if (user.local.user_role > 1)
+										li.ng-binding
+											i.zmdi.zmdi-code-setting
+											| #{t('frontpages:players_data.players_data_guid')}: #{results.player.player_guid}
+										li.ng-binding
+											i.zmdi.zmdi-steam
+											|  #{results.player.player_steam_id}
+									li
+										i.zmdi.zmdi-pin
+										address.m-b-0.ng-binding
+											span(class='m-r-5 flag-icon flag-icon-'+results.player.player_country_short)
+											| #{results.player.player_country}, #{results.player.player_city}
+							h4.m-t-25 #{t('frontpages:players_data.players_data_name_aliases')}
+							ul.list-inline.commaseparated.pull-left.nowrap
+								each item in results.player.player_name_aliases
+									li
+										| #{item}
+							.clearfix

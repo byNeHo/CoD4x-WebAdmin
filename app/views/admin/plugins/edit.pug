@@ -1,0 +1,80 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li
+				a(href='/admin/plugins') Plugins
+			li.active Edit Plugin
+		section#content
+			.container.container-alt
+				.row
+					.col-md-12
+						.card
+							.card-header
+								h2.c-green.f-400 #{results.plugins.name}
+									small=results.plugins.description
+							.card-body.card-padding
+								if (results.plugins.instructions)
+									.row
+										.col-md-12
+											h2.c-green.f-400 Install/Usage Instructions
+											p !{results.plugins.instructions}
+								.row.m-t-25
+									.col-md-12
+										form(method='post', action='/admin/plugins/edit/update/plugin/'+results.plugins._id)
+											.col-md-4
+												.form-group
+													.checkbox.m-t-30
+														label
+															input(type="checkbox", name="status", checked=(results.plugins.status))
+															span.input-helper
+															| Status Activate/Deactivate
+											if (results.plugins.name_alias === 'welcome-message')
+												input(type='hidden', name='min_power', value='1')
+											else if (results.plugins.category === 'sso')
+												input(type='hidden', name='min_power', value='1')
+											else if (results.plugins.name_alias === 'discord-webhook')
+												input(type='hidden', name='min_power', value='1')
+											else if (results.plugins.name_alias === 'remove-old-admin-actions')
+												input(type='hidden', name='min_power', value='1')
+											else if (results.plugins.name_alias === 'cod4x-authtoken')
+												input(type='hidden', name='min_power', value='1')
+											else if (results.plugins.name_alias === 'remove-old-tempbans')
+												input(type='hidden', name='min_power', value='1')
+											else if (results.plugins.name_alias === 'julia-ss-check')
+												input(type='hidden', name='min_power', value='1')
+											else
+												.col-md-4
+													.form-group
+														.fg-line
+															.select
+																label Minimum Power to use this Plugin
+																select.form-control(name='min_power', required)
+																	option(value=results.plugins.min_power) #{results.plugins.min_power}
+																	each row in results.admingroups	
+																		option(value=row.power) #{row.power}
+											if (results.plugins.require_cronjob === true)
+												.col-md-4
+													.form-group.fg-line
+														label(for='cron_job_time_intervals')
+															span.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content='Only numbers, without commas, points' title="" data-original-title="Time Interval")
+															|  * Time interval
+														input#cron_job_time_intervals.form-control.input-sm(type='text', name='cron_job_time_intervals', required, value=results.plugins.cron_job_time_intervals)
+											else
+												input(type='hidden', name='cron_job_time_intervals', value='2')
+											if (results.plugins.category == "cod4x")
+												.col-md-4
+													.form-group.fg-line
+														label(for='extra_field')
+															span.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content='Only numbers, without commas, points' title="" data-original-title="CoD4x AuthToken")
+															|  * Token
+														input#extra_field.form-control.input-sm(type='text', name='extra_field', required, value=results.plugins.extra_field)
+											.col-md-12
+												.form-group
+													input(type='hidden', name='_csrf', value=csrfToken)
+													button.btn.btn-primary.pull-right.waves-effect(type='submit') Save
+								.clearfix

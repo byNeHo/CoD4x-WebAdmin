@@ -1,0 +1,72 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li
+				a(href='/admin/rcon-commands') Rcon Commands
+			li.active Add a new Rcon Command
+		section#content
+			.container.container-alt
+				.row
+					.col-md-12
+						.card
+							.card-header.bgm-blue
+								h2 Rcon Command
+									small Add a new Rcon Command
+							.card-body.card-padding
+								form(method='post', action='/admin/rcon-commands/new/save')
+									.row.m-b-25
+										.col-md-12
+											.checkbox
+												label
+													input(type="checkbox", name="send_back_message_to_server", value="1")
+													span.input-helper
+													| Send back message to the server after command executes (For example player kicked by admin with reason ...)
+									.row.m-b-25
+										.col-md-6
+											.form-group.fg-line
+												label(for='rcon_command')
+													|  Rcon Command
+												input#rcon_command.form-control.input-sm(type='text', name='rcon_command', placeholder="for example kick, permban, tempban ...", required)
+										.col-md-6
+											.form-group.fg-line
+												label(for='short_name')
+													|  Rcon Command Short name
+												input#short_name.form-control.input-sm(type='text', name='short_name', placeholder="for example K, PB, TB ...", required)
+									.row.m-b-25
+										.col-md-4
+											.form-group.fg-line
+												label(for='rcon_position')
+													|  Position
+												.select
+													select.form-control(name='rcon_position', required)
+														option(value='') choose
+														each row in results.positions
+															option(value=row.name) #{row.name}
+										.col-md-4
+											.form-group.fg-line
+												label(for='min_power')
+													|  Minimum Power to execute this command
+												.select
+													select.form-control(name='min_power', required)
+														option(value='') choose
+														each row in results.admingroups
+															option(value=row.power) #{row.name} (#{row.power})
+										.col-md-4
+											.form-group.fg-line
+												label(for='color')
+													|  Color of the command
+												.select
+													select.form-control(name='color', required)
+														option(value='') choose
+														each row in results.colors
+															option(value=row.name) #{row.name}
+									.row.m-t-25
+										.col-sm-12.text-right
+											input(type='hidden', name='_csrf', value=csrfToken)
+											button.btn.btn-primary.waves-effect(type='submit') Add new Command
+									.clearfix

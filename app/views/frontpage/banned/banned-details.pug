@@ -1,0 +1,108 @@
+extends ../../layout/home
+
+block content
+	ol.breadcrumb
+		li
+			a(href='/') #{t('navigation:main_navigation.home')}
+		li
+			a(href='/banlist') #{t('navigation:main_navigation.banlist')}
+		li.active #{results.getbanned.player_name} #{t('frontpages:banned.banned_details_bc_active')}
+	section#content
+		.container.container-alt
+			if (success_messages.length > 0)
+				.row
+					.col-sm-12.col-md-12.m-t-30
+						.alert.alert-success
+							|  #{success_messages}
+			if (error_messages.length > 0)
+				.row
+					.col-sm-12.col-md-12.m-t-30
+						.alert.alert-danger
+							| #{error_messages}
+			if (rconconsole_messages.length > 0)
+				.row
+					.col-sm-12.col-md-12.m-t-30
+						.alert.alert-info
+							| #{rconconsole_messages}
+			.block-header
+				h2
+					| #{results.getbanned.player_name} #{t('frontpages:banned.banned_details_bc_active')}
+					small
+						| #{t('frontpages:banned.banned_details_on_server')} #{results.getbanned.server_name}
+			.row.wall
+				.col-md-8
+					.card.w-item
+						.card-header
+							.media
+								.media-body
+									h2
+										a(href="/members/"+results.getbanned.admin_id)
+											| #{results.getbanned.admin_name}
+										small #{t('frontpages:banned.banned_details_posted_on')} #{moment(results.getbanned.createdAt).format('YYYY MMM Do')}
+								.pull-right
+									if (user.local.user_role >= results.requiredpower.minimum_power_for_player_unban)
+										ul.actions
+											li.dropdown
+												a(href='', data-toggle='dropdown')
+													i.zmdi.zmdi-more-vert
+												ul.dropdown-menu.dropdown-menu-right
+													li
+														a(href='/rconcmd/unban/'+results.getbanned._id) #{t('frontpages:banned.banned_card_unban')} #{results.getbanned.player_name}
+						.card-body.card-padding
+							p
+								| #{t('frontpages:banned.banned_details_permanently_banned')} 
+								span.c-red #{results.getbanned.player_name}
+								|  #{t('frontpages:banned.banned_details_with_reason')} 
+								| #{results.getbanned.admin_message}
+								br
+								| #{t('frontpages:banned.banned_details_player_guid')} #{results.getbanned.player_name} (#{results.getbanned.player_guid}) #{t('frontpages:banned.banned_details_server')}  
+								span.c-blue #{results.getbanned.server_name}
+								if ( typeof results.getbanned.cheater_reporter !== 'undefined' && results.getbanned.cheater_reporter )
+									.help-header
+										| !{results.getbanned.cheater_reporter}
+							if (results.getbanned.player_screenshot)
+								.wi-preview.lightbox.clearfix
+									.wip-item(data-src=results.getbanned.player_screenshot, style='background-image: url('+results.getbanned.player_screenshot+');')
+										.lightbox-item
+				.col-md-4.hidden-sm.hidden-xs
+					.card
+						.card-header.bgm-bluegray
+							h2
+								| #{t('frontpages:banned.banned_details_card_bann_appeal_h2')}
+								small #{t('frontpages:banned.banned_details_card_bann_appeal_h2_small')}
+						.card-body.card-padding
+							if (!user)
+								.popover-demo
+									.popover.top
+										.arrow
+										h3.popover-title #{t('frontpages:banned.banned_details_registration_required')}
+										.popover-content
+											p
+												| #{t('frontpages:banned.banned_details_registratin_required_help_text')}
+								a.btn.bgm-bluegray.waves-effect.btn-block.notification(data-type="danger", data-from="bottom", data-align="right", data-title=t('frontpages:banned.banned_details_btn_error_not_logged_in'))
+									i.him-icon.zmdi.zmdi-mail-send
+									|  #{t('frontpages:banned.banned_details_request_unban')}
+							if (user)
+								if ( typeof results.getbanned.unban_request_denied !== 'undefined' && results.getbanned.unban_request_denied )
+									.popover-demo
+										.popover.top
+											.arrow
+											h3.popover-title #{t('frontpages:banned.banned_details_unban_request_declined')}
+											.popover-content
+												p.red
+													| #{t('frontpages:banned.banned_details_unban_request_decline_text')}
+								else
+									form.notificationForm(method='post', action='/unban-request/new/save')
+										.form-group.fg-line
+											label.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content=t('frontpages:banned.banned_details_why_unban_me_tooltip_text') title="" data-original-title="Info")
+													|  #{t('frontpages:banned.banned_details_why_unban_me')}
+											textarea#message.form-control.input-sm.html-editor(rows='25' name='message', required)
+										.form-group
+											input(type='hidden', name='banid', value=results.getbanned._id)
+											input(type='hidden', name='notifymessage', class="notifymessage", value=t('frontpages:banned.banned_details_notify_msg')' '+results.getbanned.player_name)
+											input(type='hidden', name='_csrf', value=csrfToken)
+											button.btn.bgm-bluegray.btn-block.waves-effect(type='submit') #{t('frontpages:banned.banned_details_btn_send')}
+block extrajs
+	if (!user)
+		script(type='text/javascript').
+			function notify(from, align, icon, title, type, animIn, animOut){$.growl({icon: icon,title: title,message: t('frontpages:banned.banned_details_js_notify'),url: ''},{element: 'body',type: type,allow_dismiss: true,placement: {from: from, align: align},offset: {x: 20,y: 85},spacing: 10,z_index: 1031,delay: 5000,timer: 1000,url_target: '_blank',mouse_over: false,	animate: {enter: animIn,exit: animOut},icon_type: 'class',template: '<div data-growl="container" class="alert" role="alert">' +'<button type="button" class="close" data-growl="dismiss">' +'<span aria-hidden="true">&times;</span>' +'<span class="sr-only">Close</span>' +'</button>' +'<span class="inline-block", data-growl="icon"></span>' +'<h3 class="white", data-growl="title"></h3>' +'<span data-growl="message" class=""></span>' +'<a href="#" data-growl="url"></a>' +'</div>'});};$('.notification').click(function(e){e.preventDefault();var nFrom = $(this).attr('data-from');var nAlign = $(this).attr('data-align');var nIcons = $(this).attr('data-icon');var nTitle = $(this).attr('data-title');var nType = $(this).attr('data-type');var nAnimIn = $(this).attr('data-animation-in');var nAnimOut = $(this).attr('data-animation-out');notify(nFrom, nAlign, nIcons, nTitle, nType, nAnimIn, nAnimOut);});

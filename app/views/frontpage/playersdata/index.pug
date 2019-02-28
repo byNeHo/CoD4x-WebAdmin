@@ -1,0 +1,58 @@
+extends ../../layout/home
+block extrastuff
+	link(href='/vendors/bower_components/datatables.net-dt/css/jquery.dataTables.min.css', rel='stylesheet')
+block content
+	ol.breadcrumb
+		li
+			a(href='/') #{t('navigation:main_navigation.home')}
+		li.active #{t('navigation:main_navigation.players_data')}
+	section#content
+		.container.container-alt
+			.card
+				.card-body.card-padding
+					.contacts.clearfix.row
+						if (success_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-success
+										| #{success_messages}
+						if (error_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-danger
+										| #{error_messages}
+					.table-responsive
+						table#data-table-basic.table.table-striped
+							thead
+								tr
+									th #{t('frontpages:players_data.players_data_name')}
+									th #{t('frontpages:players_data.players_data_lt_seen')}
+									th #{t('frontpages:players_data.players_data_guid')}
+							tfoot
+								tr
+									th #{t('frontpages:players_data.players_data_name')}
+									th #{t('frontpages:players_data.players_data_lt_seen')}
+									th #{t('frontpages:players_data.players_data_guid')}
+							tbody
+								each player in results.players
+									tr
+										td 
+											span(class='m-r-5 flag-icon flag-icon-'+player.player_country_short)
+											a(href="/players-data/"+player.id) #{player.player_name}
+										td
+											| #{moment(player.updatedAt).format('L')}
+										td
+											if (user.local.user_role > 1)
+												| #{player.player_guid}
+											else
+												| #{t('frontpages:players_data.players_data_only_for_server_admins')}
+											if (user.local.user_role > 99)
+												a.m-l-25(href="/admin/players-data/delete/"+player.id)
+													span.zmdi.zmdi-delete.m-r-5
+													| #{t('frontpages:players_data.players_data_delete')}
+block extrajs
+	script(src='/vendors/bower_components/datatables.net/js/jquery.dataTables.min.js')
+	script(type='text/javascript').
+		$(document).ready(function() {
+			$('#data-table-basic').DataTable();
+		} );

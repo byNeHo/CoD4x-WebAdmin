@@ -1,0 +1,114 @@
+extends ../../layout/home
+block extrastuff
+	link(href='/vendors/bower_components/datatables.net-dt/css/jquery.dataTables.min.css', rel='stylesheet')
+block content
+	ol.breadcrumb
+		li
+			a(href='/') #{t('navigation:main_navigation.home')}
+		li.active #{t('frontpages:banned.banned_bc_active')}
+	section#content
+		.container.container-alt
+			.card
+				.card-body.card-padding
+					.contacts.clearfix.row
+						if (success_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-success
+										| #{success_messages}
+						if (error_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-danger
+										| #{error_messages}
+					.row
+						ul.tab-nav(role='tablist')
+							li.active
+								a(href='#permbans', aria-controls='permbans', role='tab', data-toggle='tab')
+									| #{t('frontpages:banned.banned_tab_permanentbans')}
+									span.m-l-10.label.label-danger=results.serverbans.length
+							li
+								a(href='#tempbans', aria-controls='tempbans', role='tab', data-toggle='tab')
+									| #{t('frontpages:banned.banned_tab_temp_bans')}
+									span.m-l-10.label.label-warning=results.servertempbans.length
+						.tab-content
+							#permbans.tab-pane.active(role='tabpanel')
+								.table-responsive
+									table#data-table-basic.table.table-striped
+										thead
+											tr
+												th #{t('frontpages:banned.banned_card_name')}
+												th #{t('frontpages:banned.banned_card_added')}
+												th #{t('frontpages:banned.banned_card_admin')}
+												th #{t('frontpages:banned.banned_card_expire')}
+										tfoot
+											tr
+												th #{t('frontpages:banned.banned_card_name')}
+												th #{t('frontpages:banned.banned_card_added')}
+												th #{t('frontpages:banned.banned_card_admin')}
+												th #{t('frontpages:banned.banned_card_expire')}
+										tbody
+											each permban in results.serverbans
+												tr
+													td 
+														a(href="/banlist/"+permban.id) #{permban.player_name}
+													td
+														| #{moment(permban.createdAt).format('MMMM Do YYYY')}
+													td
+														| #{permban.admin_name}
+													td
+														span.c-red #{t('frontpages:banned.banned_card_never')}
+							#tempbans.tab-pane(role='tabpanel')
+								.table-responsive
+									table#data-table-basic-2.table.table-striped
+										thead
+											tr
+												th #{t('frontpages:banned.banned_card_type')}
+												th #{t('frontpages:banned.banned_card_name')}
+												th #{t('frontpages:banned.banned_card_added')}
+												th #{t('frontpages:banned.banned_card_admin')}
+												th #{t('frontpages:banned.banned_card_expire')}
+												th #{t('frontpages:banned.banned_card_action')}
+										tfoot
+											tr
+												th #{t('frontpages:banned.banned_card_type')}
+												th #{t('frontpages:banned.banned_card_name')}
+												th #{t('frontpages:banned.banned_card_added')}
+												th #{t('frontpages:banned.banned_card_admin')}
+												th #{t('frontpages:banned.banned_card_expire')}
+												th #{t('frontpages:banned.banned_card_action')}
+										tbody
+											each tempban in results.servertempbans
+												tr
+													td
+														if (tempban.admin_command=='chat')
+															span.label.label-default #{t('frontpages:banned.banned_card_cm')}
+														else if (tempban.admin_command=='mute')
+															span.label.label-info #{t('frontpages:banned.banned_card_vm')}
+														else
+															span.label.label-warning #{t('frontpages:banned.banned_card_tb')}
+													td 
+														span.c-blue #{tempban.player_name}
+													td #{moment(tempban.createdAt).fromNow()}
+													td #{tempban.admin_name}
+													td 
+														if (moment()>tempban.expire)
+															span.c-gray #{t('frontpages:banned.banned_card_expired')}
+														else
+															| #{moment(tempban.expire).format('MMMM Do YYYY, h:mm')}
+													if (user && user.local.user_role > 1)		
+														td 
+															if (moment()>tempban.expire)
+																span.c-deeporange #{t('frontpages:banned.banned_card_no_action_needed')}
+															else
+																a.btn.btn-xs.bgm-lightgreen(href='/rconcmd/unban-tempban/'+tempban._id) #{t('frontpages:banned.banned_card_unban')}
+block extrajs
+	script(src='/vendors/bower_components/datatables.net/js/jquery.dataTables.min.js')
+	script(type='text/javascript').
+		$(document).ready(function() {
+			$('#data-table-basic').DataTable();
+		} );
+
+		$(document).ready(function() {
+			$('#data-table-basic-2').DataTable();
+		} );

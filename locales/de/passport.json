@@ -1,0 +1,14 @@
+{
+    "local_login": {
+        "error_no_user": "Es gibt keinen Benutzer mit dieser E-Mail!",
+        "error_wrong_password": "Oops! Falsches Passwort!",
+        "error_user_exist": "Es gibt bereits ein Konto mit dieser E-Mail!"
+    },
+
+    "input_validation": {
+        "user_name": "Gebe einen Benutzernamen ein!",
+        "email": "Ungültige E-Mail!",
+        "password": "Ungültiges Passwort, mindestens 6 Zeichen!",
+        "confirmPassword": "Passwörter stimmen nicht überein!"
+    }
+}

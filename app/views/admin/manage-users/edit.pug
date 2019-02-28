@@ -1,0 +1,39 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li
+				a(href='/admin/manage-users') Manage Users
+			li.active Edit
+		section#content
+			.container.container-alt
+				.row
+					.col-md-12
+						.card
+							.card-header.bgm-blue
+								h2 Manage Users
+									small Edit User
+							.card-body.card-padding
+								form(method='post', action='/admin/manage-users/edit/update/'+results.user._id)
+									.form-group
+										.checkbox
+											label
+												input(type="checkbox", name="block_user", checked=(results.user.local.block_user))
+												span.input-helper
+												| Block user from Status page
+									.form-group
+										label Admin Power
+										.fg-line
+											.select
+												select.form-control(name='user_role', required)
+													option(value=results.user.local.user_role) #{results.user.local.user_role}
+													each row in results.admingroups
+														option(value=row.power) #{row.power}
+									.col-sm-12.m-b-20.text-right
+										input(type='hidden', name='_csrf', value=csrfToken)
+										button.btn.btn-primary.waves-effect(type='submit') Edit
+								.clearfix

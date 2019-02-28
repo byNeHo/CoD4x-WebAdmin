@@ -1,0 +1,74 @@
+extends ../../layout/home
+
+block content
+	ol.breadcrumb
+		li
+			a(href='/') #{t('navigation:main_navigation.home')}
+		li
+			a(href="/admin-conversations") #{t('frontpages:admin_conversations.admin_conversations_bc_active')}
+		li.active #{t('frontpages:admin_conversations.admin_conversations_details_bc_active')} #{results.adminconversations.sender_id.local.user_name}
+	section#content
+		.container.container-alt
+			.block-header
+				h2
+					| #{t('frontpages:admin_conversations.admin_conversations_bc_active')}
+					small #{t('frontpages:admin_conversations.admin_conversations_details_h2_small')}
+			.row.wall
+				.col-md-8
+					.card.w-item
+						.card-header
+							.media
+								.pull-left
+									img.avatar-img(src=results.adminconversations.sender_id.local.avatar_60, alt=results.adminconversations.sender_id.local.user_name)
+								.media-body
+									h2
+										| #{results.adminconversations.sender_id.local.user_name}
+										small #{t('frontpages:admin_conversations.admin_conversations_details_card_h2_small')} #{moment(results.adminconversations.app_id.createdAt).fromNow()}
+						.card-body.card-padding
+							if (success_messages.length > 0)
+									.row
+										.col-sm-12.col-md-12.m-t-30
+											.alert.alert-success
+												| #{success_messages}
+							if (error_messages.length > 0)
+								.row
+									.col-sm-12.col-md-12.m-t-30
+										.alert.alert-danger
+											| #{error_messages}
+							p
+								| #{t('frontpages:admin_conversations.admin_conversations_details_age')} 
+								span.c-blue #{results.adminconversations.app_id.age}
+								br
+								| #{t('frontpages:admin_conversations.admin_conversations_details_cheater_reports')} 
+								span.c-blue #{reports}
+							p
+								| #{results.adminconversations.app_id.adminappmessage}
+							.wi-stats.clearfix
+								.wis-numbers
+									span
+										i.zmdi.zmdi-comments
+										|  #{results.adminconversationscomments.length}
+						.wi-comments
+							if (results.adminconversationscomments)
+								.list-group
+									each comment in results.adminconversationscomments
+										.list-group-item.media
+											a.pull-left(href='/members/'+comment.sender_id._id)
+												img.lgi-img(src=comment.sender_id.local.avatar_60, alt=comment.sender_id.local.user_name)
+											.media-body
+												a.lgi-heading(href='')
+													| #{comment.sender_id.local.user_name} 
+													small.c-gray.m-l-10 
+														| #{moment(comment.createdAt).fromNow()} ...
+												small.lgi-text
+													| #{comment.message}
+							.wic-form
+								form(method='post', action='/admin-conversations/conversation/new/save')
+									textarea(placeholder=t('frontpages:admin_conversations.admin_conversations_details_form_textarea_placeholder', {app_senderName: results.adminconversations.sender_id.local.user_name}), data-ma-action='wall-comment-open', name="message", required)
+									.wicf-actions.text-right
+										input(type='hidden', name='conversation_id', value=results.adminconversations._id)
+										input(type='hidden', name='app_id', value=results.adminconversations.app_id._id)
+										input(type='hidden', name='app_sender_id', value=results.adminconversations.app_id._id)
+										input(type='hidden', name='_csrf', value=csrfToken)
+										button.btn.btn-sm.btn-link(data-ma-action='wall-comment-close') #{t('frontpages:admin_conversations.admin_conversations_details_form_cancel_btn')}
+										button.btn.btn-sm.btn-primary(type="submit") #{t('frontpages:admin_conversations.admin_conversations_details_form_send_btn')} 

@@ -1,0 +1,39 @@
+extends ../../layout/home
+
+block content
+	ol.breadcrumb
+		li
+			a(href='/') #{t('navigation:main_navigation.home')}
+		li.active #{t('frontpages:admin_conversations.admin_conversations_bc_active')}
+	section#content
+		.container.container-alt
+			.block-header
+				h2
+					| #{t('frontpages:admin_conversations.admin_conversations_bc_active')}
+					small #{t('frontpages:admin_conversations.admin_conversations_h2_small')}
+			.card
+				.card-body.card-padding
+					.contacts.clearfix.row
+						if (success_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-success
+										| #{success_messages}
+						if (error_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-danger
+										| #{error_messages}
+					each conversation in results.adminconversations
+						span.list-group-item.media.animated.zoomIn
+							.pull-left
+								a(href='/admin-conversations/conversation/'+conversation._id)
+									img.lgi-img(src=conversation.sender_id.local.avatar_60, alt='img', data-toggle="tooltip", data-placement="top", title="", data-original-title=conversation.sender_id.local.user_name)
+							.media-body
+								.lgi-heading
+									| #{t('frontpages:admin_conversations.admin_conversations_lgi_heading')}
+								ul.lgi-attrs
+									li
+										| #{t('frontpages:admin_conversations.admin_conversations_sent_by')} #{conversation.sender_id.local.user_name}
+									li
+										| #{moment(conversation.createdAt).fromNow()}

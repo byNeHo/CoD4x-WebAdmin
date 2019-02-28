@@ -1,0 +1,61 @@
+{
+    "global": {
+        "error_page_removed": "Diese Seite existiert leider nicht, vielleicht wurde sie in der Zwischenzeit entfernt!",
+        "error_script": "Es ist ein Fehler aufgetreten. Bitte versuchen Sie es erneut oder wenden Sie sich an den Skriptbesitzer",
+        "error_no_permission": "Sie haben keine Berechtigung, diese Seite zu besuchen. Erforderliche Benutzerkraft ist:"
+    },
+
+    "index": {
+        "ScreenshotsRemove_error": "Screenshots nicht gelöscht! Es gab einen Fehler: {{display_error}}",
+        "ScreenshotsRemove_success": "Screenshots wurden erfolgreich gelöscht!",
+        "ScreenshotsRemove_error_permission":"Screenshots nicht gelöscht! Minimale Benutzerleistung für Screenshots löschen ist: {{req_power}}",
+
+        "InsertNewCheaterReport_error_already_banned": "ist bereits gebannt!",
+        "InsertNewCheaterReport_error_already_reported": "ist bereits gemeldet! Bitte haben Sie etwas Geduld, bis einer unserer Admins den vorhandenen Cheater-Bericht überprüft!",
+        "InsertNewCheaterReport_success_report_sent": "Cheater Bericht für {{getPlayer}} erfolgreich gesendet!!",
+        "InsertNewCheaterReport_error_no_screenshot": "Dieser Screenshot existiert nicht, er wurde in der Zwischenzeit möglicherweise entfernt oder der Spieler ist bereits gebannt.",
+
+        "InsertNewunbanRequest_success_sent": "Unban Anfrage für {{getPlayer}} erfolgreich gesendet!",
+        "InsertNewunbanRequest_error_ban_not_found": "Dieses Ban gibt es nicht, vielleicht wurde es inzwischen entfernt oder der Splieler ist bereits gebannt.",
+        "InsertNewunbanRequest_error_already_sent": "Unban Anfrage bereits gesendet, Warten Sie, bis Server-Admins eine Entscheidung treffen, Sie werden informiert!",
+
+        "CheaterReportRemove_declined_msg": "Cheater Bericht erfolgreich gelöscht. Der Spieler ist nicht gebannt, der Cheater Berichter wurde über unsere Entscheidung informiert!",
+        
+        "UnbanRequestRemove_declined_msg": "Unban Anfrage abgelehnt, Spieler ist nicht ungebannt! Der Spieler wird über unsere Entscheidung informiert!",
+
+        "GlobalNotificationsRemove_cleaned": "Benachrichtigungen erfolgreich gelöscht!",
+
+        "getAdminApp_already_admin": "Sie sind bereits Admin!",
+        "InsertNewAdminApp": "Neue Admin-Anwendung",
+
+        "InsertNewAdminApp_already_admin": "Sie sind bereits Admin!",
+        "InsertNewAdminApp_cheater_reports_count_error": "Du brauchst mindestens {{count_CheaterReports}} Cheater Berichte!",
+        "InsertNewAdminApp_success_sent": "Admin-Anwendung erfolgreich gesendet. Sie werden innerhalb von 7 Tagen über unsere Entscheidung informiert!",
+
+        "AdminAppRemove_declined": "Admin-Anwendung abgelehnt. Spieler ist über unsere Entscheidung informiert!",
+
+        "AdminAppAccept_accepted": "Admin-Anwendung akzeptiert Spieler ist über unsere Entscheidung informiert!",
+
+        "AdminAppConversationStart_started": "Admin-Anwendungsdiskussion erfolgreich gestartet!",
+
+        "getConversations_restricted_access": "Nur Server-Admins können diese Seite besuchen!",
+
+        "getKGBplugin_restricted_access": "Sie haben keine Administratorrechte auf diesen Server!",
+        "getKGBplugin_restricted_access_low_power": "Zur Verwendung ist eine höhere Administratorleistung erforderlich, Plugin KGB Host!",
+        "getKGBplugin_restricted_access_plugin_disabled": "KGB Host Plugin ist deaktiviert!",
+
+        "PluginLocalServerStart_success_server_started": "Server erfolgreich gestartet!",
+        "PluginLocalServerStart_restricted_access": "Sie haben keine Administratorrechte auf diesen Server!",
+        "PluginLocalServerStart_restricted_access_low_power": "Zur Verwendung ist eine höhere Administratorleistung erforderlich, Plugin Start-Stop-Server!",
+        "PluginLocalServerStart_restricted_access_only_local_server": "Start-Stop-Server Plugin kann nur auf lokalen CoD4x-Servern verwendet werden!",
+        "PluginLocalServerStart_restricted_access_plugin_disabled": "Start-Stop-Server Plugin ist deaktiviert!",
+        "PluginLocalServerStart_admin_logs": "{{get_ServerName}} gestartet von {{get_UserName}}",
+
+        "PluginLocalServerStop_success_server_started": "Server erfolgreich gestoppt!",
+        "PluginLocalServerStop_restricted_access": "Sie haben keine Administratorrechte auf diesen Server!",
+        "PluginLocalServerStop_restricted_access_low_power": "Zur Verwendung ist eine höhere Administratorleistung erforderlich, Plugin Start-Stop-Server!",
+        "PluginLocalServerStop_restricted_access_only_local_server": "Start-Stop-Server Plugin kann nur auf lokalen CoD4x-Servern verwendet werden!",
+        "PluginLocalServerStop_restricted_access_plugin_disabled": "Start-Stop-Server Plugin ist deaktiviert!",
+        "PluginLocalServerStop_admin_logs": "{{get_ServerName}} gestoppt von {{get_UserName}}"
+    }
+}

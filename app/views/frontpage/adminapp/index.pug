@@ -1,0 +1,71 @@
+extends ../../layout/home
+
+block content
+	ol.breadcrumb
+		li
+			a(href='/') #{t('navigation:main_navigation.home')}
+		li.active #{t('frontpages:adminapp.adminapp_bc_active')}
+	section#content
+		.container.container-alt
+			.row
+				.col-md-8
+					.card
+						.card-header
+							h2 #{t('frontpages:adminapp.adminapp_h2')}
+								small
+									|  #{t('frontpages:adminapp.adminapp_h2_small')}
+						.card-body.card-padding
+							if (success_messages.length > 0)
+								.row
+									.col-sm-12.col-md-12.m-b-30
+										.alert.alert-success
+											| #{success_messages}
+							if (error_messages.length > 0)
+								.row
+									.col-sm-12.col-md-12.m-b-30
+										.alert.alert-danger
+											| #{error_messages}
+							if (results.total_cheater_reports < results.requiredpower.minimum_cheater_reports)
+								.row
+									.col-sm-12.col-md-12.m-b-30
+										.alert.alert-danger
+											strong #{t('frontpages:adminapp.adminapp_allert_strong', {cheater_reportsCount: results.total_cheater_reports})}
+											|  #{t('frontpages:adminapp.adminapp_allert', {cheater_reportsCount: results.requiredpower.minimum_cheater_reports})}
+							if (results.total_cheater_reports >= results.requiredpower.minimum_cheater_reports)
+								if ( typeof user.steam.id !== 'undefined' && user.steam.id)
+									form.notificationForm(method='post', action='/admin-applications')
+										.col-md-4
+											.form-group.fg-line
+												input.form-control.input-sm(type='text', name='age', placeholder=t('frontpages:adminapp.adminapp_form_placeholder_age'), required)
+										.col-md-12
+											.form-group.fg-line
+												textarea.form-control.input-sm(placeholder=t('frontpages:adminapp.adminapp_form_textarea_placeholder'), rows='15' name='adminappmessage', required)
+										.col-md-12.text-right
+											input(type='hidden', name='notifymessage', class="notifymessage", value=t('frontpages:adminapp.adminapp_form_notify_msg'))
+											input(type='hidden', name='_csrf', value=csrfToken)
+											button.btn.btn-primary.waves-effect(type='submit') #{t('frontpages:adminapp.adminapp_form_sbmt_btn')}
+								else
+									.alert.alert-danger
+										strong #{t('frontpages:adminapp.adminapp_app_denied_strong')}
+										|  #{t('frontpages:adminapp.adminapp_app_denied_text')} 
+										a.alert-link(href="/user/profile") #{t('frontpages:adminapp.adminapp_link_to_profile')}
+								
+								.clearfix
+				.col-md-4
+					.card
+						.card-header
+							h2
+								| #{t('frontpages:adminapp.adminapp_requirements')}
+								small #{t('frontpages:adminapp.adminapp_requirements_small')}
+						.card-body.card-padding
+							ul.clist.clist-star
+								li #{t('frontpages:adminapp.adminapp_requirements_1')}
+								li #{t('frontpages:adminapp.adminapp_requirements_2')}
+								li #{t('frontpages:adminapp.adminapp_requirements_3')}
+								li #{t('frontpages:adminapp.adminapp_requirements_4')}
+								li #{t('frontpages:adminapp.adminapp_requirements_5_1')} 
+									span.c-red #{t('frontpages:adminapp.adminapp_requirements_5_2', {cheater_reportsRequired: results.requiredpower.minimum_cheater_reports})}
+								li #{t('frontpages:adminapp.adminapp_requirements_6')}
+								li #{t('frontpages:adminapp.adminapp_requirements_7_1')} 
+									a(href="/user/profile") #{t('frontpages:adminapp.adminapp_requirements_7_2')}
+								li #{t('frontpages:adminapp.adminapp_requirements_8')}

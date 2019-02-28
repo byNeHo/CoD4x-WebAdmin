@@ -1,0 +1,40 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li
+				a(href='/admin/server-commands') Server Commands
+			li.active Edit
+		section#content
+			.container.container-alt
+				.row
+					.col-md-12
+						.card
+							.card-header
+								h2 Edit Server Command
+									small Edit Server Command Here
+							.card-body.card-padding
+								form(method='post', action='/admin/server-commands/edit/update/'+results.server_commands._id)
+									.form-group
+										.checkbox.m-t-30
+											label
+												input(type="checkbox", name="send_back_message_to_server", checked=(results.server_commands.send_back_message_to_server))
+												span.input-helper
+												| On command execute via website send console message to the game server (example: Player kicked by Admin with reason)
+									.form-group.fg-line
+										label(for='req_power') Req. Power to execute this Command
+										select.selectpicker(name='req_power', required)
+											option(value=results.server_commands.req_power) #{results.server_commands.req_power}
+											each row in results.admingroups
+												option(value=row.power) #{row.power}
+									.form-group.fg-line
+										label(for='command_name') Command
+										input#command_name.form-control.input-sm(type='text', name='command_name', required, value=results.server_commands.command_name)
+									.form-group
+										input(type='hidden', name='_csrf', value=csrfToken)
+										button.btn.btn-primary.pull-right.waves-effect(type='submit') Edit Command
+								.clearfix

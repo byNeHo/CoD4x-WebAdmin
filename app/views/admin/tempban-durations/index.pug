@@ -1,0 +1,72 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li.active Tempban Durations
+		section#content
+			.container
+				.row
+					.col-md-8.col-sm-12
+						if (success_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-success
+										| #{success_messages}
+						if (error_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-danger
+										| #{error_messages}
+						.card
+							.card-header
+								h2 Tempban Durations
+									small Manage your Tempban Durations
+							.table-responsive.m-t-20
+								table.table.table-striped.m-t-20.m-b-20
+									thead
+										tr
+											th Tempban Duration and Category
+											th Category
+											th
+									tbody
+										each row in results
+											tr
+												td
+													a(href='/admin/tempban-durations/edit/'+row._id)
+														| #{row.time_number} #{row.category}
+												td
+													| #{row.category}
+												td.text-right
+													a.btn.btn-danger.btn-xs(href='/admin/tempban-durations/delete/'+row._id) Delete
+					.col-md-4.col-sm-12
+						.row
+							.card
+								.card-header
+									h2 Add new Tempban Duration
+										small Admin can choose for how long they would like to Temban a Player
+								.card-body.card-padding
+									form(method='post', action='/admin/tempban-durations/new/save')
+										.form-group.fg-line
+											label(for='category')
+												span.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content='Players can be tempbanned for more period types, we can tempban them for X minutes, hours, days' title="" data-original-title="Tempban Type")
+												|  * Tempban Type 
+											.select
+												select.form-control(name='category', required)
+													option(value='') choose
+													option(value='Minute') Minute
+													option(value='Hour') Hour
+													option(value='Day') Day
+										.form-group.fg-line
+											label(for='time_number')
+												span.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content='After you choose the tempban type enter the number from what the admins can choose' title="" data-original-title="Tempban Period")
+												|  * Tempban Period
+											input#time_number.form-control.input-sm(type='text', name='time_number', required)
+										.form-group
+											input(type='hidden', name='_csrf', value=csrfToken)
+											button.btn.btn-primary.btn-block.waves-effect(type='submit') Add new Tempban Duration
+								.clearfix
+

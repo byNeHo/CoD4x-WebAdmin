@@ -1,0 +1,64 @@
+extends ../layout/home
+
+block content
+	
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li.active #{t('navigation:main_navigation.login')}
+		section#content
+			.container
+				.row
+					.col-md-4.col-md-offset-3
+						.card
+							.card-header.bgm-blue
+								h2
+									| #{t('auth:login.login_h2')}
+									small #{t('auth:login.login_h2_small')}
+								button.btn.bgm-green.btn-float.waves-effect
+									i.zmdi.zmdi-account
+							.card-body.card-padding
+								if (message.length > 0)
+									.alert.alert-danger=message
+								form(method='post', action='/user/login')
+									.form-group.fg-line
+										label(for='email')
+											i.zmdi.zmdi-account
+											|  #{t('auth:login.login_form_email')}
+										input#email.form-control.input-sm(type='email', placeholder=t('auth:login.login_form_email_placeholder'), name='email')
+									.form-group.fg-line
+										label(for='password')
+											i.zmdi.zmdi-lock
+											|  #{t('auth:login.login_form_password')}
+										input#password.form-control.input-sm(type='password', placeholder=t('auth:login.login_form_password_placeholder'), name='password')
+									.row
+										.col-sm-3.m-b-20
+											input(type='hidden', name='_csrf', value=csrfToken)
+											button.btn.btn-primary.waves-effect(type='submit') #{t('auth:login.login_form_btn')}
+										.col-sm-9.m-b-20
+											.toggle-switch.toggle-switch-demo(data-ts-color='blue')
+												label.ts-label(for='rememberMe') #{t('auth:login.login_form_stay_logged_in')}
+												input#rememberMe(type='checkbox', hidden='hidden', name='rememberMe', value='1')
+												label.ts-helper(for='rememberMe')
+									.col-sm-12.m-b-20.text-center
+										a(href='/user/signup')  #{t('auth:login.login_create_new_account')}
+									.clearfix
+									if (results.length > 0)
+										.col-sm-12-m-t-20.text-center
+											h5 #{t('auth:login.login_login_sso_btns')}
+										hr
+										.col-sm-12-m-t-20.btn-demo.text-center
+											each row in results
+												if (row.name_alias=='sso-facebook')
+													a.btn.bgm-indigo.btn-icon.waves-effect.waves-circle.waves-float(href='/user/auth/facebook')
+														span.zmdi.zmdi-facebook
+												if (row.name_alias=='sso-google')
+													a.btn.bgm-red.btn-icon.waves-effect.waves-circle.waves-float(href='/user/auth/google')
+														span.zmdi.zmdi-google-plus
+												if (row.name_alias=='sso-twitter')
+													a.btn.bgm-lightblue.btn-icon.waves-effect.waves-circle.waves-float(href='/user/auth/twitter')
+														span.zmdi.zmdi-twitter
+												if (row.name_alias=='sso-steam')
+													a.btn.bgm-black.btn-icon.waves-effect.waves-circle.waves-float(href='/user/auth/steam')
+														span.zmdi.zmdi-steam
+									.clearfix

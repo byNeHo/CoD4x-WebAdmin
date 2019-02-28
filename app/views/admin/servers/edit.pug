@@ -1,0 +1,286 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li.active Edit
+		section#content
+			.container.container-alt
+				.block-header
+					h2
+						| #{results.servers.name}
+						small 
+							if (results.servers.external_ip===true)
+								| External Server on #{results.servers.ip}:#{results.servers.port} address
+							else
+								| Local Server on #{results.servers.ip}:#{results.servers.port} address
+				.row
+					.col-md-12
+						if (success_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-success
+										| #{success_messages}
+						if (error_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-danger
+										| #{error_messages}
+						.card
+							.card-body
+								div(role='tabpanel')
+									ul.tab-nav(role='tablist')
+										li.active
+											a(href='#server', aria-controls='server', role='tab', data-toggle='tab')
+												i.zmdi.zmdi-play.m-r-10
+												| Server
+										li
+											a(href='#server_rules', aria-controls='server_rules', role='tab', data-toggle='tab')
+												i.zmdi.zmdi-comment-edit.m-r-10
+												| Rules
+										li
+											a(href='#screenshot_plugin', aria-controls='screenshot_plugin', role='tab', data-toggle='tab')
+												i.zmdi.zmdi-camera.m-r-10
+												| Server Plugins
+										li
+											a(href='#settings', aria-controls='settings', role='tab', data-toggle='tab')
+												i.zmdi.zmdi-settings.m-r-10
+												| Settings
+									.tab-content
+										#server.tab-pane.active(role='tabpanel')
+											.card
+												.card-body.card-padding
+													form(method='post', action='/admin/servers/edit/update/'+results.servers._id)
+														.row
+															.col-md-4
+																.form-group
+																	.checkbox
+																		label
+																			input(type="checkbox", name="external_ip", checked=(results.servers.external_ip))
+																			span.input-helper
+																			| External Server
+															.col-md-4
+																.form-group.fg-line
+																	label(for='ip')
+																		|  * Server IP
+																	input#ip.form-control.input-sm(type='text', name='ip', required, value=results.servers.ip)
+															.col-md-4
+																.form-group.fg-line
+																	label(for='port')
+																		|  * Server Port
+																	input#port.form-control.input-sm(type='text', name='port', required, value=results.servers.port)
+														.row
+															.col-md-12
+																.form-group.fg-line
+																	label(for='script_starter')
+																		|  Server start line
+																	textarea#script_starter.form-control.input-sm(rows='3' name='script_starter')
+																		| #{results.servers.script_starter}
+														.row
+															.col-md-4
+																.form-group.fg-line
+																	label(for='rcon_password')
+																		|  Rcon Password
+																	input#rcon_password.form-control.input-sm(type='password', name='rcon_password', value=results.servers.rcon_password)
+															.col-md-4
+																.form-group.fg-line
+																	label(for='screenshot_identkey')
+																		|  Screenshot identkey
+																	input#screenshot_identkey.form-control.input-sm(type='text', name='screenshot_identkey', value=results.servers.screenshot_identkey)
+															.col-md-4
+																.form-group.fg-line
+																	label(for='julia_identkey')
+																		|  Julia identkey
+																		span.c-red 
+																			|  (must be unique for every server)
+																	input#julia_identkey.form-control.input-sm(type='text', name='julia_identkey', value=results.servers.julia_identkey)
+														.row
+															.col-md-12
+																.form-group
+																	input(type='hidden', name='_csrf', value=csrfToken)
+																	button.btn.btn-primary.pull-right.waves-effect(type='submit') Save Changes
+														
+													.clearfix
+										#server_rules.tab-pane(role='tabpanel')
+											.card
+												.card-header
+													h2 Server Rules
+														small Server Rules on this game server, displayed on server details page
+												.card-body.card-padding
+													form(method='post', action='/admin/servers/edit/rules/update/'+results.servers._id)
+														.form-group.fg-line
+															label(for='server_rules')
+																|  * Server Rules
+															textarea#server_rules.form-control.input-sm.html-editor(rows='25' name='server_rules', required)
+																|#{results.servers.server_rules}
+														.form-group
+															input(type='hidden', name='_csrf', value=csrfToken)
+															button.btn.btn-primary.pull-right.waves-effect(type='submit') Save Changes
+													.clearfix
+										#screenshot_plugin.tab-pane(role='tabpanel')
+											.card
+												.card-header
+													h2 Game Server Settings - Plugin ScreenshotSender
+														small
+															| If you would like to use the screenshot reciving, sending feature add this lines to your server.cfg.
+															span.c-red 
+															|  Create for every server an Unique screenshot_identkey, thats how the plugin knows which screenshot belongs to which server
+												.card-body.card-padding
+													pre
+														| set nehoscreenshot_identkey "#{results.servers.screenshot_identkey}"
+													br
+													pre
+														| set nehoscreenshot_url "#{websiteaddress}/cod4x_plugins/screenshots/#{results.servers.screenshot_identkey}"
+													br
+													pre
+														| loadplugin nehoscreenshotuploader
+											.card
+												.card-header
+													h2 Game Server Settings - Plugin Julia
+														small
+															| If you would like to use the Julia Plugin add this lines to your server.cfg.
+															span.c-red 
+																| Create for every server an Unique julia_identkey, otherwise the Plugin will not work correctly. If you use Plugin Julia the ScreenshotSender Plugin is not required since Julia contains that part to.
+												.card-body.card-padding
+													pre
+														| set julia_identkey "#{results.servers.julia_identkey}"
+													br
+													pre
+														| set julia_url "#{websiteaddress}/cod4x_plugins/julia/#{results.servers.julia_identkey}"
+													br
+													pre
+														| loadplugin julia
+											.clearfix
+										#settings.tab-pane(role='tabpanel')
+											.card
+												.card-body.card-padding
+													form(method='post', action='/admin/servers/edit/settings/update/'+results.servers._id)
+														- var current_time = new moment().format("HH:mm");
+														.row
+															.col-md-12.m-b-30.text-center
+																strong
+																	| Current Server Time on Local Machine: 
+																span.c-green 
+																	| #{current_time}
+														hr
+														.row
+															.col-md-12.m-t-15.m-b-15
+																h5 Card Background Color
+														.row
+															.col-md-4
+																.form-group.fg-line
+																	select.selectpicker(name='color', required)
+																		option(value=results.servers.color) #{results.servers.color}
+																		each row in results.colors
+																			option(value=row.name) #{row.name}
+																.form-group
+																	input(type='hidden', name='_csrf', value=csrfToken)
+																	button.btn.btn-primary.pull-right.waves-effect(type='submit') Save Changes
+															.col-md-8.p-t-5
+																span.small
+																	| * Card Background Color for this Game Server on the Homepage
+													.clearfix
+													.row.m-t-30
+														.col-sm-3.col-xs-6
+															.color-block.bgm-red
+																span.color Red
+																span.code #F44336
+																span.less @bgm-red
+														.col-sm-3.col-xs-6
+															.color-block.bgm-pink
+																span.color Pink
+																span.code #E91E63
+																span.less @bgm-pink
+														.col-sm-3.col-xs-6
+															.color-block.bgm-purple
+																span.color Purple
+																span.code #9C27B0
+																span.less @bgm-purple
+														.col-sm-3.col-xs-6
+															.color-block.bgm-deeppurple
+																span.color Deep Purple
+																span.code #673AB7
+																span.less @bgm-deeppurple
+														.col-sm-3.col-xs-6
+															.color-block.bgm-indigo
+																span.color Indigo
+																span.code #3F51B5
+																span.less @bgm-indigo
+														.col-sm-3.col-xs-6
+															.color-block.bgm-blue
+																span.color Blue
+																span.code #2196F3
+																span.less @bgm-blue
+														.col-sm-3.col-xs-6
+															.color-block.bgm-lightblue
+																span.color Light Blue
+																span.code #03A9F4
+																span.less @bgm-lightblue
+														.col-sm-3.col-xs-6
+															.color-block.bgm-cyan
+																span.color Cyan
+																span.code #00BCD4
+																span.less @bgm-cyan
+														.col-sm-3.col-xs-6
+															.color-block.bgm-teal
+																span.color Teal
+																span.code #009688
+																span.less @bgm-teal
+														.col-sm-3.col-xs-6
+															.color-block.bgm-green
+																span.color Green
+																span.code #4CAF50
+																span.less @bgm-green
+														.col-sm-3.col-xs-6
+															.color-block.bgm-lightgreen
+																span.color Light Green
+																span.code #8BC34A
+																span.less @bgm-lightgreen
+														.col-sm-3.col-xs-6
+															.color-block.bgm-lime
+																span.color Lime
+																span.code #CDDC39
+																span.less @bgm-lime
+														.col-sm-3.col-xs-6
+															.color-block.bgm-yellow
+																span.color Yellow
+																span.code #FFEB3B
+																span.less @bgm-yellow
+														.col-sm-3.col-xs-6
+															.color-block.bgm-amber
+																span.color Amber
+																span.code #FFC107
+																span.less @bgm-amber
+														.col-sm-3.col-xs-6
+															.color-block.bgm-orange
+																span.color Orange
+																span.code #FF9800
+																span.less @bgm-orange
+														.col-sm-3.col-xs-6
+															.color-block.bgm-deeporange
+																span.color Deep Orange
+																span.code #FF5722
+																span.less @bgm-deeporange
+														.col-sm-3.col-xs-6
+															.color-block.bgm-brown
+																span.color Brown
+																span.code #795548
+																span.less @bgm-brown
+														.col-sm-3.col-xs-6
+															.color-block.bgm-gray
+																span.color Gray
+																span.code #9E9E9E
+																span.less @bgm-gray
+														.col-sm-3.col-xs-6
+															.color-block.bgm-bluegray
+																span.color Blue Gray
+																span.code #607D8B
+																span.less @bgm-bluegray
+														.col-sm-3.col-xs-6
+															.color-block.bgm-black
+																span.color Black
+																span.code #000000
+																span.less @bgm-black

@@ -1,0 +1,61 @@
+{
+    "global": {
+        "error_page_removed": "Nažalost, stranica ne postoji, možda je uklonjena u međuvremenu!",
+        "error_script": "Došlo je do pogreške. Pokušajte ponovno ili kontaktirajte vlasnika",
+        "error_no_permission": "Nemate dopuštenje za posjet ove stranice. Zahtijeva snagu:"
+    },
+
+    "index": {
+        "ScreenshotsRemove_error": "Slike nisu izbrisane! Došlo je do pogreške: {{display_error}}",
+        "ScreenshotsRemove_success": "Slike uspješno izbrisane!",
+        "ScreenshotsRemove_error_permission":"Slike nisu izbrisane. Brisanje slika zahtjeva snagu: {{req_power}}",
+
+        "InsertNewCheaterReport_error_already_banned": "je već Trajno Banan!",
+        "InsertNewCheaterReport_error_already_reported": "već je prijavljen! Molimo Vas budite strpljivi dok jedan od naših administratore provjeri postojeći izvještaj!",
+        "InsertNewCheaterReport_success_report_sent": "Cheater izvješće za {{getPlayer}} uspješno poslano!",
+        "InsertNewCheaterReport_error_no_screenshot": "Ova slika ne postoji, možda je uklonjena ili je igrač Trajno Banan u međuvremenu.",
+
+        "InsertNewunbanRequest_success_sent": "Unban Zahtjev za {{getPlayer}} uspješno poslan!",
+        "InsertNewunbanRequest_error_ban_not_found": "Ovaj Trajni Ban ne postoji, možda je uklonjena ili je igrač već Unbanan.",
+        "InsertNewunbanRequest_error_already_sent": "Unban zahtjev je već poslan, sačekajte dok naši administratori donesu odluku, biti će te informirani o našoj odluci!",
+
+        "CheaterReportRemove_declined_msg": "Cheater Izvješče uspješno izbrisano. Igrač nije Trajno Banan, cheater izvjestitelj je obaviješten o našoj odluci!",
+        
+        "UnbanRequestRemove_declined_msg": "Zahtjev za Unban je odbijen, Igrač nije Unbanan! Izvjestitelj je obaviješten o našoj odluci!",
+
+        "GlobalNotificationsRemove_cleaned": "Obavijesti uspješno izbrisane!",
+
+        "getAdminApp_already_admin": "Već imaš Adminska prava!",
+        "InsertNewAdminApp": "Novi Zahtjev za Adminska prava",
+
+        "InsertNewAdminApp_already_admin": "Već imaš Adminska prava!",
+        "InsertNewAdminApp_cheater_reports_count_error": "morate imati barem {{count_CheaterReports}} odobrenih cheater izvješća!",
+        "InsertNewAdminApp_success_sent": "Zahtjev za Adminska prava uspješno poslan. Biti će te obaviješteni o našoj odluci u sljedećih 7 dana!",
+
+        "AdminAppRemove_declined": "Zahtjev za Adminska prava Odbijen. Igrač je obaviješten o našoj odluci!",
+
+        "AdminAppAccept_accepted": "Zahtjev za Adminska prava Prihvaćen. Igrač je obaviješten o našoj odluci!",
+
+        "AdminAppConversationStart_started": "Zahtjev za Adminska prava, nova rasprava uspješno započeta!",
+
+        "getConversations_restricted_access": "Samo administratori mogu posjetiti ovu stranicu!",
+
+        "getKGBplugin_restricted_access": "Nemaš Adminska prava na ovom Serveru!",
+        "getKGBplugin_restricted_access_low_power": "Potrebna su veća Adminska prava za korištenje KGB Host Plugina!",
+        "getKGBplugin_restricted_access_plugin_disabled": "KGB Host Plugin je isključen!",
+
+        "PluginLocalServerStart_success_server_started": "Server uspješno startan!",
+        "PluginLocalServerStart_restricted_access": "Nemaš Adminska prava na ovom Serveru!",
+        "PluginLocalServerStart_restricted_access_low_power": "Potrebna su veća Adminska prava za korištenje Start-Stop-Server Plugina!",
+        "PluginLocalServerStart_restricted_access_only_local_server": "Start-Stop-Server Plugin može se koristiti samo na Lokalnim CoD4x Serverima!",
+        "PluginLocalServerStart_restricted_access_plugin_disabled": "Start-Stop-Server Plugin je isključen!",
+        "PluginLocalServerStart_admin_logs": "{{get_ServerName}} startan od strane {{get_UserName}}",
+
+        "PluginLocalServerStop_success_server_started": "Server uspješno stopiran!",
+        "PluginLocalServerStop_restricted_access": "Nemaš Adminska prava na ovom Serveru!",
+        "PluginLocalServerStop_restricted_access_low_power": "Potrebna su veća Adminska prava za korištenje Start-Stop-Server Plugina!",
+        "PluginLocalServerStop_restricted_access_only_local_server": "Start-Stop-Server Plugin može se koristiti samo na Lokalnim CoD4x Serverima!",
+        "PluginLocalServerStop_restricted_access_plugin_disabled": "Start-Stop-Server Plugin je isključen!",
+        "PluginLocalServerStop_admin_logs": "{{get_ServerName}} stopiran od strane {{get_UserName}}"
+    }
+}

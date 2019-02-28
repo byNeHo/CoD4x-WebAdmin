@@ -1,0 +1,136 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li.active Rcon Console for #{results.server.name}
+		section#content
+			.container.container-alt
+				if (success_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-success
+										| #{success_messages}
+				if (error_messages.length > 0)
+					.row
+						.col-sm-12.col-md-12.m-t-30
+							.alert.alert-danger
+								| #{error_messages}
+				.messages.card
+					.m-sidebar
+						header
+							h2.hidden-xs
+								| Rcon Console
+						.ms-search.hidden-xs
+							.lgi-heading
+								|  Quick Commands
+						.list-group.c-overflow
+							form.list-group-item.media(method='post', action='/admin/servers/rconconsole/send/'+results.server._id)
+								.pull-left
+									img.lgi-img(src='/img/cod4.gif', alt='cod4')
+								.media-body
+									.lgi-heading Status
+									small.lgi-text Get Server Status
+									input(type='hidden', name='rcon_cmd', value="status")
+									input(type='hidden', id="_csrf", name='_csrf', value=csrfToken)
+									small.ms-time
+										button.btn-xs.btn.bgm-lightgreen.btn-icon.waves-effect(type='submit')
+											i.zmdi.zmdi-mail-send
+							form.list-group-item.media(method='post', action='/admin/servers/rconconsole/send/'+results.server._id)
+								.pull-left
+									img.lgi-img(src='/img/cod4.gif', alt='cod4')
+								.media-body
+									.lgi-heading MiniStatus
+									small.lgi-text Get Server MiniStatus
+									input(type='hidden', name='rcon_cmd', value="miniStatus")
+									input(type='hidden', id="_csrf", name='_csrf', value=csrfToken)
+									small.ms-time
+										button.btn-xs.btn.bgm-lightgreen.btn-icon.waves-effect(type='submit')
+											i.zmdi.zmdi-mail-send
+							form.list-group-item.media(method='post', action='/admin/servers/rconconsole/send/'+results.server._id)
+								.pull-left
+									img.lgi-img(src='/img/cod4.gif', alt='cod4')
+								.media-body
+									.lgi-heading AdminListAdmins
+									small.lgi-text List Server Admins
+									input(type='hidden', name='rcon_cmd', value="adminlistadmins")
+									input(type='hidden', id="_csrf", name='_csrf', value=csrfToken)
+									small.ms-time
+										button.btn-xs.btn.bgm-lightgreen.btn-icon.waves-effect(type='submit')
+											i.zmdi.zmdi-mail-send
+							form.list-group-item.media(method='post', action='/admin/servers/rconconsole/send/'+results.server._id)
+								.pull-left
+									img.lgi-img(src='/img/cod4.gif', alt='cod4')
+								.media-body
+									.lgi-heading CmdList
+									small.lgi-text List All Commands
+									input(type='hidden', name='rcon_cmd', value="cmdlist")
+									input(type='hidden', id="_csrf", name='_csrf', value=csrfToken)
+									small.ms-time
+										button.btn-xs.btn.bgm-lightgreen.btn-icon.waves-effect(type='submit')
+											i.zmdi.zmdi-mail-send
+							form.list-group-item.media(method='post', action='/admin/servers/rconconsole/send/'+results.server._id)
+								.pull-left
+									img.lgi-img(src='/img/cod4.gif', alt='cod4')
+								.media-body
+									.lgi-heading Serverinfo
+									small.lgi-text Server info
+									input(type='hidden', name='rcon_cmd', value="serverinfo")
+									input(type='hidden', id="_csrf", name='_csrf', value=csrfToken)
+									small.ms-time
+										button.btn-xs.btn.bgm-lightgreen.btn-icon.waves-effect(type='submit')
+											i.zmdi.zmdi-mail-send
+							form.list-group-item.media(method='post', action='/admin/servers/rconconsole/send/'+results.server._id)
+								.pull-left
+									img.lgi-img(src='/img/cod4.gif', alt='cod4')
+								.media-body
+									.lgi-heading Systeminfo
+									small.lgi-text System info
+									input(type='hidden', name='rcon_cmd', value="systeminfo")
+									input(type='hidden', id="_csrf", name='_csrf', value=csrfToken)
+									small.ms-time
+										button.btn-xs.btn.bgm-lightgreen.btn-icon.waves-effect(type='submit')
+											i.zmdi.zmdi-mail-send
+							form.list-group-item.media(method='post', action='/admin/servers/rconconsole/send/'+results.server._id)
+								.pull-left
+									img.lgi-img(src='/img/cod4.gif', alt='cod4')
+								.media-body
+									.lgi-heading ZoneMemInfo
+									small.lgi-text zone mem info
+									input(type='hidden', name='rcon_cmd', value="zonememinfo")
+									input(type='hidden', id="_csrf", name='_csrf', value=csrfToken)
+									small.ms-time
+										button.btn-xs.btn.bgm-lightgreen.btn-icon.waves-effect(type='submit')
+											i.zmdi.zmdi-mail-send
+					.m-body
+						header.mb-header
+							.mbh-user.clearfix
+								img(src=user.local.avatar_60, alt='img')
+								.p-t-5
+									| #{results.server.name} Rcon Console
+							ul.actions
+								li.dropdown
+									a(href='', data-toggle='dropdown')
+										i.zmdi.zmdi-delete
+									ul.dropdown-menu.dropdown-menu-right
+										li
+											a(href='/admin/servers/rconconsole/delete/'+results.server._id) Clear Messages from This Server
+										li
+											a(href='/admin/servers/rconconsole/delete-all') Clear Messages from All Servers
+						.mb-list
+							.mbl-messages.c-overflow
+								each row in results.rconcmds
+									.mblm-item.mblm-item-left
+										pre
+											| #{row.rcon_response}
+										small 
+											| Command #{row.rcon_command} executed #{row.createdAt} by admin #{row.rcon_user.local.user_name}
+							.mbl-compose
+								form(method='post', action='/admin/servers/rconconsole/send/'+results.server._id)
+									input(type='text', name='rcon_cmd', placeholder="Type a Rcon Command here ...", required)
+									input(type='hidden', id="_csrf", name='_csrf', value=csrfToken)
+									button(type='submit')
+										i.zmdi.zmdi-mail-send

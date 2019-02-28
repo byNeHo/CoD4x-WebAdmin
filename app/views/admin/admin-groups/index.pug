@@ -1,0 +1,67 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li.active Admin Groups
+		section#content
+			.container
+				.row
+					.col-md-8.col-sm-12
+						if (success_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-success
+										| #{success_messages}
+						if (error_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-danger
+										| #{error_messages}
+						.card
+							.card-header
+								h2 Admin Groups
+									small Manage your admin groups
+							.table-responsive.m-t-20
+								table.table.table-striped.m-t-20.m-b-20
+									thead
+										tr
+											th Group Name
+											th Power
+											th
+									tbody
+										each row in results
+											tr
+												td
+													a(href='/admin/admin-groups/edit/'+row._id)
+														| #{row.name}
+												td
+													| #{row.power}
+												td.text-right
+													a.btn.btn-danger.btn-xs(href='/admin/admin-groups/delete/'+row._id) Delete
+					.col-md-4.col-sm-12
+						.row
+							.card
+								.card-header
+									h2 Add new Admin Group
+										small Add a new server admin group
+								.card-body.card-padding
+									form(method='post', action='/admin/admin-groups/new/save')
+										.form-group.fg-line
+											label(for='name')
+												span.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content='Group name must be unique' title="" data-original-title="Group Name")
+												|  * Group name
+											input#name.form-control.input-sm(type='text', name='name', required)
+										.form-group.fg-line
+											label(for='power')
+												span.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content='Group power must be unique and number' title="" data-original-title="Group Power")
+												|  * Power
+											input#power.form-control.input-sm(type='text', name='power', required)
+										.form-group
+											input(type='hidden', name='_csrf', value=csrfToken)
+											button.btn.btn-primary.btn-block.waves-effect(type='submit') Add new Group
+								.clearfix
+

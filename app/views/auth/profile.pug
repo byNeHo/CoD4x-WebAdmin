@@ -1,0 +1,166 @@
+extends ../layout/home
+
+block content
+	
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li.active #{t('auth:profile.profile_bc_active')}
+		section#content
+			.container.container-alt
+				.block-header
+					h2 #{t('auth:profile.profile_bc_active')}
+						small #{t('auth:profile.profile_h2_small')}
+				#profile-main.card
+					.pm-overview.c-overflow
+						.pmo-pic
+							.p-relative
+								a(href='#')
+									img.img-responsive(src=user.local.avatar_512, alt='img')
+									a.pmop-edit(data-toggle="modal", href="#modalColor", data-target-color="blue")
+										i.zmdi.zmdi-camera
+										span.hidden-xs #{t('auth:profile.profile_form_avatar')}
+							.pmo-stat
+								h2.m-0.c-white #{user.local.user_role}
+								| #{t('auth:profile.profile_user_power')}
+					.pm-body.clearfix
+						.pmb-block
+							.pmbb-header
+								h2
+									i.zmdi.zmdi-assignment-account.m-r-10
+									|  #{t('auth:profile.profile_pm_header')}
+							.row
+								.col-md-12
+									if (success_messages.length > 0)
+										.row
+											.col-sm-12.col-md-12.m-t-30
+												.alert.alert-success
+													|  #{success_messages}
+										.clearfix
+									if (error_messages.length > 0)
+										.row
+											.col-sm-12.col-md-12.m-t-30
+												.alert.alert-danger
+													| #{error_messages}
+									.m-b-25
+										| #{t('auth:profile.profile_pm_text')}
+								.row
+									.col-md-12
+										.card
+											.card-header
+												h2
+													i.zmdi.zmdi-account
+													|  #{t('auth:profile.profile_card_h2')}
+													if (user.local.email)
+														small #{t('auth:profile.profile_card_h2_small_remove_local')}
+													else
+														small  #{t('auth:profile.profile_card_h2_small_create_local')}
+											.card-body.card-padding
+												if (user.local.email)
+													a.btn.btn-default(href='#', disabled='disabled')
+														i.zmdi.zmdi-account
+														|  #{t('auth:profile.profile_local_remove_btn')}
+												else
+													a.btn.btn-default(href='/user/connect/local')
+														i.zmdi.zmdi-account-add
+														|  #{t('auth:profile.profile_local_create_btn')}
+								if (results.ssoauth.length > 0)
+									.row
+										each row in results.ssoauth
+											if (row.name_alias=='sso-steam')
+												.col-md-4
+													.card
+														.card-header
+															h2
+																i.zmdi.zmdi-steam
+																|  #{t('auth:profile.profile_steam_h2')}
+																if (user.steam.id)
+																	small #{t('auth:profile.profile_steam_h2_small_remove_local')}
+																else
+																	small #{t('auth:profile.profile_steam_h2_small_create_local')}
+														.card-body.card-padding
+															if (user.steam.id)
+																a.btn.bgm-black(href='/user/unlink/steam')
+																	i.zmdi.zmdi-delete
+																	|  #{t('auth:profile.profile_steam_remove_btn')}
+															else
+																a.btn.bgm-black(href='/user/connect/steam')
+																	i.zmdi.zmdi-steam
+																	|  #{t('auth:profile.profile_steam_create_btn')}
+											if (row.name_alias=='sso-facebook')
+												.col-md-4
+													.card
+														.card-header
+															h2
+																i.zmdi.zmdi-facebook
+																|  #{t('auth:profile.profile_facebook_h2')}
+																if (user.facebook.token)
+																	small #{t('auth:profile.profile_facebook_h2_small_remove_local')}
+																else
+																	small #{t('auth:profile.profile_facebook_h2_small_create_local')}
+														.card-body.card-padding
+															if (user.facebook.token)
+																a.btn.bgm-indigo(href='/user/unlink/facebook')
+																	i.zmdi.zmdi-delete
+																	|  #{t('auth:profile.profile_facebook_remove_btn')}
+															else
+																a.btn.bgm-indigo(href='/user/connect/facebook')
+																	i.zmdi.zmdi-facebook
+																	|  #{t('auth:profile.profile_facebook_create_btn')}
+											if (row.name_alias=='sso-google')
+												.col-md-4
+													.card
+														.card-header
+															h2
+																i.zmdi.zmdi-google-plus
+																|  #{t('auth:profile.profile_google_h2')}
+																if (user.google.token)
+																	small #{t('auth:profile.profile_google_h2_small_remove_local')}
+																else
+																	small #{t('auth:profile.profile_google_h2_small_create_local')}
+														.card-body.card-padding
+															if (user.google.token)
+																a.btn.bgm-red(href='/user/unlink/google')
+																	i.zmdi.zmdi-delete
+																	|  #{t('auth:profile.profile_google_remove_btn')}
+															else
+																a.btn.bgm-red(href='/user/connect/google')
+																	i.zmdi.zmdi-google-plus
+																	|  #{t('auth:profile.profile_google_create_btn')}
+											if (row.name_alias=='sso-twitter')
+												.col-md-4
+													.card
+														.card-header
+															h2
+																i.zmdi.zmdi-twitter
+																|  #{t('auth:profile.profile_twitter_h2')}
+																if (user.twitter.token)
+																	small #{t('auth:profile.profile_twitter_h2_small_remove_local')}
+																else
+																	small #{t('auth:profile.profile_twitter_h2_small_create_local')}
+														.card-body.card-padding
+															if (user.twitter.token)
+																a.btn.bgm-lightblue(href='/user/unlink/twitter')
+																	i.zmdi.zmdi-delete
+																	|  #{t('auth:profile.profile_twitter_remove_btn')}
+															else
+																a.btn.bgm-lightblue(href='/user/connect/twitter')
+																	i.zmdi.zmdi-twitter
+																	|  #{t('auth:profile.profile_twitter_create_btn')}
+				#modalColor.modal.fade(aria-hidden='true')
+					.modal-dialog
+						.modal-content
+							.modal-header
+								button.close(type='button', data-dismiss='modal') ×
+								h4.modal-title #{t('auth:profile.profile_modal_title')}
+							.modal-body
+								form#uploadForm(enctype='multipart/form-data', action='/user/upload?_csrf='+csrfToken, method='post')
+									.m-t-30
+									input(type='file', name='userPhoto')
+									.m-t-30
+									a.btn.btn-sm.btn-danger.pull-right(href='/user/delete-avatar') #{t('auth:profile.profile_modal_delete_avatar')}
+									button.btn.btn-sm.btn-primary(type='submit', name='submit') #{t('auth:profile.profile_modal_change_avatar')}
+									
+							.modal-footer
+								button.btn.btn-link(type='button', data-dismiss='modal')
+									| #{t('auth:profile.profile_modal_close')}

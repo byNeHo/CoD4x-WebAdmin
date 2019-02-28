@@ -1,0 +1,41 @@
+extends ../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li.active #{t('auth:connect_local.connect_local_h2')}
+		section#content
+			.container
+				.row
+					.col-md-4.col-md-offset-3
+						.card
+							.card-header.bgm-blue
+								h2
+									| #{t('auth:connect_local.connect_local_h2')}
+									small #{t('auth:connect_local.connect_local_h2_small')}
+								button.btn.bgm-green.btn-float.waves-effect
+									i.zmdi.zmdi-account
+							.card-body.card-padding
+								if (message.length > 0)
+									.alert.alert-danger=message
+								form(method='post', action='/user/connect/local')
+									.form-group.fg-line
+										label(for='user_name')
+											i.zmdi.zmdi-account
+											|  #{t('auth:sign_up.sign_up_form_username')}
+										input#user_name.form-control.input-sm(type='text', placeholder='Enter Username here', name='user_name')
+									.form-group.fg-line
+										label(for='email')
+											i.zmdi.zmdi-account
+											|  #{t('auth:login.login_form_email')}
+										input#email.form-control.input-sm(type='email', placeholder=t('auth:login.login_form_email_placeholder'), name='email')
+									.form-group.fg-line
+										label(for='password')
+											i.zmdi.zmdi-lock
+											|  #{t('auth:login.login_form_password')}
+										input#password.form-control.input-sm(type='password', placeholder=t('auth:login.login_form_password_placeholder'), name='password')
+									.col-sm-12.m-b-20
+										input(type='hidden', name='_csrf', value=csrfToken)
+										button.btn.btn-primary.waves-effect(type='submit') #{t('auth:sign_up.sign_up_form_btn')}
+									.clearfix

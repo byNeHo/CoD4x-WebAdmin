@@ -1,0 +1,82 @@
+extends ../layout/home
+
+block content
+	
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li.active #{t('auth:sign_up.sign_up_h2')}
+		section#content
+			.container
+				.row
+					.col-md-4.col-md-offset-3
+						.card
+							.card-header.bgm-blue
+								h2
+									| #{t('auth:sign_up.sign_up_h2')}
+									small #{t('auth:sign_up.sign_up_h2_small')}
+								button.btn.bgm-green.btn-float.waves-effect
+									i.zmdi.zmdi-account-add
+							.card-body.card-padding
+								if (message.length > 0)
+									.alert.alert-danger=message
+								if (captcha)
+									form(method='post', action='/user/signup')
+										input(type='hidden', name='_csrf', value=csrfToken)
+										.form-group.fg-line
+											label(for='username')
+												i.zmdi.zmdi-account
+												|  #{t('auth:sign_up.sign_up_form_username')}
+											input#username.form-control.input-sm(type='text', placeholder=t('auth:sign_up.sign_up_form_username_placeholder'), name='user_name')
+										.form-group.fg-line
+											label(for='email')
+												i.zmdi.zmdi-account
+												|  #{t('auth:login.login_form_email')}
+											input#email.form-control.input-sm(type='text', placeholder=t('auth:login.login_form_email_placeholder'), name='email')
+										.row
+											.col-sm-6.m-b-20
+												.form-group.fg-line
+													label(for='password')
+														i.zmdi.zmdi-lock
+														|  #{t('auth:login.login_form_password')}
+													input#password.form-control.input-sm(type='password', placeholder=t('auth:login.login_form_password_placeholder'), name='password')
+											.col-sm-6.m-b-20
+												.form-group.fg-line
+													label(for='confirmPassword')
+														i.zmdi.zmdi-lock
+														|  #{t('auth:sign_up.sign_up_form_confirm_password')}
+													input#confirmPassword.form-control.input-sm(type='password', placeholder=t('auth:sign_up.sign_up_form_confirm_password_placeholder'), name='confirmPassword')
+										.row
+											.col-md-12.text-center.m-b-25
+												| !{captcha}
+										.row
+											.col-sm-4.m-b-20
+												button.btn.btn-primary.waves-effect(type='submit') #{t('auth:sign_up.sign_up_form_btn')}
+											.col-sm-8.m-b-20
+												a(href='/user/login')  #{t('auth:sign_up.sign_up_already_registered')}
+								else
+									if (error)
+										div(style="color:red") #{t('auth:sign_up.sign_up_form_recaptch_error')} : #{error}
+									else
+										div(style="color:green") #{t('auth:sign_up.sign_up_form_recaptch_data')} : #{data}
+									a(href="/user/signup") #{t('auth:sign_up.sign_up_form_recaptch_retry')}
+								.clearfix
+								if (results.length > 0)
+									.col-sm-12-m-t-20.text-center
+										h5 #{t('auth:sign_up.sign_up_register_sso_btns')}
+									hr
+									.col-sm-12-m-t-20.btn-demo.text-center
+										each row in results
+											if (row.name_alias=='sso-facebook')
+												a.btn.bgm-indigo.btn-icon.waves-effect.waves-circle.waves-float(href='/user/auth/facebook')
+													span.zmdi.zmdi-facebook
+											if (row.name_alias=='sso-google')
+												a.btn.bgm-red.btn-icon.waves-effect.waves-circle.waves-float(href='/user/auth/google')
+													span.zmdi.zmdi-google-plus
+											if (row.name_alias=='sso-twitter')
+												a.btn.bgm-lightblue.btn-icon.waves-effect.waves-circle.waves-float(href='/user/auth/twitter')
+													span.zmdi.zmdi-twitter
+											if (row.name_alias=='sso-steam')
+												a.btn.bgm-black.btn-icon.waves-effect.waves-circle.waves-float(href='/user/auth/steam')
+													span.zmdi.zmdi-steam
+									.clearfix

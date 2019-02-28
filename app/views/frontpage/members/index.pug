@@ -1,0 +1,52 @@
+extends ../../layout/home
+
+block content
+	ol.breadcrumb
+		li
+			a(href='/') #{t('navigation:main_navigation.home')}
+		li.active #{t('frontpages:members.members_tab_name_members')}
+	section#content
+		.container.container-alt
+			.block-header
+				h2
+					| #{t('frontpages:members.members_tab_name_members')}
+					small #{t('frontpages:members.members_h2_small')} #{websitename}
+			.card
+				.card-header
+					h2 #{t('frontpages:members.members_card_h2')}
+						small=t('frontpages:members.members_card_h2_small', { usersCount: results.users.length, adminsCount: results.admins.length })
+				.card-body.card-padding
+					.row
+						ul.tab-nav(role='tablist')
+							li.active
+								a(href='#admins', aria-controls='admins', role='tab', data-toggle='tab')
+									| #{t('frontpages:members.members_tab_name_admins')}
+									span.m-l-10.label.label-danger=results.admins.length
+							li
+								a(href='#users', aria-controls='users', role='tab', data-toggle='tab')
+									| #{t('frontpages:members.members_tab_name_members')}
+									span.m-l-10.label.label-warning=results.users.length
+						.tab-content
+							#admins.tab-pane.active(role='tabpanel')
+								ul#users-container.users-container
+									each row in results.admins
+										li.users-box.registered-user
+											a(href='/members/'+row._id)
+												img.user-picture(src=row.local.avatar_60, alt='img')
+											br
+											.user-info
+												div
+													a(href='/members/'+row._id)  #{row.local.user_name}
+								.clearfix
+							#users.tab-pane(role='tabpanel')
+								ul#users-container.users-container
+									each row in results.users
+										li.users-box.registered-user
+											a(href='/members/'+row._id)
+												img.user-picture(src=row.local.avatar_60, alt='img')
+											br
+											.user-info
+												div
+													a(href='/members/'+row._id)  #{row.local.user_name}
+								.clearfix
+								

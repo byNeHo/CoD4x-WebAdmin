@@ -1,0 +1,25 @@
+a(data-toggle='dropdown', href='')
+	if (cur_language=='en')
+		i.flag-icon.flag-icon.flag-icon-gb
+	else if (cur_language=='de')
+		i.flag-icon.flag-icon.flag-icon-de
+	else if (cur_language=='hr')
+		i.flag-icon.flag-icon.flag-icon-hr
+	else
+		i.flag-icon.flag-icon.flag-icon-gb
+ul.dropdown-menu.dm-icon.pull-right
+	if (cur_language!='en')
+		li
+			a(href='?lng=en')
+				i.flag-icon.flag-icon-gb
+				|  English
+	if (cur_language!='de')
+		li
+			a(href='?lng=de')
+				i.flag-icon.flag-icon-de
+				|  Deutsch
+	if (cur_language!='hr')
+		li
+			a(href='?lng=hr')
+				i.flag-icon.flag-icon-hr
+				|  Hrvatski

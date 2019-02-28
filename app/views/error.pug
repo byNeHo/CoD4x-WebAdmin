@@ -1,0 +1,10 @@
+extends layout/home
+
+block content
+	h1= message
+	h2= error.status
+	section#content
+		.container
+			.row
+				.col-md-10.col-sm-12
+					pre #{error.stack}

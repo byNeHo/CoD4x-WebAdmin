@@ -1,0 +1,87 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li.active Plugins
+		section#content
+			.container.container-alt
+				.block-header
+					h2 Plugins
+						small Manage Cod4x-WebAdmin Plugins
+				.row
+					.col-md-12
+						if (success_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-success
+										| #{success_messages}
+						if (error_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-danger
+										| #{error_messages}
+						.card
+							.card-body
+								div(role='tabpanel')
+									ul.tab-nav(role='tablist')
+										li.active
+											a(href='#active_plugins', aria-controls='active_plugins', role='tab', data-toggle='tab')
+												| Active
+												span.m-l-10.label.label-success=results.activeplugins.length
+										li
+											a(href='#inactive', aria-controls='inactive', role='tab', data-toggle='tab')
+												| Inactive
+												span.m-l-10.label.label-warning=results.inactiveplugins.length
+									.tab-content
+										#active_plugins.tab-pane.active(role='tabpanel')
+											ul.plugins
+												each plugin_active in results.activeplugins
+													li
+														.pull-right.controls
+															a.btn.btn.btn-info.m-r-15(href="/admin/plugins/edit/"+plugin_active._id)
+																	span.zmdi.zmdi-wrench
+																	|  Settings
+															if (plugin_active.status == true)
+																a.btn.btn.btn-warning(href="/admin/plugins/edit/deactivate/"+plugin_active._id)
+																	span.zmdi.zmdi-power
+																	|  Deactivate
+															else
+																a.btn.btn.btn-success(href="/admin/plugins/edit/activate/"+plugin_active._id)
+																	span.zmdi.zmdi-power
+																	|  Activate
+														h2
+															strong=plugin_active.name
+														div.p-t-25.p-r-15=plugin_active.description
+														p
+															| For more information or help with this plugin visit: 
+															a(target='_blank', href='https://forum.cirkus-serveri.com/') https://forum.cirkus-serveri.com/
+										#inactive.tab-pane(role='tabpanel')
+											ul.plugins
+												each plugin_inactive in results.inactiveplugins
+													li
+														.row
+															.col-md-9
+																h2
+																	strong=plugin_inactive.name
+																div.p-t-15.p-b-15=plugin_inactive.description
+																p
+																	| For more information, help visit: 
+																	a(target='_blank', href='https://forum.cirkus-serveri.com/') https://forum.cirkus-serveri.com/
+															.col-md-3.text-right.controls
+																a.btn.btn.btn-info.m-r-15(href="/admin/plugins/edit/"+plugin_inactive._id)
+																		span.zmdi.zmdi-wrench
+																		|  Settings
+																if (plugin_inactive.status == true)
+																	a.btn.btn.btn-warning(href="/admin/plugins/edit/deactivate/"+plugin_inactive._id)
+																		span.zmdi.zmdi-power
+																		|  Deactivate
+																else
+																	a.btn.btn.btn-success(href="/admin/plugins/edit/activate/"+plugin_inactive._id)
+																		span.zmdi.zmdi-power
+																		|  Activate
+														
+						.clearfix

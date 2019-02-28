@@ -1,0 +1,95 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li.active Server Commands (Plugin Julia)
+		section#content
+			.container
+				.row
+					.col-md-8.col-sm-12
+						.card
+							.card-header
+								h2 Plugin Julia - Server Commands
+									small Server Commands in combination with Plugin Julia on the game Server(s)
+							if (success_messages.length > 0)
+								.card-body.card-padding
+									.alert.alert-success
+										| #{success_messages}
+							if (error_messages.length > 0)
+								.card-body.card-padding
+									.alert.alert-danger
+										| #{error_messages}
+							.table-responsive.m-t-20
+								table.table.table-striped.m-t-20.m-b-20
+									thead
+										tr
+											th Req. Power
+											th Command name
+											th.text-center Send Message to Game Server
+											th
+									tbody
+										each row in results.server_commands
+											tr
+												td
+													if (row.req_power > 1 && row.req_power < 40)
+														button.btn.btn-xs.bgm-deeppurple.waves-effect #{row.req_power}
+													else if (row.req_power >= 40 && row.req_power < 60)
+														button.btn.btn-xs.bgm-bluegray.waves-effect #{row.req_power}
+													else if (row.req_power >= 60 && row.req_power < 80)
+														button.btn.btn-xs.bgm-blue.waves-effect #{row.req_power}
+													else if (row.req_power >= 80 && row.req_power < 100)
+														button.btn.btn-xs.bgm-orange.waves-effect #{row.req_power}
+													else if (row.req_power == 100)
+														button.btn.btn-xs.bgm-red.waves-effect #{row.req_power}
+													else
+														button.btn.btn-xs.bgm-lightgreen.waves-effect #{row.req_power}
+												td
+													a(href='/admin/server-commands/edit/'+row._id)
+														| #{row.command_name}
+												td.text-center
+													if (row.send_back_message_to_server == true)
+														button.btn.btn-xs.btn-success
+															span.zmdi.zmdi-check
+													else
+														button.btn.btn-xs.btn-danger
+															span.zmdi.zmdi-block
+												td.text-right
+													a.btn.btn-danger.btn-xs(href='/admin/server-commands/delete/'+row._id) Delete
+					.col-md-4.col-sm-12
+						.row
+							.card
+								.card-header
+									h2 Send Message to Game Server
+										small After Command execution via Website an information message will be sent to the Game Server. This feature is available for next commands
+								.card-body.card-padding
+									h4 Supported Commands List
+									ul.clist.clist-check
+										li Kick
+										li Tempban (if enabled works with tempban, voice and chat mute)
+										li Permban
+										li Unban (if enabled works with permban and any tempban)
+								.clearfix
+						.row
+							.card
+								.card-header
+									h2 Add new Server Command
+										small Game Server(s) Commands in Combination with Plugin Julia
+								.card-body.card-padding
+									form(method='post', action='/admin/server-commands/new/save')
+										.form-group.fg-line
+											select.selectpicker(name='req_power', required)
+												option(value="") minimum power
+												each row in results.admingroups
+													option(value=row.power) #{row.power}
+										.form-group.fg-line
+											label(for='command_name') Command
+											input#command_name.form-control.input-sm(type='text', name='command_name', placeholder='server_command', required)
+										.form-group
+											input(type='hidden', name='_csrf', value=csrfToken)
+											button.btn.btn-primary.btn-block.waves-effect(type='submit') Add new Server Command
+								.clearfix
+
