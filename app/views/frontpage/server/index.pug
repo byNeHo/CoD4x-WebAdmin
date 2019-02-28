@@ -35,7 +35,7 @@ block content
 									|  #{results.server.country}
 								li
 									i.zmdi.zmdi-account
-									|  #{t('frontpages:server.server_server_details')} #{results.server.server_slots}
+									|  #{results.server.max_players} #{t('frontpages:server.server_slots')}
 									if(results.server.private_clients > 0)
 										|  (#{results.server.private_clients} #{t('frontpages:server.server_private_slots')})
 								li
