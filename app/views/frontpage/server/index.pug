@@ -97,9 +97,9 @@ block content
 																		span.zmdi.zmdi-refresh
 																a.btn.waves-effect.pull-right.m-r-15.btn.bgm-lightgreen(href='/kgb-plugin/'+results.server.id+'/start', data-toggle="tooltip", data-placement="top", title="", data-original-title=t('frontpages:server.server_start_server'))
 																		span.zmdi.zmdi-play
-											if (results.startstop)
+											if (results.startstop.status === true)
 												if (user.local.user_role >= results.startstop.min_power)
-													if (results.server.external_ip === false)
+													if (results.server.external_ip != true)
 														.row
 															.col-md-12.m-b-25.m-t-15
 																if (results.server.is_stoped === false)

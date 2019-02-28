@@ -78,7 +78,7 @@ module.exports = {
 			usermaps: Maps.find({}, 'map_name display_map_name').sort({map_name: 'asc'}).execAsync(),
 			rcon_extra: ExtraRcon.findOne({'name': 'extra_rcon'}, 'enable_map_change minimum_power_for_map_change enable_maprotate minimum_power_for_maprotate enable_screenshot_all minimum_admin_power_for_screenshots screenshots_for_users_enabled screenshots_enabled minimum_admin_power_for_screenshots enable_tempban_duration default_tempban_time').execAsync(),
 			plugins: Plugins.findOne({'category' : 'kgb', 'status':true}).execAsync(),
-			startstop: Plugins.findOne({'category': 'servers', 'status':true, 'name_alias':'start-stop-server'}, 'min_power').execAsync()
+			startstop: Plugins.findOne({'category': 'servers', 'name_alias':'start-stop-server'}, 'status min_power').execAsync()
 		}).then (function(results){
 			if (results.server.map_img!= null && results.server.map_img != '' && results.server.map_img){
 				if (fileExists('./public/img/maps/'+results.server.map_img+'.jpg')===true){
