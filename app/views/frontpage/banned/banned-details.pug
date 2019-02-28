@@ -52,8 +52,8 @@ block content
 							p
 								| #{t('frontpages:banned.banned_details_permanently_banned')} 
 								span.c-red #{results.getbanned.player_name}
-								|  #{t('frontpages:banned.banned_details_with_reason')} 
-								| #{results.getbanned.admin_message}
+								|  #{t('frontpages:banned.banned_details_with_reason')}: 
+								span.c-green #{results.getbanned.admin_message}
 								br
 								| #{t('frontpages:banned.banned_details_player_guid')} #{results.getbanned.player_name} (#{results.getbanned.player_guid}) #{t('frontpages:banned.banned_details_server')}  
 								span.c-blue #{results.getbanned.server_name}

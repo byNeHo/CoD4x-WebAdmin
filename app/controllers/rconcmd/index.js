@@ -303,7 +303,7 @@ module.exports = {
 														expire: tempbanexpire
 									  			});
 													newTempban.saveAsync();
-													req.flash('rconconsole_messages', req.t('rcon_commands:RconTempban.tempban_msg_web', { get_PlayerName: req.body.rcon_player, get_TimeNumber:getNum, get_TimeCategory:time_label, get_Reason: setdefault_reason }));
+													req.flash('rconconsole_messages', req.t('rcon_commands:RconTempban.tempban_msg_web', { get_PlayerName:req.body.rcon_player, get_TimeNumber:getNum, get_TimeCategory:time_label_web, get_Reason:setdefault_reason }));
 												}).then(function(returninfo){
 													if ( typeof results.getcommand.send_back_message_to_server !== 'undefined' && results.getcommand.send_back_message_to_server==true){
 														var cmdinform = 'say '+main_lng('rcon_commands:RconTempban.tempban_msg_game_server', { get_PlayerName: req.body.rcon_player, get_AdminName: req.user.local.user_name, get_TimeNumber: getNum, get_TimeCategory: time_label, get_Reason: setdefault_reason });
@@ -340,7 +340,7 @@ module.exports = {
 												expire: tempbanexpire
 							  			});
 							  			newTempban.saveAsync();
-											req.flash('rconconsole_messages', req.t('rcon_commands:RconTempban.tempban_msg_web', { get_PlayerName: req.body.rcon_player, get_TimeNumber:getNum, get_TimeCategory:time_label, get_Reason: setdefault_reason }));
+											req.flash('rconconsole_messages', req.t('rcon_commands:RconTempban.tempban_msg_web', { get_PlayerName: req.body.rcon_player, get_TimeNumber:getNum, get_TimeCategory:time_label_web, get_Reason: setdefault_reason }));
 										}).then(function(returninfo){
 											if ( typeof results.getcommand.send_back_message_to_server !== 'undefined' && results.getcommand.send_back_message_to_server==true){
 												var cmdinform = 'say '+main_lng('rcon_commands:RconTempban.tempban_msg_game_server', { get_PlayerName: req.body.rcon_player, get_AdminName: req.user.local.user_name, get_TimeNumber: getNum, get_TimeCategory: time_label, get_Reason: setdefault_reason });
