@@ -641,10 +641,9 @@ module.exports = {
 								var shotnum = data[4];
 								var time = data[5];
 
-								if (isEmpty(uncolorize(playername))==true){
+								if (isEmpty(screenshot_playername(playername))==true){
 									var save_player_name = 'CID';
 								} else {
-									var save_player_name_uncolorize = uncolorize(playername);
 									var save_player_name = screenshot_playername(playername);
 								}
 								var newServerScreenshot = new ServerScreenshots ({
@@ -767,10 +766,9 @@ module.exports = {
 									var shotnum = data[4];
 									var time = data[5];
 
-									if (isEmpty(uncolorize(playername))==true){
+									if (isEmpty(screenshot_playername(playername))==true){
 										var save_player_name = 'CID';
 									} else {
-										var save_player_name_uncolorize = uncolorize(playername);
 										var save_player_name = screenshot_playername(playername);
 									}
 									var newServerScreenshot = new ServerScreenshots ({
@@ -827,8 +825,28 @@ function uncolorize(string){
 }
 
 function screenshot_playername(string){
-	string = string.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
+	string = replaceString(string, '^0', '');
+	string = replaceString(string, '^1', '');
+	string = replaceString(string, '^2', '');
+	string = replaceString(string, '^3', '');
+	string = replaceString(string, '^4', '');
+	string = replaceString(string, '^5', '');
+	string = replaceString(string, '^6', '');
+	string = replaceString(string, '^7', '');
+	string = replaceString(string, '^8', '');
+	string = replaceString(string, '^9', '');
+	string = replaceString(string, '&', '');
+	string = replaceString(string, '\\', '');
+	string = replaceString(string, '\/', '');
+	string = replaceString(string, '#', '');
+	string = replaceString(string, ',', '');
+	string = replaceString(string, '.', '');
+	string = replaceString(string, '+', '');
+	string = replaceString(string, '$', '');
+	string = replaceString(string, '|', '');
+	return string
 }
+
 
 function removeEmpty(obj) {
   Object.keys(obj).forEach(function(key) {
