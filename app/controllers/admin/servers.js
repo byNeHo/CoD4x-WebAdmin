@@ -46,68 +46,75 @@ module.exports = {
 				res.redirect('/admin/my-servers');
 			}else {
 				var sq = new SourceQuery(2000);
-			sq.open(req.body.ip, req.body.port);
-			sq.getRules(function(error, rules){
-				if(!error){
-					var private_clients = search("sv_privateClients", rules);
-					var max_clients = search("sv_maxclients", rules);
-					var location = search("_Location", rules);
-					var game_name = search("gamename", rules);
-					var gametype = search("g_gametype", rules);
-					var mapStartTime = search("g_mapStartTime", rules);
-					var shortversion = search("shortversion", rules);
-					geo = geoip.lookup(req.body.ip);
-					short_country = geo.country.toLowerCase();
-					sq.getInfo(function(error, info){
-						if (!error){
-							
-							//Remove Host(Rounds: 0/0) from alias
-							var my_string = info.name;
-							if (S(my_string).contains('Round') == true){
-								var new_name = my_string.split("Round")[0];
-							}else{
-								var new_name= my_string
-							}
-
-							var newServer = new Servers ({
-								ip: req.body.ip,
-								port: req.body.port,
-								name: info.name,
-								slug_name: new_name,
-								country: location.value,
-								country_shortcode: short_country,
-								gametype: gametype.value,
-								shortversion: shortversion.value,
-								private_clients: private_clients.value,
-								online_players: info.players,
-								max_players: info.maxplayers,
-								map_playing: info.map,
-								game_name: info.game,
-								rcon_password: req.body.rcon_password,
-								external_ip : true,
-								screenshot_identkey: req.body.screenshot_identkey,
-								color: req.body.color,
-								is_online: true,
-								is_stoped: false
-							});
-							newServer.saveAsync()
-							.then(function(saved) {
-								req.flash('success_messages', 'Server successfully added');
+				sq.open(req.body.ip, req.body.port);
+				sq.getRules(function(error, rules){
+					if(!error){
+						var private_clients = search("sv_privateClients", rules);
+						var max_clients = search("sv_maxclients", rules);
+						var location = search("_Location", rules);
+						var game_name = search("gamename", rules);
+						var gametype = search("g_gametype", rules);
+						var mapStartTime = search("g_mapStartTime", rules);
+						var shortversion = search("shortversion", rules);
+						geo = geoip.lookup(req.body.ip);
+						short_country = geo.country.toLowerCase();
+						
+						sq.getInfo(function(error, info){
+							if (!error){
+								//Remove Host(Rounds: 0/0) from alias
+								var my_string = uncolorize(info.name);
+								if (S(my_string).contains('Round') == true){
+									var new_name = my_string.split("Round")[0];
+								} else {
+									var new_name= my_string
+								}
+								//check if this server name already exist
+								Servers.findOne({'slug_name':new_name}, function( err, check_server_name ) {
+									if(check_server_name) {
+										req.flash('error_messages', 'Server name already exist, server names have to be unique. You already have a server called "SERVERNAME"');
+										res.redirect('back');
+									} else {
+										var newServer = new Servers ({
+											ip: req.body.ip,
+											port: req.body.port,
+											name: info.name,
+											slug_name: new_name,
+											country: location.value,
+											country_shortcode: short_country,
+											gametype: gametype.value,
+											shortversion: shortversion.value,
+											private_clients: private_clients.value,
+											online_players: info.players,
+											max_players: info.maxplayers,
+											map_playing: info.map,
+											game_name: info.game,
+											rcon_password: req.body.rcon_password,
+											external_ip : true,
+											screenshot_identkey: req.body.screenshot_identkey,
+											color: req.body.color,
+											is_online: true,
+											is_stoped: false
+										});
+										newServer.saveAsync()
+										.then(function(saved) {
+											req.flash('success_messages', 'Server successfully added');
+											res.redirect('back');
+										}).catch(function(err) {
+											console.log("There was an error" +err);
+										});
+									}
+								});
+							}else {
+								req.flash('error_messages', 'There was an error, please try again later - '+error);
 								res.redirect('back');
-							}).catch(function(err) {
-								console.log("There was an error" +err);
-							});
-						}else {
-							req.flash('error_messages', 'There was an error, please try again later - '+error);
-							res.redirect('back');
-						}
-					});
-				}else{
-					req.flash('error_messages', 'There was an error, please try again later - '+error);
-					console.log("There was an error: " +error);
-					res.redirect('back');
-				}
-			});
+							}
+						});
+					}else{
+						req.flash('error_messages', 'There was an error, please try again later - '+error);
+						console.log("There was an error: " +error);
+						res.redirect('back');
+					}
+				});
 			}
 			
 		}).catch(function(err) {
@@ -118,129 +125,144 @@ module.exports = {
 	},
 
 	CreateNewLocalServer: function(req, res, next) {
+		BluebirdPromise.props({
+			check_server_port: Servers.findOne({'port':req.body.port, 'ip':config.ssh_access.host}).execAsync(),
+			check_server_name: Servers.findOne({'slug_name': 'SERVERNAME'}).execAsync()
+		}).then (function(results){
+			if (results.check_server_port){
+				req.flash('error_messages', 'Server port already exist, you can not run 2 servers on same port');
+				res.redirect('back');
+			} else {
+				if (results.check_server_name){
+					req.flash('error_messages', 'Server name already exist, server names have to be unique. You already have a server called "SERVERNAME"');
+					res.redirect('back');
+				} else {
+					var serverport=req.body.port;
+					var homedir=config.cod4_server_plugin.servers_root+"/cod4-"+req.body.port;
+					var configfile="server.cfg";
+					var geo = geoip.lookup(config.ssh_access.host);
+					var short_country = geo.country.toLowerCase();
+					var serverslots = req.body.server_slots;
 
-		var serverport=req.body.port;
-		var homedir=config.cod4_server_plugin.servers_root+"/cod4-"+req.body.port;
-		var configfile="server.cfg";
-		var geo = geoip.lookup(config.ssh_access.host);
-		var short_country = geo.country.toLowerCase();
-		var serverslots = req.body.server_slots;
-
-		//Add server to mongoDB
-
-		var newServer = new Servers ({
-			ip: config.ssh_access.host,
-			port: req.body.port,
-			name: 'SERVERNAME',
-			slug_name: 'SERVERNAME',
-			country: 'Germany',
-			country_shortcode: 'de',
-			gametype: 'war',
-			shortversion: '1.8',
-			online_players: '0/'+serverslots,
-			max_players: serverslots,
-			map_playing: 'Crash',
-			map_img: 'mp_crash',
-			game_name: 'Call of Duty 4',
-			rcon_password: req.body.rcon_password,
-			external_ip : false,
-			screenshot_identkey: req.body.screenshot_identkey,
-			julia_identkey: req.body.julia_identkey,
-			color: req.body.color,
-			server_slots: req.body.server_slots,
-			script_starter: './cod4x18_dedrun +set net_ip '+config.ssh_access.host+' +set net_port '+serverport+' +set sv_maxclients '+serverslots+' +set fs_homepath '+homedir+' +set fs_basepath '+homedir+' +set sv_punkbuster 0 +set rcon_password '+req.body.rcon_password+' +exec '+configfile+' +map_rotate',
-			is_online: false,
-			is_stoped: true
-		});
-		newServer.saveAsync()
-		.then(function(saved) {
-			var ssh = new SSH({
-				host: config.ssh_access.host,
-				user: config.ssh_access.user,
-				pass: config.ssh_access.password,
-				baseDir: config.cod4_server_plugin.servers_root
-			});
-			ssh.exec('cd '+config.cod4_server_plugin.servers_root, {
-				out: console.log.bind('Entering the servers root directory')
-			}).exec('mkdir '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port, {
-				out: console.log.bind(console)
-			}).exec('mkdir '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main', {
-				out: console.log.bind(console)
-			}).exec('cd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port, {
-				out: console.log.bind('Entering the servers directory')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/cod4x18_dedrun '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/cod4x18_dedrun', {
-				out: console.log.bind('Symlink cod4x18_dedrun')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/libstdc++.so.6 '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/libstdc++.so.6', {
-				out: console.log.bind('Symlink libstdc++.so.6')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/steam_api.so '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/steam_api.so', {
-				out: console.log.bind('Symlink steam_api.so')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/steamclient.so '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/steamclient.so', {
-				out: console.log.bind('Symlink steamclient.so')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_00.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_00.iwd', {
-				out: console.log.bind('Symlink main/iw_00.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_01.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_01.iwd', {
-				out: console.log.bind('Symlink main/iw_01.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_02.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_02.iwd', {
-				out: console.log.bind('Symlink main/iw_02.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_03.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_03.iwd', {
-				out: console.log.bind('Symlink main/iw_03.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_04.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_04.iwd', {
-				out: console.log.bind('Symlink main/iw_04.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_05.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_05.iwd', {
-				out: console.log.bind('Symlink main/iw_05.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_06.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_06.iwd', {
-				out: console.log.bind('Symlink main/iw_06.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_07.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_07.iwd', {
-				out: console.log.bind('Symlink main/iw_07.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_08.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_08.iwd', {
-				out: console.log.bind('Symlink main/iw_08.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_09.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_09.iwd', {
-				out: console.log.bind('Symlink main/iw_09.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_10.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_10.iwd', {
-				out: console.log.bind('Symlink main/iw_10.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_11.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_11.iwd', {
-				out: console.log.bind('Symlink main/iw_11.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_12.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_12.iwd', {
-				out: console.log.bind('Symlink main/iw_12.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_13.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_13.iwd', {
-				out: console.log.bind('Symlink main/iw_13.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/localized_english_iw00.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/localized_english_iw00.iwd', {
-				out: console.log.bind('Symlink main/localized_english_iw00.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/localized_english_iw01.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/localized_english_iw01.iwd', {
-				out: console.log.bind('Symlink main/localized_english_iw01.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/localized_english_iw02.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/localized_english_iw02.iwd', {
-				out: console.log.bind('Symlink main/localized_english_iw02.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/localized_english_iw03.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/localized_english_iw03.iwd', {
-				out: console.log.bind('Symlink main/localized_english_iw03.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/localized_english_iw04.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/localized_english_iw04.iwd', {
-				out: console.log.bind('Symlink main/localized_english_iw04.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/localized_english_iw05.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/localized_english_iw05.iwd', {
-				out: console.log.bind('Symlink main/localized_english_iw05.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/localized_english_iw06.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/localized_english_iw06.iwd', {
-				out: console.log.bind('Symlink main/localized_english_iw06.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/xbase_00.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/xbase_00.iwd', {
-				out: console.log.bind('Symlink main/xbase_00.iwd')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/miles '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/miles', {
-				out: console.log.bind('Symlink miles directory')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/zone '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/zone', {
-				out: console.log.bind('Symlink zone dir')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/mods '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/mods', {
-				out: console.log.bind('Symlink mods directory')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/plugins '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/plugins', {
-				out: console.log.bind('Symlink plugins directory')
-			}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/usermaps '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/usermaps', {
-				out: console.log.bind('Symlink usermaps directory')
-			}).exec('cp '+config.cod4_server_plugin.servers_root+'/main-server-files/main/server.cfg '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/', {
-				out: console.log.bind('Symlink plugins directory')
-			}).exec('chmod 775 '+config.cod4_server_plugin.servers_root+'/main-server-files/main/server.cfg',{
-				out: console.log.bind('CHMOD 775 server.cfg')
-			}).start();
-			req.flash('success_messages', 'Server successfully Created, dont forget to open the PORTS in Firewall and to start the Server and ofcorse to change manually the server.cfg');
-			res.redirect('back');
+					var newServer = new Servers ({
+						ip: config.ssh_access.host,
+						port: req.body.port,
+						name: 'SERVERNAME',
+						slug_name: 'SERVERNAME',
+						country: 'Germany',
+						country_shortcode: 'de',
+						gametype: 'war',
+						shortversion: '1.8',
+						online_players: '0/'+serverslots,
+						max_players: serverslots,
+						map_playing: 'Crash',
+						map_img: 'mp_crash',
+						game_name: 'Call of Duty 4',
+						rcon_password: req.body.rcon_password,
+						external_ip : false,
+						screenshot_identkey: req.body.screenshot_identkey,
+						julia_identkey: req.body.julia_identkey,
+						color: req.body.color,
+						server_slots: req.body.server_slots,
+						script_starter: './cod4x18_dedrun +set net_ip '+config.ssh_access.host+' +set net_port '+serverport+' +set sv_maxclients '+serverslots+' +set fs_homepath '+homedir+' +set fs_basepath '+homedir+' +set sv_punkbuster 0 +set rcon_password '+req.body.rcon_password+' +exec '+configfile+' +map_rotate',
+						is_online: false,
+						is_stoped: true
+					});
+					newServer.saveAsync()
+					.then(function(saved) {
+						var ssh = new SSH({
+							host: config.ssh_access.host,
+							user: config.ssh_access.user,
+							pass: config.ssh_access.password,
+							baseDir: config.cod4_server_plugin.servers_root
+						});
+						ssh.exec('cd '+config.cod4_server_plugin.servers_root, {
+							out: console.log.bind('Entering the servers root directory')
+						}).exec('mkdir '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port, {
+							out: console.log.bind(console)
+						}).exec('mkdir '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main', {
+							out: console.log.bind(console)
+						}).exec('cd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port, {
+							out: console.log.bind('Entering the servers directory')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/cod4x18_dedrun '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/cod4x18_dedrun', {
+							out: console.log.bind('Symlink cod4x18_dedrun')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/libstdc++.so.6 '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/libstdc++.so.6', {
+							out: console.log.bind('Symlink libstdc++.so.6')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/steam_api.so '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/steam_api.so', {
+							out: console.log.bind('Symlink steam_api.so')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/steamclient.so '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/steamclient.so', {
+							out: console.log.bind('Symlink steamclient.so')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_00.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_00.iwd', {
+							out: console.log.bind('Symlink main/iw_00.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_01.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_01.iwd', {
+							out: console.log.bind('Symlink main/iw_01.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_02.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_02.iwd', {
+							out: console.log.bind('Symlink main/iw_02.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_03.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_03.iwd', {
+							out: console.log.bind('Symlink main/iw_03.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_04.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_04.iwd', {
+							out: console.log.bind('Symlink main/iw_04.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_05.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_05.iwd', {
+							out: console.log.bind('Symlink main/iw_05.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_06.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_06.iwd', {
+							out: console.log.bind('Symlink main/iw_06.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_07.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_07.iwd', {
+							out: console.log.bind('Symlink main/iw_07.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_08.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_08.iwd', {
+							out: console.log.bind('Symlink main/iw_08.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_09.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_09.iwd', {
+							out: console.log.bind('Symlink main/iw_09.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_10.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_10.iwd', {
+							out: console.log.bind('Symlink main/iw_10.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_11.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_11.iwd', {
+							out: console.log.bind('Symlink main/iw_11.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_12.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_12.iwd', {
+							out: console.log.bind('Symlink main/iw_12.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/iw_13.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/iw_13.iwd', {
+							out: console.log.bind('Symlink main/iw_13.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/localized_english_iw00.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/localized_english_iw00.iwd', {
+							out: console.log.bind('Symlink main/localized_english_iw00.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/localized_english_iw01.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/localized_english_iw01.iwd', {
+							out: console.log.bind('Symlink main/localized_english_iw01.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/localized_english_iw02.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/localized_english_iw02.iwd', {
+							out: console.log.bind('Symlink main/localized_english_iw02.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/localized_english_iw03.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/localized_english_iw03.iwd', {
+							out: console.log.bind('Symlink main/localized_english_iw03.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/localized_english_iw04.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/localized_english_iw04.iwd', {
+							out: console.log.bind('Symlink main/localized_english_iw04.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/localized_english_iw05.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/localized_english_iw05.iwd', {
+							out: console.log.bind('Symlink main/localized_english_iw05.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/localized_english_iw06.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/localized_english_iw06.iwd', {
+							out: console.log.bind('Symlink main/localized_english_iw06.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/xbase_00.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/xbase_00.iwd', {
+							out: console.log.bind('Symlink main/xbase_00.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/miles '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/miles', {
+							out: console.log.bind('Symlink miles directory')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/zone '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/zone', {
+							out: console.log.bind('Symlink zone dir')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/mods '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/mods', {
+							out: console.log.bind('Symlink mods directory')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/plugins '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/plugins', {
+							out: console.log.bind('Symlink plugins directory')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/usermaps '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/usermaps', {
+							out: console.log.bind('Symlink usermaps directory')
+						}).exec('cp '+config.cod4_server_plugin.servers_root+'/main-server-files/main/server.cfg '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/', {
+							out: console.log.bind('Symlink plugins directory')
+						}).exec('chmod 775 '+config.cod4_server_plugin.servers_root+'/main-server-files/main/server.cfg',{
+							out: console.log.bind('CHMOD 775 server.cfg')
+						}).start();
+						req.flash('success_messages', 'Server successfully Created, dont forget to open the PORTS in Firewall and to start the Server and ofcorse to change manually the server.cfg');
+						res.redirect('back');
+					}).catch(function(err) {
+						console.log("There was an error" +err);
+						req.flash('error_messages', 'Server name must be unique, detailed error: '+err);
+						res.redirect('back');
+					});
+				}
+			}
 		}).catch(function(err) {
-			console.log("There was an error" +err);
-			req.flash('error_messages', 'Server name must be unique, detailed error: '+err);
-			res.redirect('back');
+			console.log(err);
+			res.redirect('/user/profile');
 		});
 	},
 
@@ -583,6 +605,20 @@ function search(nameKey, myArray){
 function includecod4authtoken(string, plus_string) {
 	string = replaceString(string, 'server.cfg', plus_string);
 	return string;
+}
+
+function uncolorize(string){
+	string = replaceString(string, '^0', '');
+	string = replaceString(string, '^1', '');
+	string = replaceString(string, '^2', '');
+	string = replaceString(string, '^3', '');
+	string = replaceString(string, '^4', '');
+	string = replaceString(string, '^5', '');
+	string = replaceString(string, '^6', '');
+	string = replaceString(string, '^7', '');
+	string = replaceString(string, '^8', '');
+	string = replaceString(string, '^9', '');
+	return string
 }
 
 
