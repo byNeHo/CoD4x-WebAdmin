@@ -114,7 +114,12 @@ module.exports = {
 																if (err){
 																	console.log(err);
 																} else {
-																	playerinfo.player_name = uncolorize(req.body.playername),
+																	if (isEmpty(uncolorize(req.body.playername))==true){
+																		var save_player_name = 'CID';
+																	} else {
+																		var save_player_name = uncolorize(req.body.playername);
+																	}
+																	playerinfo.player_name = save_player_name,
 																	playerinfo.player_guid = req.body.playerid,
 																	playerinfo.player_steam_id = req.body.steamid,
 																	playerinfo.player_ip = req.body.address,
@@ -222,8 +227,13 @@ module.exports = {
 																		.then(function(connected){
 																			return rcon.command(cmd);
 																		}).then(function(messagesent){
+																			if (isEmpty(uncolorize(playerinfo.player_name))==true){
+																				var save_player_name = 'CID';
+																			} else {
+																				var save_player_name = uncolorize(playerinfo.player_name);
+																			}
 																			var newBan = new Bans ({
-														  						player_name: playerinfo.player_name,
+														  						player_name: save_player_name,
 														  						player_guid: playerinfo.player_guid,
 														  						player_steam_id: playerinfo.player_steam_id,
 														  						player_ip: playerinfo.player_ip,
@@ -255,8 +265,13 @@ module.exports = {
 															.then(function(connected){
 																return rcon.command(cmd);
 															}).then(function(messagesent){
+																if (isEmpty(uncolorize(req.body.playername))==true){
+																	var save_player_name = 'CID';
+																} else {
+																	var save_player_name = uncolorize(req.body.playername);
+																}
 																var newBan = new Bans ({
-														  			player_name: uncolorize(req.body.playername),
+														  			player_name: save_player_name,
 														  			player_guid: req.body.playerid,
 														  			player_steam_id: req.body.steamid,
 														  			admin_name: getadmin.local.user_name,
@@ -325,15 +340,20 @@ module.exports = {
 																			return rcon.command(cmd);
 																		}).then(function(messagesent){
 																			var tempbanexpire = moment().add(req.body.timeleft, 'm').toDate();
+																			if (isEmpty(uncolorize(playerinfo.player_name))==true){
+																				var save_player_name = 'CID';
+																			} else {
+																				var save_player_name = uncolorize(playerinfo.player_name);
+																			}
 																			var newTempban = new TempBans ({
-														  						player_name: playerinfo.player_name,
-														  						player_guid: playerinfo.player_guid,
-														  						player_steam_id: playerinfo.player_steam_id,
-														  						player_ip: playerinfo.player_ip,
-														  						player_country_short: playerinfo.player_country_short,
-														  						admin_name: getadmin.local.user_name,
-														  						admin_id: getadmin._id,
-														  						admin_steam_id: getadmin.steam.id,
+														  					player_name: save_player_name,
+														  					player_guid: playerinfo.player_guid,
+														  					player_steam_id: playerinfo.player_steam_id,
+														  					player_ip: playerinfo.player_ip,
+														  					player_country_short: playerinfo.player_country_short,
+														  					admin_name: getadmin.local.user_name,
+														  					admin_id: getadmin._id,
+														  					admin_steam_id: getadmin.steam.id,
 																				admin_message: req.body.reason,
 																				admin_command: 'tempban',
 																				game_server: results.selectedserver.slug_name,
@@ -359,13 +379,18 @@ module.exports = {
 																return rcon.command(cmd);
 															}).then(function(messagesent){
 																var tempbanexpire = moment().add(req.body.timeleft, 'm').toDate();
+																if (isEmpty(uncolorize(req.body.playername))==true){
+																	var save_player_name = 'CID';
+																} else {
+																	var save_player_name = uncolorize(req.body.playername);
+																}
 																var newTempban = new TempBans ({
-												  					player_name: uncolorize(req.body.playername),
-												  					player_guid: req.body.playerid,
-												  					player_steam_id: req.body.steamid,
-												  					admin_name: getadmin.local.user_name,
-												  					admin_id: getadmin._id,
-												  					admin_steam_id: getadmin.steam.id,
+												  				player_name: save_player_name,
+												  				player_guid: req.body.playerid,
+												  				player_steam_id: req.body.steamid,
+												  				admin_name: getadmin.local.user_name,
+												  				admin_id: getadmin._id,
+												  				admin_steam_id: getadmin.steam.id,
 																	admin_message: req.body.reason,
 																	admin_command: 'tempban',
 																	game_server: results.selectedserver.slug_name,
@@ -409,8 +434,13 @@ module.exports = {
 														if (err){
 															console.log(err);
 														} else {
+															if (isEmpty(uncolorize(delscreenshot.player_name))==true){
+																var save_player_name = 'CID';
+															} else {
+																var save_player_name = uncolorize(delscreenshot.player_name);
+															}
 															var newUnban = new Unbans ({
-												  			player_name: delscreenshot.player_name,
+												  			player_name: save_player_name,
 												  			player_guid: delscreenshot.player_guid,
 												  			rcon_command: 'unban',
 												  			admin_name: checkifadmin.local.user_name,
@@ -570,10 +600,16 @@ module.exports = {
 									} else {
 										var player_steamid = '0';
 									}
+
+									if (isEmpty(uncolorize(player.name))==true){
+										var save_player_name = 'CID';
+									} else {
+										var save_player_name = uncolorize(player.name);
+									}
 									var newOnlinePlayers = new OnlinePlayers ({
 										server_alias: results.selectedserver.name_alias,
 										player_slot: player.num,
-										player_name: player.name,
+										player_name: save_player_name,
 										player_score: player.score,
 										player_guid: player.pid,
 										player_steam_id: player_steamid,
@@ -604,8 +640,15 @@ module.exports = {
 								var guid = data[3];
 								var shotnum = data[4];
 								var time = data[5];
+
+								if (isEmpty(uncolorize(playername))==true){
+									var save_player_name = 'CID';
+								} else {
+									var save_player_name_uncolorize = uncolorize(playername);
+									var save_player_name = screenshot_playername(playername);
+								}
 								var newServerScreenshot = new ServerScreenshots ({
-									player_name:playername,
+									player_name:save_player_name,
 									player_guid:guid,
 									map_name:map,
 									screenshot_img: '/img/screenshots/'+img_name+'.jpg',
@@ -723,8 +766,15 @@ module.exports = {
 									var guid = data[3];
 									var shotnum = data[4];
 									var time = data[5];
+
+									if (isEmpty(uncolorize(playername))==true){
+										var save_player_name = 'CID';
+									} else {
+										var save_player_name_uncolorize = uncolorize(playername);
+										var save_player_name = screenshot_playername(playername);
+									}
 									var newServerScreenshot = new ServerScreenshots ({
-										player_name:playername,
+										player_name:save_player_name,
 										player_guid:guid,
 										map_name:map,
 										screenshot_img: '/img/screenshots/'+img_name+'.jpg',
@@ -774,6 +824,10 @@ function uncolorize(string){
 	string = replaceString(string, '^8', '');
 	string = replaceString(string, '^9', '');
 	return string
+}
+
+function screenshot_playername(string){
+	string = string.replace(/[&\/\\#,+()$~%.'":*?<>{}]/g, '');
 }
 
 function removeEmpty(obj) {
