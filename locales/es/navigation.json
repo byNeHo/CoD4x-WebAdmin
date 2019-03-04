@@ -1,0 +1,17 @@
+{  
+    "main_navigation": {
+        "home": "Inicio",
+        "members": "Miembros",
+        "banlist": "Lista de baneos",
+        "players_data": "Datos de jugadores",
+        "latest_notifications":"Últimas notificaciones",
+        "view_all":"Ver todo",
+        "login":"Iniciar sesión",
+        "register":"Registrarse",
+        "admin":"Administrador",
+        "profile":"Perfil",
+        "logout":"Cerrar sesión",
+        "my_profile":"Mi Perfil",
+        "cheater_reports":"Reportes de trampas"
+    }
+}

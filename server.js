@@ -67,7 +67,7 @@ i18next
     ns: ['frontpages', 'auth', 'navigation', 'general', 'language', 'notifications', 'pagetitles', 'passport', 'rcon_commands', 'plugin_discord'],
     defaultNS: 'frontpages',
     fallbackLng: config.website_language,
-    preload: ['en','hr','de'],
+    preload: ['en','hr','de', 'es'],
     saveMissing: true
   });
 

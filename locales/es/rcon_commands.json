@@ -1,0 +1,135 @@
+{   
+    "general": {
+        "general_no_permission": "¡No tienes permiso para usar este Comando!",
+        "general_there_was_an_error": "Hubo un error: {{get_error}}",
+        "general_no_admin_rights_on_server": "¡No tienes derechos de administrador en este servidor!",
+        "general_command_disabled_by_admin": "Este comando está deshabilitado por el administrador del servidor!",
+        "is_imune": "{{get_AdminName}} es administrador del servidor! Los administradores del servidor están protegidos!",
+        "info_msg_sent_to_server": "Mensaje de información enviado al servidor!",
+        "default_reason": "Ningún motivo dado",
+        "cmd_doesnt_exist": "¡Este comando no existe!",
+        "no_server_found": "¡Servidor no encontrado!",
+        "already_banned_guid": "¡Esta GUID ya está baneada!"
+    },
+
+    "commands": {
+        "kick": "expulsar",
+        "kicked": "expulsado",
+        "tempban": "Banear temporalmente",
+        "tempbaned": "Baneado temporalmente",
+        "permabn": "Banear permanentemente",
+        "permbaned": "Baneado permanentemente"
+    },
+
+    "input_select_time": {
+        "m": "minuto",
+        "h": "hora",
+        "d": "día",
+        "mm": "minutos",
+        "hh": "horas",
+        "dd": "días"
+    },
+
+    "RconConsoleCommand": {
+        "server_not_found": "¡No se ha encontrado ningún servidor con esta ID!"
+    },
+
+    "RconMaprotate": {
+        "map_rotated": "Mapa rotado con éxito!"
+    },
+
+    "RconGetssAll": {
+        "ss_all_executed": "Comando 'Screenshot All' ejecutado con éxito!"
+    },
+
+    "RconChangeMap": {
+        "map_changed_to_mapname": "Mapa cambiado exitosamente a {{get_MapName}}!"
+    },
+
+    "RconTempban": {
+        "wrong_time_format": "Formato de tiempo erroneo para los baneos temporales!",
+        "tempban_msg_web": "{{get_PlayerName}} exitosamente baneado temporalmente ({{get_TimeNumber}} {{get_TimeCategory}}) con motivo {{get_Reason}}",
+        "tempban_msg_game_server": "^6{{get_PlayerName}}^7 ^6temporalmente baneado ^7por Admin ^5{{get_AdminName}} ^7(^6{{get_TimeNumber}} {{get_TimeCategory}}^7) con motivo: ^6{{get_Reason}}",
+        "is_already_banned": "{{get_PlayerName}} ya está baneado!"
+    },
+
+    "RconAdminAction": {
+        "kick_msg_web": "{{get_PlayerName}} exitosamente expulsado con motivo {{get_Reason}}",
+        "tell_msg_web": "Mensaje privado enviado con éxito a {{get_PlayerName}}",
+        "screentell_msg_web": "Mensaje de pantalla privado enviado con éxito a {{get_PlayerName}}",
+        "kick_msg_game_server": "^6{{get_PlayerName}} ^5expulsado ^7 por Admin ^5{{get_AdminName}}^7 con motivo: ^5{{get_Reason}}"
+    },
+
+    "RconChatAction": {
+        "chat_and_voice_mute_rcon_command_reason": "{{get_PlayerGuid}} has sido expulsado y bloqueado del chat por (duration: {{get_TimeNumber}} {{get_Category}}) con motivo: ^5{{get_Reason}}",
+        "chat_and_voice_mute_server_message": "^6{{get_PlayerName}} ^7expulsado y bloqueado del chat (^5 {{get_TimeNumber}} {{get_Category}} ^7) por admin ^5{{get_Admin}} ^7 con motivo {{get_Reason}}",
+        "voice_mute_rcon_command_reason": "{{get_PlayerGuid}} has sido expulsado y silenciado por (duration: {{get_TimeNumber}} {{get_Category}}) con motivo: ^5{{get_Reason}}",
+        "voice_mute_server_message": "^6{{get_PlayerName}} ^7expulsado y silenciado (^5 {{get_TimeNumber}} {{get_Category}} ^7) por admin ^5{{get_Admin}} ^7 con motivo {{get_Reason}}",
+        "return_message_muted_voice": "{{get_PlayerName}} exitosamente expulsado/silenciado!",
+        "return_message_muted_chat": "{{get_PlayerName}} exitosamente expulsado/silenciado-bloqueado del chat!"
+    },
+
+    "Rcongetss": {
+        "max_ss_hourly": "Capturas de pantalla máximas por hora para usuarios regulares: {{get_MaxNumber}}!"
+    },
+
+    "RconPermban": {
+        "default_reason_for_report": "trampa detectada en la captura de pantalla!",
+        "rconconsole_messages_on_ban": "{{get_PlayerName}} exitosamente baneado con motivo: {{get_Reason}}!",
+        "rconconsole_cmdinform_on_ban": "^5{{get_PlayerName}}^7 ^1baneado permanentemente ^7por Admin ^5{{get_Admin}} ^7con motivo: ^5{{get_Reason}}",
+        "no_ss_found": "Esta captura de pantalla no existe, pudo haber sido removida con el tiempo"
+    },
+
+    "RconPermbanNoImage": {
+        "rconconsole_messages_on_ban": "{{get_PlayerName}} exitosamente baneado con motivo: {{get_Reason}}!",
+        "rconconsole_cmdinform_on_ban": "^5{{get_PlayerName}}^7 ^1baneado permanentemente ^7por Admin ^5{{get_Admin}} ^7con motivo: ^5{{get_Reason}}",
+        "no_reason_given_error": "¡No puedes banear sin un motivo!"
+    },
+
+    "RconPermbanOnReport": {
+        "send_info_msg_to_reporter": "Remitente del reporte informo que este jugador ya esta baneado!",
+        "ty_to_reporter": "{{get_BannedName}} está permanentemente baneado gracias al reporte de trampa de <span class=\"c-blue\">@{{get_ReporterName}}</span>. ¡Gracias por toda su colaboración! Realmente apreciamos su ayuda! ¡Buen trabajo!"
+    },
+
+    "RconUnban": {
+        "success_unban": "Jugador exitosamente desbaneado!",
+        "success_unban_server_msg": "^6{{unbaned_PlayerName}} ^7fue exitosamente desbaneado por ^5{{unban_AdminName}}^7!",
+        "permban_not_found": "Este baneo permanentemente no existe, pudo haber sido removido con el tiempo!"
+    },
+    
+    "globalnotifications": {
+        "globalnotifications_display_responses_link_title_cheater_report_already_banned": "{{reported_PlayerName}} ya esta baneado permanentemente",
+        "globalnotifications_display_responses_link_text_cheater_report_already_banned": "Respuesta del administrador en su reporte de trampas",
+        "globalnotifications_display_responses_message_cheater_report_already_banned": "¡Gracias por toda su colaboración! Realmente apreciamos su ayuda!",
+        "globalnotifications_display_responses_plus_message_cheater_report_already_banned": "<strong>{{reported_PlayerName}}</strong> ya esta baneado permanentemente!",
+
+        "globalnotifications_display_responses_link_title_cheater_report_declined": "Respuesta al reporte de trampas",
+        "globalnotifications_display_responses_link_text_cheater_report_declined": "Respuesta del administrador a su reporte de trampas",
+        "globalnotifications_display_responses_message_cheater_report_declined": "¡Gracias por contactarnos! ¡Según la captura de pantalla que nos ha enviado {{reported_PlayerName}} parece estar limpio!",
+
+        "globalnotifications_display_responses_link_title_cheater_report_accepted": "Respuesta al reporte de trampas",
+        "globalnotifications_display_responses_link_text_cheater_report_accepted": "Respuesta del administrador a su reporte de trampas",
+        "globalnotifications_display_responses_message_cheater_report_accepted": "Basándonos en la captura de pantalla que nos ha enviado, hemos baneado de forma permanente a <strong>{{get_BannedPlayerName}}</strong>! ¡Gracias por toda su colaboración! Realmente apreciamos su ayuda! ¡Buen trabajo!",
+        "globalnotifications_display_responses_plus_message_cheater_report_accepted": "<strong>{{get_BannedPlayerName}}</strong> esta baneado permanentemente, puede encontrar el baneo aquí <a href=\"/banlist\">Lista de baneos</a>",
+
+        "globalnotifications_display_responses_link_title_unban_request_declined": "Solicitud de desbaneo rechazada",
+        "globalnotifications_display_responses_link_text_unban_request_declined": "Respuesta del administrador a su solicitud de desbaneo",
+        "globalnotifications_display_responses_message_unban_request_declined": "¡Gracias por contactarnos! Sobre la solicitud de desbaneo que nos ha enviado, decidimos no aceptarla. ¡El baneo permanente no será eliminado!",
+
+        "globalnotifications_display_responses_link_title_unban_request_accepted": "Solicitud de desbaneo Aceptada",
+        "globalnotifications_display_responses_link_text_unban_request_accepted": "Respuesta del administrador a su solicitud de desbaneo",
+        "globalnotifications_display_responses_message_unban_request_accepted": "¡Decidimos aceptar su solicitud de desbaneo! ¡Ahora puedes entrar a nuestros Servidores!",
+
+        "globalnotifications_display_responses_link_title_admin_application_declined": "Solicitud de administrador rechazada",
+        "globalnotifications_display_responses_link_text_admin_application_declined": "Respuesta del administrador a su solicitud de administrador",
+        "globalnotifications_display_responses_message_admin_application_declined": "Después de unas pequeñas conversaciones con los administradores existentes en nuestros servidores, ¡Decidimos no aceptar su solicitud de administrador! ¡Esta decisión no es permanente y puede cambiar si envía una nueva solicitud de administrador!",
+
+        "globalnotifications_display_responses_link_title_admin_application_accepted": "Solicitud de administrador aceptada",
+        "globalnotifications_display_responses_link_text_admin_application_accepted": "Respuesta del administrador a su solicitud de administrador",
+        "globalnotifications_display_responses_message_admin_application_accepted": "Después de unas pequeñas conversaciones con los administradores existentes en nuestros servidores, ¡Decidimos aceptar su solicitud de administrador! Felicitaciones bienvenido a {{get_WebSite}}!",
+        
+        "globalnotifications_display_responses_link_title_admin_application_discussion": "La aplicación de administración será discutida",
+        "globalnotifications_display_responses_link_text_admin_application_discussion": "Respuesta del administrador a su solicitud de administrador",
+        "globalnotifications_display_responses_message_admin_application_discussion": "Tenga en cuenta que pueden pasar algunos días hasta que decidamos su destino. ¡Las aplicaciones que no se rechacen instantáneamente por razones obvias se discutirán con otros administradores!"
+    }
+}

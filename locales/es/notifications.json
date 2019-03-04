@@ -1,0 +1,61 @@
+{
+    "global": {
+        "error_page_removed": "Lo sentimos, esta página no existe, pudo haber sido removida con el tiempo!",
+        "error_script": "Hubo un error, por favor intente nuevamente o contacte al propietario del código",
+        "error_no_permission": "No tienes permiso para visitar esta página. El poder requerido es:"
+    },
+
+    "index": {
+        "ScreenshotsRemove_error": "Capturas de pantalla no eliminadas! Hubo un error: {{display_error}}",
+        "ScreenshotsRemove_success": "Capturas de pantalla eliminadas exitosamente!",
+        "ScreenshotsRemove_error_permission":"Capturas de pantalla no eliminadas! El poder mínimo para eliminar capturas es: {{req_power}}",
+
+        "InsertNewCheaterReport_error_already_banned": "¡Ya está baneado!",
+        "InsertNewCheaterReport_error_already_reported": "ya ha sido reportado! ¡Por favor, sea paciente hasta que uno de nuestros administradores verifique el reporte de tramposo existente!",
+        "InsertNewCheaterReport_success_report_sent": "Reporte de trampas para {{getPlayer}} enviado exitosamente!",
+        "InsertNewCheaterReport_error_no_screenshot": "La captura de pantalla no existe, pudo haber sido removida con el tiempo o el jugador ya ha sido baneado.",
+
+        "InsertNewunbanRequest_success_sent": "Solicitud de desbaneo para {{getPlayer}} enviada exitosamente!",
+        "InsertNewunbanRequest_error_ban_not_found": "Este baneo no existe, pudo haber sido removido con el tiempo o el jugador ya ha sido desbaneado.",
+        "InsertNewunbanRequest_error_already_sent": "La solicitud de desbaneo ya ha sido enviada, espere hasta que los administradores del servidor tomen una decisión, ¡se le informará!",
+
+        "CheaterReportRemove_declined_msg": "Reporte de trampa eliminado con éxito. El jugador no está baneado, ¡se le ha informado al remitente del reporte sobre nuestra decisión!",
+        
+        "UnbanRequestRemove_declined_msg": "Solicitud de desbaneo rechazada, ¡el jugador no ha sido desbaneado! se le ha informado al remitente del reporte sobre nuestra decisión!",
+
+        "GlobalNotificationsRemove_cleaned": "Notificaciones eliminadas con éxito!",
+
+        "getAdminApp_already_admin": "¡Ya eres un administrador!",
+        "InsertNewAdminApp": "Nueva aplicación de administrador",
+
+        "InsertNewAdminApp_already_admin": "¡Ya eres un administrador!",
+        "InsertNewAdminApp_cheater_reports_count_error": "Necesitas al menos {{count_CheaterReports}} reportes de trampas!",
+        "InsertNewAdminApp_success_sent": "La aplicación de administración se envió correctamente. ¡Le informaremos sobre nuestra decisión dentro de 7 días!",
+
+        "AdminAppRemove_declined": "Solicitud de administrador rechazada. ¡El jugador ha sido informado de nuestra decisión!",
+
+        "AdminAppAccept_accepted": "Solicitud de administrador aceptada. ¡El jugador ha sido informado de nuestra decisión!",
+
+        "AdminAppConversationStart_started": "Discusión de la aplicación de administración iniciada con éxito!",
+
+        "getConversations_restricted_access": "¡Solo los administradores del servidor pueden visitar esta página!",
+
+        "getKGBplugin_restricted_access": "¡Usted no tiene derechos de administrador en este servidor!",
+        "getKGBplugin_restricted_access_low_power": "¡Se requiere mayor poder de administración para utilizar el complemento de host KGB!",
+        "getKGBplugin_restricted_access_plugin_disabled": "El complemento host KGB esta deshabilitado!",
+
+        "PluginLocalServerStart_success_server_started": "¡El servidor se ha iniciado exitosamente!",
+        "PluginLocalServerStart_restricted_access": "¡Usted no tiene derechos de administrador en este servidor!",
+        "PluginLocalServerStart_restricted_access_low_power": "¡Se requiere mayor poder de administración para usar el complemento Start-Stop-Server!",
+        "PluginLocalServerStart_restricted_access_only_local_server": "El complemento Start-Stop-Server solo puede ser usado en servidores CoD4x locales!",
+        "PluginLocalServerStart_restricted_access_plugin_disabled": "El complemento Start-Stop-Server esta deshabilitado!",
+        "PluginLocalServerStart_admin_logs": "{{get_ServerName}} ha sido iniciado por {{get_UserName}}",
+
+        "PluginLocalServerStop_success_server_started": "¡El servidor se ha detenido exitosamente!",
+        "PluginLocalServerStop_restricted_access": "¡Usted no tiene derechos de administrador en este servidor!",
+        "PluginLocalServerStop_restricted_access_low_power": "¡Se requiere mayor poder de administración para usar el complemento Start-Stop-Server!",
+        "PluginLocalServerStop_restricted_access_only_local_server": "El complemento Start-Stop-Server solo puede ser usado en servidores CoD4x locales!",
+        "PluginLocalServerStop_restricted_access_plugin_disabled": "El complemento Start-Stop-Server esta deshabilitado!",
+        "PluginLocalServerStop_admin_logs": "{{get_ServerName}} ha sido detenido por {{get_UserName}}"
+    }
+}

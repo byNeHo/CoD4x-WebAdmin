@@ -5,6 +5,8 @@ a(data-toggle='dropdown', href='')
 		i.flag-icon.flag-icon.flag-icon-de
 	else if (cur_language=='hr')
 		i.flag-icon.flag-icon.flag-icon-hr
+	else if (cur_language=='es')
+		i.flag-icon.flag-icon.flag-icon-es
 	else
 		i.flag-icon.flag-icon.flag-icon-gb
 ul.dropdown-menu.dm-icon.pull-right
@@ -23,3 +25,8 @@ ul.dropdown-menu.dm-icon.pull-right
 			a(href='?lng=hr')
 				i.flag-icon.flag-icon-hr
 				|  Hrvatski
+	if (cur_language!='es')
+		li
+			a(href='?lng=es')
+				i.flag-icon.flag-icon-es
+				|  Español

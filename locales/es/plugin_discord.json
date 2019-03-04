@@ -1,0 +1,26 @@
+{
+    "cheater_reports_msg": {
+        "msg_title": "Nuevo reporte de trampas",
+        "message": "{{getUserName}} reportó a {{getReportedPlayer}} como tramposo! Para más detalles visita {{get_website}}!"
+    },
+
+    "unban_request_msg": {
+        "msg_title": "Nueva solicitud de desbaneo",
+        "message": "Nueva solicitud de desbaneo enviada por {{getUserName}}! Para más detalles visita {{get_website}}!"
+    },
+
+    "new_admin_application_msg": {
+        "msg_title": "Nueva aplicación de administrador",
+        "message": "{{getUserName}} envió una nueva aplicación de administrador! Para más detalles visita {{get_website}}!"
+    },
+
+    "new_admin_added_msg": {
+        "msg_title": "Tenemos un nuevo administrador",
+        "message": "Felicidades {{getUserName}} !!! Bienvenido a {{get_website}}!"
+    },
+
+    "new_admin_conversation": {
+        "msg_title": "Nueva conversación de administrador iniciada",
+        "message": "{{getUserName}} inicio una nueva conversación de administrador. ¡Ayúdanos a tomar la decisión correcta! Si tienes derechos de administrador visita {{get_website}}!"
+    }
+}
