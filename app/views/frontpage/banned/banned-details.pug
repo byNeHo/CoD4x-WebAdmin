@@ -38,7 +38,7 @@ block content
 									h2
 										a(href="/members/"+results.getbanned.admin_id)
 											| #{results.getbanned.admin_name}
-										small #{t('frontpages:banned.banned_details_posted_on')} #{moment(results.getbanned.createdAt).format('YYYY MMM Do')}
+										small #{t('frontpages:banned.banned_details_posted_on')} #{moment(results.getbanned.createdAt).format('DD.MM.YYYY')}
 								.pull-right
 									if (user.local.user_role >= results.requiredpower.minimum_power_for_player_unban)
 										ul.actions
@@ -50,8 +50,8 @@ block content
 														a(href='/rconcmd/unban/'+results.getbanned._id) #{t('frontpages:banned.banned_card_unban')} #{results.getbanned.player_name}
 						.card-body.card-padding
 							p
-								| #{t('frontpages:banned.banned_details_permanently_banned')} 
 								span.c-red #{results.getbanned.player_name}
+								|  #{t('frontpages:banned.banned_details_permanently_banned')}
 								|  #{t('frontpages:banned.banned_details_with_reason')}: 
 								span.c-green #{results.getbanned.admin_message}
 								br
