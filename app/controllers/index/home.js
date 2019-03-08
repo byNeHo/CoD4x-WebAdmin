@@ -80,27 +80,32 @@ module.exports = {
 			plugins: Plugins.findOne({'category' : 'kgb', 'status':true}).execAsync(),
 			startstop: Plugins.findOne({'category': 'servers', 'name_alias':'start-stop-server'}, 'status min_power').execAsync()
 		}).then (function(results){
-			if (results.server.map_img!= null && results.server.map_img != '' && results.server.map_img){
-				if (fileExists('./public/img/maps/'+results.server.map_img+'.jpg')===true){
-					var current_map_image = results.server.map_img+'.jpg';
+			if (results.server){
+				if (results.server.map_img!= null && results.server.map_img != '' && results.server.map_img){
+					if (fileExists('./public/img/maps/'+results.server.map_img+'.jpg')===true){
+						var current_map_image = results.server.map_img+'.jpg';
+					} else {
+						var current_map_image = 'no-photo.jpg';
+					}
 				} else {
 					var current_map_image = 'no-photo.jpg';
 				}
+				
+				if (req.user){
+					Servers.countDocuments({'admins_on_server':req.user._id, 'name_alias':req.params.name_alias, rcon_password: { $gt: []  }}, function( err, check_admin ) {
+						if( !err ) {
+							res.render('frontpage/server/index.pug', {title: results.server.name, results:results, check_admin:check_admin, current_map_image:current_map_image, csrfToken: req.csrfToken()});
+						} else {
+							console.log( err );
+							res.redirect('/');
+						}
+					});
+				}else{
+					res.render('frontpage/server/index.pug', {title: results.server.name, current_map_image:current_map_image, results:results});
+				}
 			} else {
-				var current_map_image = 'no-photo.jpg';
-			}
-			
-			if (req.user){
-				Servers.countDocuments({'admins_on_server':req.user._id, 'name_alias':req.params.name_alias, rcon_password: { $gt: []  }}, function( err, check_admin ) {
-					if( !err ) {
-						res.render('frontpage/server/index.pug', {title: results.server.name, results:results, check_admin:check_admin, current_map_image:current_map_image, csrfToken: req.csrfToken()});
-					} else {
-						console.log( err );
-						res.redirect('/');
-					}
-				});
-			}else{
-				res.render('frontpage/server/index.pug', {title: results.server.name, current_map_image:current_map_image, results:results});
+				res.status(400);
+				res.status(404).render('404.pug', {title: '404: Sorry, page not found'});
 			}
 		}).catch (function(err){
 			console.log(err);
