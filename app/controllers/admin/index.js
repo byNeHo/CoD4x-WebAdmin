@@ -39,7 +39,6 @@ module.exports = {
 			sysinfo: Systemlogs.find({}).sort({createdAt: -1}).limit(30).execAsync(),
 			colors: Color.find({}).execAsync()
 		}).then (function(results){
-			
 			const opsys = osName(os.platform());
 			if (S.startsWith(opsys, "Windows")==true){
 				addlocalServer = false;

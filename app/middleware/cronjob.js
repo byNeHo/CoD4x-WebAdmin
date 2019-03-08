@@ -219,6 +219,38 @@ const main_lng = i18next.getFixedT(config.website_language);
 		});
 	});
 
+
+	// ################################ Download files from Github CoD4x Server every day at X hours ################################ //
+	var downloadcod4xgithub = schedule.scheduleJob('24 5 * * *', function(){
+		Plugins.findOne({'name_alias':'download-cod4x-files-from-github'},function(error, plugincod4x){	
+			if (!error){
+				if (plugincod4x.status==true){
+					download_cod4_github();
+				}
+			}
+		});	
+	});
+
+	var extractcod4xgithub = schedule.scheduleJob('27 5 * * *', function(){
+		Plugins.findOne({'name_alias':'download-cod4x-files-from-github'},function(error, plugincod4x){	
+			if (!error){
+				if (plugincod4x.status==true){
+					extract_cod4_github();
+				}
+			}
+		});	
+	});
+
+	var removezipcod4xgithub = schedule.scheduleJob('30 5 * * *', function(){
+		Plugins.findOne({'name_alias':'download-cod4x-files-from-github'},function(error, plugincod4x){	
+			if (!error){
+				if (plugincod4x.status==true){
+					remove_cod4_zip_github();
+				}
+			}
+		});	
+	});
+
 	// ################################ Functions ################################ //
 	function check_cod4_xwebadmin_version(req, res, next) {
 		var my_packagejsonfile = './package.json';
@@ -250,7 +282,61 @@ const main_lng = i18next.getFixedT(config.website_language);
 				}
 			})
 		})
-	}
+	};
+
+	function download_cod4_github(req, res, next) {
+		var ssh = new SSH({
+			host: config.ssh_access.host,
+			user: config.ssh_access.user,
+			pass: config.ssh_access.password,
+			baseDir: config.cod4_server_plugin.servers_root
+		});
+		ssh.exec('cd '+config.cod4_server_plugin.servers_root, {
+			out: console.log.bind('Entering the servers root directory')
+		}).exec('wget -b '+config.cod4x_compile.download_link, {
+			pty: true,	
+			out: console.log.bind('Start CoD4x New Arch files download')
+		}).start();
+	};
+
+
+	function extract_cod4_github(req, res, next) {
+		var ssh = new SSH({
+			host: config.ssh_access.host,
+			user: config.ssh_access.user,
+			pass: config.ssh_access.password,
+			baseDir: config.cod4_server_plugin.servers_root
+		});
+		ssh.exec('cd '+config.cod4_server_plugin.servers_root, {
+			out: console.log.bind('Entering the servers root directory')
+		}).exec('sudo chmod 775 '+config.cod4_server_plugin.servers_root+'/'+config.cod4x_compile.zip_file_name+' && unzip -o '+config.cod4x_compile.zip_file_name+' -d '+config.cod4_server_plugin.servers_root+' && sudo chmod -R 775 '+config.cod4x_compile.dir_root+'', {
+			pty: true,	
+			out: console.log.bind('Unzip and remove on end the zip file')
+		}).start();
+	};
+
+	function remove_cod4_zip_github(req, res, next) {
+		var ssh = new SSH({
+			host: config.ssh_access.host,
+			user: config.ssh_access.user,
+			pass: config.ssh_access.password,
+			baseDir: config.cod4_server_plugin.servers_root
+		});
+		ssh.exec('cd '+config.cod4_server_plugin.servers_root, {
+			out: console.log.bind('Entering the servers root directory')
+		}).exec('rm '+config.cod4x_compile.zip_file_name+' && exit', {
+			pty: true,	
+			out: console.log.bind('Remove on end the zip file')
+		}).start();
+
+		var newSystemlogs = new Systemlogs ({
+			logline: 'Latest CoD4x Source files from Github sucessfully Downloaded',
+			successed: true
+		});
+		newSystemlogs.saveAsync()
+	};
+
+
 	function get_cod4x_latest_version(req, res, next) {
 		githubLatestRelease('callofduty4x', 'CoD4x_Server', function (err, github_results){
 				if (err){
@@ -277,7 +363,7 @@ const main_lng = i18next.getFixedT(config.website_language);
 					}
 				}
 		})
-	}
+	};
 
 	function discordmessages (title, color, description){
 		/*
@@ -308,7 +394,7 @@ const main_lng = i18next.getFixedT(config.website_language);
 		msgdiscord.on("error", (error) => {
 		  console.warn(error);
 		});
-	}
+	};
 
 	function includecod4authtoken(string, plus_string) {
 		string = replaceString(string, 'server.cfg', plus_string);
@@ -328,10 +414,10 @@ const main_lng = i18next.getFixedT(config.website_language);
 				}
 			});
 		});
-	}
+	};
 
 	function isEmpty(value) {
 		return typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null;
-	}
+	};
 
 module.exports = CronJob;

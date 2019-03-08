@@ -13,6 +13,7 @@ module.exports = function(router, passport){
 	const maps = require( '../controllers/admin/maps' );
 	const tempbandurations = require('../controllers/admin/tempbandurations');
 	const servercommands = require('../controllers/admin/servercommands');
+	const cod4x = require('../controllers/admin/cod4x');
 	
 	
 
@@ -99,6 +100,14 @@ module.exports = function(router, passport){
 	router.post('/server-commands/new/save', requireRole(100), isLoggedIn, servercommands.InsertNewServercommand);
 	router.post('/server-commands/edit/update/extra/:id', requireRole(100), isLoggedIn, servercommands.ExtraRconUpdate);
 	router.get('/server-commands', requireRole(100), isLoggedIn, servercommands.getServercommands);
+
+	/*###################### COD4X BINARY FILES AND GITHUB ##################################################*/
+	router.get('/cod4x-github', requireRole(100), isLoggedIn, cod4x.getHome);
+	router.post('/cod4x-github/new/server-file/save', requireRole(100), isLoggedIn, cod4x.InsertCoD4xGithubFiles);
+	router.post('/cod4x-github/new/plugin-file/save', requireRole(100), isLoggedIn, cod4x.InsertCoD4xGithubPlugins);
+	router.get('/cod4x-github/delete/:id', requireRole(100), isLoggedIn, cod4x.RemoveBinaryFile);
+	router.get('/cod4x-github/use-server-version/save/:id', requireRole(100), isLoggedIn, cod4x.UseCoD4xGithubBinary);
+	router.get('/cod4x-github/use-plugin-version/save/:id', requireRole(100), isLoggedIn, cod4x.UseCoD4xGithubPlugin);
 };
 
 /*RESTRICT ACCESS BY USER POWER*/
