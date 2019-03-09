@@ -198,7 +198,7 @@ module.exports = {
 
 	UseCoD4xGithubBinary: function(req, res, next) {
 		BluebirdPromise.props({
-			cod4xfiles: Cod4xbinary.findOne({'id':req.params.id}).execAsync(),
+			cod4xfiles: Cod4xbinary.findOne({'_id':req.params.id}).execAsync(),
 			server: Servers.find({'external_ip':false, 'is_online':true}).execAsync()
 		}).then (function(results){
 			if (results.server.length > 0){
