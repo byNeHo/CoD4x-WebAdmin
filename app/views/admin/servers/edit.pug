@@ -49,6 +49,14 @@ block content
 											a(href='#settings', aria-controls='settings', role='tab', data-toggle='tab')
 												i.zmdi.zmdi-settings.m-r-10
 												| Settings
+										li
+											a(href='#colors', aria-controls='colors', role='tab', data-toggle='tab')
+												i.zmdi.zmdi-invert-colors.m-r-10
+												| Colors
+										li
+											a(href='#http_plugin', aria-controls='http_plugin', role='tab', data-toggle='tab')
+												i.zmdi.zmdi-apps.m-r-10
+												| 3rd Party Http Plugin
 									.tab-content
 										#server.tab-pane.active(role='tabpanel')
 											.card
@@ -156,15 +164,55 @@ block content
 											.clearfix
 										#settings.tab-pane(role='tabpanel')
 											.card
+												.card-header
+													- var current_time = new moment().format("HH:mm");
+													h2 Game Server Settings
+														small.f-13
+															| Current Server Time on Local Machine:
+															span.zmdi.zmdi-time.m-l-5.c-lightblue
+															span.c-green.m-l-5
+																| #{current_time}
 												.card-body.card-padding
 													form(method='post', action='/admin/servers/edit/settings/update/'+results.servers._id)
-														- var current_time = new moment().format("HH:mm");
 														.row
-															.col-md-12.m-b-30.text-center
-																strong
-																	| Current Server Time on Local Machine: 
-																span.c-green 
-																	| #{current_time}
+															.col-md-12.m-b-15
+																h5 
+																	| Auto restart 
+																	span.c-red Local Server
+																	|  every day at X hours
+														.row
+															.col-md-4
+																.form-group.p-t-5
+																	.toggle-switch.toggle-switch-demo(data-ts-color='blue')
+																			label.ts-label(for='auto_restart_server') Activate/Deactivate
+																			input#auto_restart_server(type='checkbox', hidden='hidden', name='auto_restart_server', checked=(results.servers.auto_restart_server))
+																			label.ts-helper(for='auto_restart_server')
+															.col-md-3
+																.form-group.fg-line
+																	select.selectpicker(name='time_to_restart_server', required)
+																		option(value=results.servers.time_to_restart_server) #{results.servers.time_to_restart_server}
+																		- for(var i = 0; i < 24; i++)
+																			option(value=i)=i
+															.col-md-5.p-t-5
+																span.small
+																	| * Local Server will be stopped for 2 minutes at X hours and then started. In Game Servers main directory!
+														hr
+														.row
+															.col-md-12.m-b-15.m-t-15
+																h5 
+																	| Auto Restart 
+																	span.c-red Local Server
+																	|  on Crash
+														.row
+															.col-md-4
+																.form-group.p-t-5
+																	.toggle-switch.toggle-switch-demo(data-ts-color='blue')
+																			label.ts-label(for='auto_restart_server_on_crash') Activate/Deactivate
+																			input#auto_restart_server_on_crash(type='checkbox', hidden='hidden', name='auto_restart_server_on_crash', checked=(results.servers.auto_restart_server_on_crash))
+																			label.ts-helper(for='auto_restart_server_on_crash')
+															.col-md-8.p-t-5
+																span.small
+																	| * Game Server will be stopped for 2 minutes and started again on Game Server Crash. If the server is not available for longer than 5 minutes this plugin will run! If you are using Plugin Discord Webhook an information message will be sent on Server restart.
 														hr
 														.row
 															.col-md-12.m-t-15.m-b-15
@@ -176,14 +224,23 @@ block content
 																		option(value=results.servers.color) #{results.servers.color}
 																		each row in results.colors
 																			option(value=row.name) #{row.name}
+															.col-md-8.p-t-5
+																span.small
+																	| * Card Background Color for this Game Server on the websites Homepage. Check the available colors under tab COLORS
+														.row.m-t-25
+															.col-md-12.text-right
 																.form-group
 																	input(type='hidden', name='_csrf', value=csrfToken)
 																	button.btn.btn-primary.pull-right.waves-effect(type='submit') Save Changes
-															.col-md-8.p-t-5
-																span.small
-																	| * Card Background Color for this Game Server on the Homepage
 													.clearfix
-													.row.m-t-30
+										#colors.tab-pane(role='tabpanel')
+											.card
+												.card-header
+													h2 Colors
+														small
+															| Server Card colors used on the homepage
+												.card-body.card-padding
+													.row
 														.col-sm-3.col-xs-6
 															.color-block.bgm-red
 																span.color Red
@@ -284,3 +341,141 @@ block content
 																span.color Black
 																span.code #000000
 																span.less @bgm-black
+
+										#http_plugin.tab-pane(role='tabpanel')
+											.card
+												.card-body.card-padding
+													.row
+														.col-md-12
+															p.c-black.f-500.m-b-5 JSON HTTP GET and POST Requests
+															.small.m-b-25
+																| This plugin allows you to do http requests within your gsx scripts. More info can be found here 
+																a(href="https://github.com/callofduty4x/cod4x_plugin_http", target="_blank") Http GSC Plugin
+															blockquote.m-b-25
+																| Some links need the players GUID to work properly, the GUID value will be marked with red color. 
+																| For example when you set the "httpgetjson" in your gsc script make sure that you replace the 
+																| red 
+																span.c-red
+																	| player_guid
+																|  with the players 
+																span.c-red 
+																	| real GUID
+															span.btn.btn-success.btn-xs.waves-effect.m-r-10
+																| G
+															| is a GET request. We use this when we want to GET informations from website
+															br
+															br
+															span.btn.btn-warning.btn-xs.waves-effect.m-r-10
+																| P
+															| is a POST request. We use this when we want to POST/save informations to the Database. Can be used for example to store the Players Vision settings (FOV, FPS, PROMOD etc)
+													.row.m-t-25
+														.col-md-12
+															.panel-group(role='tablist', aria-multiselectable='true', data-collapse-color="green")
+																.panel.panel-collapse
+																	#headingOne.panel-heading(role='tab')
+																		h4.panel-title
+																			a(data-toggle='collapse', data-parent='#accordion', href='#collapseOne', aria-expanded='true', aria-controls='collapseOne')
+																				| Server Related Informations
+																	#collapseOne.collapse.in(role='tabpanel', aria-labelledby='headingOne')
+																		.panel-body
+																			.list-group.lg-odd-black
+																				.list-group-item.media
+																					.pull-left
+																						span.btn.btn-success.btn-xs.waves-effect.m-r-10
+																							| G
+																					.media-body
+																						.lgi-heading
+																							a(href='/cod4x_plugins/json/'+results.servers.julia_identkey+'/server/info', target='_blank')
+																								| #{websiteaddress}/cod4x_plugins/json/#{results.servers.julia_identkey}/server/info
+																				.list-group-item.media
+																					.pull-left
+																						span.btn.btn-success.btn-xs.waves-effect.m-r-10
+																							| G
+																					.media-body
+																						.lgi-heading
+																							a(href='/cod4x_plugins/json/'+results.servers.julia_identkey+'/server/admins', target='_blank')
+																								| #{websiteaddress}/cod4x_plugins/json/#{results.servers.julia_identkey}/server/admins
+																.panel.panel-collapse
+																	#headingTwo.panel-heading(role='tab')
+																		h4.panel-title
+																			a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseTwo', aria-expanded='false', aria-controls='collapseTwo')
+																				| Player Related Informations
+																	#collapseTwo.collapse(role='tabpanel', aria-labelledby='headingTwo')
+																		.panel-body
+																			.list-group.lg-odd-black
+																				.list-group-item.media
+																					.pull-left
+																						span.btn.btn-success.btn-xs.waves-effect.m-r-10
+																							| G
+																					.media-body
+																						.lgi-heading
+																							a(href='/cod4x_plugins/json/'+results.servers.julia_identkey+'/player/check-admin/:player_guid', target='_blank')
+																								| #{websiteaddress}/cod4x_plugins/json/#{results.servers.julia_identkey}/player/check-admin/
+																								span.c-red player_guid
+																				.list-group-item.media
+																					.pull-left
+																						span.btn.btn-success.btn-xs.waves-effect.m-r-10
+																							| G
+																					.media-body
+																						.lgi-heading
+																							a(href='/cod4x_plugins/json/'+results.servers.julia_identkey+'/player/info/:player_guid', target='_blank')
+																								| #{websiteaddress}/cod4x_plugins/json/#{results.servers.julia_identkey}/player/info/
+																								span.c-red player_guid
+																				.list-group-item.media
+																					.pull-left
+																						span.btn.btn-success.btn-xs.waves-effect.m-r-10
+																							| G
+																					.media-body
+																						.lgi-heading
+																							a(href='/cod4x_plugins/json/'+results.servers.julia_identkey+'/player/name-aliases/:player_guid', target='_blank')
+																								| #{websiteaddress}/cod4x_plugins/json/#{results.servers.julia_identkey}/player/name-aliases/
+																								span.c-red player_guid
+																				.list-group-item.media
+																					.pull-left
+																						span.btn.btn-warning.btn-xs.waves-effect.m-r-10
+																							| P
+																					.media-body
+																						.lgi-heading
+																							a(href='/cod4x_plugins/json/'+results.servers.julia_identkey+'/player/info/update/:player_guid', target='_blank')
+																								| #{websiteaddress}/cod4x_plugins/json/#{results.servers.julia_identkey}/player/info/update/
+																								span.c-red player_guid
+																							.c-bluegray.small
+																								br
+																								strong Body names what we can send 
+																								br
+																								| player_registered - num; player_fov - num; player_fps - num;
+																								br
+																								| player_promod - num;player_emblem_color - num; player_emblem_text - string; player_icon - num;)
+																.panel.panel-collapse
+																	#headingThree.panel-heading(role='tab')
+																		h4.panel-title
+																			a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseThree', aria-expanded='false', aria-controls='collapseThree')
+																				| Ban Related Informations
+																	#collapseThree.collapse(role='tabpanel', aria-labelledby='headingThree')
+																		.panel-body
+																			.list-group.lg-odd-black
+																				.list-group-item.media
+																					.pull-left
+																						span.btn.btn-success.btn-xs.waves-effect.m-r-10
+																							| G
+																					.media-body
+																						.lgi-heading
+																							a(href='/cod4x_plugins/json/'+results.servers.julia_identkey+'/banlist/permbans', target='_blank')
+																								| #{websiteaddress}/cod4x_plugins/json/#{results.servers.julia_identkey}/banlist/permbans
+																				.list-group-item.media
+																					.pull-left
+																						span.btn.btn-success.btn-xs.waves-effect.m-r-10
+																							| G
+																					.media-body
+																						.lgi-heading
+																							a(href='/cod4x_plugins/json/'+results.servers.julia_identkey+'/banlist/tempbans', target='_blank')
+																								| #{websiteaddress}/cod4x_plugins/json/#{results.servers.julia_identkey}/banlist/tempbans
+																.panel.panel-collapse
+																	#headingFive.panel-heading(role='tab')
+																		h4.panel-title
+																			a.collapsed(data-toggle='collapse', data-parent='#accordion', href='#collapseFive', aria-expanded='false', aria-controls='collapseFive')
+																				| Julia Stats
+																	#collapseFive.collapse(role='tabpanel', aria-labelledby='headingFive')
+																		.panel-body
+																			| Coming soon, the idea is to create similar stats as XLRStats in B3
+

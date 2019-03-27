@@ -91,6 +91,7 @@ module.exports = {
 											rcon_password: req.body.rcon_password,
 											external_ip : true,
 											screenshot_identkey: req.body.screenshot_identkey,
+											julia_identkey: req.body.julia_identkey,
 											color: req.body.color,
 											is_online: true,
 											is_stoped: false
@@ -302,6 +303,7 @@ module.exports = {
 	ServerSettingsUpdate: function(req, res, next) {
 		Servers.findOneAsync({'_id' : req.params.id})
 			.then (function(server){
+				server.auto_restart_server_on_crash = req.body.auto_restart_server_on_crash ? true : false,
 				server.auto_restart_server = req.body.auto_restart_server ? true : false,
 				server.time_to_restart_server = req.body.time_to_restart_server,
 				server.color = req.body.color
@@ -310,7 +312,7 @@ module.exports = {
 				req.flash('success_messages', 'Server successfully edited');
 				res.redirect('back');
 			}).catch(function(err) {
-				req.flash('error_messages', 'There was an error, please try again or Contact the script Owner');
+				req.flash('error_messages', 'There was an error: '+err);
 				console.log("There was an error: " +err);
 				res.redirect('back');
 			});

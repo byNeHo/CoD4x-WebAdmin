@@ -800,7 +800,183 @@ module.exports = {
 				console.log('Error is here: '+error);
 			}
 		});	
-	}
+	},
+
+	getServerInfo: function(req, res, next) {
+		BluebirdPromise.props({
+			servers: Servers.find({}, 'name country online_players map_playing ip port -_id').execAsync()
+		}).then (function(results){
+			res.json({total:results.servers.length, results:results});
+		}).catch (function(err){
+			console.log(err);
+		});
+	},
+
+	getServerAdmins: function(req, res, next) {
+		var populateadmins = [{path:'admins_on_server', select:'local.user_name local.user_role id'}];
+		BluebirdPromise.props({
+			servers: Servers.findOne({'julia_identkey': req.params.julia_identkey}).populate(populateadmins).execAsync(),
+		}).then (function(results){
+				res.json({total:results.servers.admins_on_server.length, results:results.servers.admins_on_server});
+		}).catch (function(err){
+			console.log(err);
+		});
+	},
+
+	getPlayerInfo: function(req, res, next) {
+		BluebirdPromise.props({
+			player: PlayersData.findOne({'player_guid': req.params.player_guid}, 'player_name player_guid player_steam_id player_country player_country_short player_city player_registered player_fov player_fps player_promod player_emblem_color player_emblem_text player_icon -_id').execAsync(),
+			selectedserver: Servers.findOne({'julia_identkey': req.params.julia_identkey}, '_id').execAsync(),
+		}).then (function(results){
+			if (results.player && results.player.player_steam_id!=null){
+				User.countDocuments({'steam.id' : results.player.player_steam_id, 'local.admin_on_servers' : results.selectedserver._id , 'local.user_role' : {$gte : 20}},function(error, getadmin){	
+					if (error){
+						console.log(error);
+					} else {
+						res.json({results:results, is_admin:getadmin});
+					}
+				})
+			} else {
+				res.json({results:results, is_admin:0});
+			}
+				
+		}).catch (function(err){
+			console.log(err);
+		});
+	},
+
+	getPlayerIsAdmin: function(req, res, next) {
+		BluebirdPromise.props({
+			player: PlayersData.findOne({'player_guid': req.params.player_guid}, 'player_name player_guid player_steam_id player_country -_id').execAsync(),
+			selectedserver: Servers.findOne({'julia_identkey': req.params.julia_identkey}, '_id').execAsync(),
+		}).then (function(results){
+			if (results.player && results.player.player_steam_id!=null){
+				User.countDocuments({'steam.id' : results.player.player_steam_id, 'local.admin_on_servers' : results.selectedserver._id , 'local.user_role' : {$gte : 20}},function(error, getadmin){	
+					if (error){
+						console.log(error);
+					} else {
+						res.json({is_admin:getadmin});
+					}
+				})
+			} else {
+				res.json({is_admin:0});
+			}
+				
+		}).catch (function(err){
+			console.log(err);
+		});
+	},
+
+	getPlayerNameAliases: function(req, res, next) {
+		BluebirdPromise.props({
+			player: PlayersData.findOne({'player_guid': req.params.player_guid}).execAsync()
+		}).then (function(results){
+			if (results.player){
+				res.json({count:results.player.player_name_aliases.length, results:results.player.player_name_aliases});
+			} else {
+				res.json({results:[]});
+			}	
+		}).catch (function(err){
+			console.log(err);
+		});
+	},
+
+	getPermBanList: function(req, res, next) {
+		BluebirdPromise.props({
+			permbans: Bans.find({}, 'player_name admin_name -_id').limit(10).sort({ 'updatedAt': -1}).execAsync()
+		}).then (function(results){
+				res.json({results:results});
+		}).catch (function(err){
+			console.log(err);
+		});
+	},
+
+	getTempBanList: function(req, res, next) {
+		BluebirdPromise.props({
+			tempbans: TempBans.find({}, 'admin_command player_name admin_name -_id').limit(10).sort({ 'updatedAt': -1}).execAsync()
+		}).then (function(results){
+				res.json({results:results});
+		}).catch (function(err){
+			console.log(err);
+		});
+	},
+
+	updatePlayerInfo: function(req, res, next) {
+		BluebirdPromise.props({
+			player: PlayersData.findOne({'player_guid': req.params.player_guid}, 'player_guid player_registered player_fov player_fps player_promod player_emblem_color player_emblem_text player_icon -_id').execAsync()
+		}).then (function(results){
+				if (results.player){
+					PlayersData.updateOne({'player_guid':req.params.player_guid},function(err){
+						if (err){
+							console.log(err);
+						} else {
+							//Registered
+							if (req.body.player_registered){
+								new_registered = req.body.player_registered;
+							} else {
+								new_registered = results.player.player_registered;
+							};
+
+							//Fov
+							if (req.body.player_fov){
+								new_fov = req.body.player_fov;
+							} else {
+								new_fov = results.player.player_fov;
+							};
+
+							//Fps
+							if (req.body.player_fps){
+								new_fps = req.body.player_fps;
+							} else {
+								new_fps = results.player.player_fps;
+							};
+
+							//Promod
+							if (req.body.player_promod){
+								new_promod = req.body.player_promod;
+							} else {
+								new_promod = results.player.player_promod;
+							};
+
+							//Emblem Color
+							if (req.body.player_emblem_color){
+								new_emblem_color = req.body.player_emblem_color;
+							} else {
+								new_emblem_color = results.player.player_emblem_color;
+							};
+
+							//Emblem Text
+							if (req.body.player_emblem_text){
+								new_emblem_text = req.body.player_emblem_text;
+							} else {
+								new_emblem_text = results.player.player_emblem_text;
+							};
+
+							//Player Icon
+							if (req.body.player_icon){
+								new_icon = req.body.player_icon;
+							} else {
+								new_icon = results.player.player_icon;
+							};
+							
+							playerinfo.player_registered = new_registered,
+							playerinfo.player_fov = new_fov,
+							playerinfo.player_fps = new_fps,
+							playerinfo.player_promod = new_promod,
+							playerinfo.player_emblem_color = new_emblem_color,
+							playerinfo.player_emblem_text = new_emblem_text,
+							playerinfo.player_icon = new_icon
+							playerinfo.saveAsync()
+						}
+					});
+				}
+		}).catch (function(err){
+			console.log(err);
+		});
+	},
+
+
+
 };
 
 function finalMapName(string) {
