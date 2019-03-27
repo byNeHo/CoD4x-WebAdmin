@@ -28,6 +28,8 @@ block content
 										span.zmdi.zmdi-cloud-outline
 										|  CoD4x Binary Files
 										small.c-red Read the Instructions before you compile the Files
+									a.btn.bgm-blue.btn-float.waves-effect(href="/admin//cod4x-github/pull", data-toggle="tooltip", data-placement="top", title="", data-original-title="Git Pull latest Files")
+										i.zmdi.zmdi-cloud-download
 								.card-body.card-padding
 									.row
 										ul.tab-nav(role='tablist')
@@ -79,7 +81,7 @@ block content
 												.p-20
 													.row
 														.col-md-12
-															span.c-red To compile CoD4x from source you require the following tools, make sure that you have this tools installed on your OS:
+															h5.c-red To compile CoD4x from source you require the following tools, make sure that you have this tools installed on your OS:
 															br
 															br
 															ul.clist.clist-angle
@@ -106,6 +108,26 @@ block content
 															h5.m-b-20 Arch Linux 32-bit:
 															blockquote.f-13
 																p yaourt -S nasm paxctl gcc-multilib make
+													.row
+														.col-md-12
+															h5.c-red To get the latest files from Github we have to install git on your OS:
+													.row
+														.col-md-12
+															h5.m-b-20 Ubuntu:
+															blockquote.m-b-25.f-13
+																p sudo apt update
+																p sudo apt install git
+															h5.m-b-20 Debian 9:
+															blockquote.m-b-25.f-13
+																p sudo apt update
+																p sudo apt install git
+															h5.m-b-20 Debian 8:
+															blockquote.m-b-25.f-13
+																p sudo apt update
+																p sudo apt-get install git-core
+															h5.m-b-20 Centos 7:
+															blockquote.m-b-25.f-13
+																p sudo yum install git
 													.row
 														.col-md-12
 															hr

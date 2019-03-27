@@ -60,6 +60,22 @@ module.exports = {
 		});
 	},
 
+	getLatestFiles: function(req, res, next) {
+		var ssh = new SSH({
+			host: config.ssh_access.host,
+			user: config.ssh_access.user,
+			pass: config.ssh_access.password,
+			baseDir: config.cod4x_compile.dir_root
+		});
+		ssh.exec('cd '+config.cod4x_compile.dir_root, {
+			out: console.log.bind('Entering the servers root directory')
+		}).exec('git pull origin dev_newarch && exit', {
+			out: console.log.bind('Start CoD4x New Arch file Compiling')
+		}).start();
+		req.flash('success_messages', 'New CoD4x Files will be downloaded soon, wait about 10-15 seconds and Compile your new binary files!');
+		res.redirect('back');
+	},
+
 	InsertCoD4xGithubFiles: function(req, res, next) {
 		var ssh = new SSH({
 			host: config.ssh_access.host,
