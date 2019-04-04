@@ -392,11 +392,6 @@ function remove_cod4_github(req, res, next) {
 		pty: true,	
 		out: console.log.bind('Start CoD4x New Arch files download')
 	}).start();
-	var newSystemlogs = new Systemlogs ({
-		logline:'Latest Files from CoD4x Github branch dev_newarch downloaded',
-		successed: true
-	});
-	newSystemlogs.saveAsync()
 };
 
 
