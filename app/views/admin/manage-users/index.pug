@@ -57,7 +57,7 @@ block content
 																		.pmbb-edit
 																			form(method='post', action='/admin/manage-users/edit/update/servers/'+row._id)
 																				.fg-line
-																					select.chosen(multiple='', name="admin_on_servers[]+", data-placeholder='Choose Servers')
+																					select.chosen(multiple='', name="admin_on_servers", data-placeholder='Choose Servers')
 																						each row in results.servers
 																							option(value=row._id) #{row.name}
 																				.m-t-10

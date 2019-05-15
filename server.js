@@ -94,7 +94,7 @@ app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
 app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser.json({limit: '5mb'}));
-app.use(bodyParser.urlencoded({ limit: '5mb', extended: true }));
+app.use(bodyParser.urlencoded({ limit: '5mb', extended: false }));
 app.use(validator());
 app.use(session({secret: config.sessionSecret,resave: false,cookie: { maxAge: (24 * 3600 * 1000 * 14)},saveUninitialized: false,store: new MongoStore({ mongooseConnection: mongoose.connection,ttl: 2 * 24 * 60 * 60 })}));
 app.use(passport.initialize());

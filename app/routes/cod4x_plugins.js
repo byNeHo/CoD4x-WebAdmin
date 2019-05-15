@@ -1,3 +1,4 @@
+var express = require('express');
 const cod4x_plugins = require('../controllers/cod4x_plugins/index');
 
 module.exports = function(app, passport){
@@ -11,8 +12,10 @@ module.exports = function(app, passport){
 	app.get('/json/:julia_identkey/player/check-admin/:player_guid', cod4x_plugins.getPlayerIsAdmin);
 	app.get('/json/:julia_identkey/player/info/:player_guid', cod4x_plugins.getPlayerInfo);
 	app.get('/json/:julia_identkey/player/name-aliases/:player_guid', cod4x_plugins.getPlayerNameAliases);
-	app.post('/json/:julia_identkey/player/info/update/:player_guid', cod4x_plugins.updatePlayerInfo);
+	
 	//BanList
 	app.get('/json/:julia_identkey/banlist/permbans', cod4x_plugins.getPermBanList);
 	app.get('/json/:julia_identkey/banlist/tempbans', cod4x_plugins.getTempBanList);
+
+	app.post('/json/:julia_identkey/player/info/update/:player_guid', cod4x_plugins.updatePlayerInfo);
 };

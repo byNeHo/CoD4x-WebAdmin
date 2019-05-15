@@ -28,6 +28,8 @@ const TempbanDurations = require("../../models/tempban_duration");
 const PlayersData =  require("../../models/players_db");
 const config = require("../../config/config");
 
+const { parse } = require('querystring');
+
 module.exports = {
 	
 	getJulia:  function(req, res, next) {
@@ -806,7 +808,7 @@ module.exports = {
 		BluebirdPromise.props({
 			servers: Servers.find({}, 'name country online_players map_playing ip port -_id').execAsync()
 		}).then (function(results){
-			res.json({total:results.servers.length, results:results});
+			res.json({total:results.servers.length, results:results, status:"okay"});
 		}).catch (function(err){
 			console.log(err);
 		});
@@ -817,7 +819,7 @@ module.exports = {
 		BluebirdPromise.props({
 			servers: Servers.findOne({'julia_identkey': req.params.julia_identkey}).populate(populateadmins).execAsync(),
 		}).then (function(results){
-				res.json({total:results.servers.admins_on_server.length, results:results.servers.admins_on_server});
+				res.json({total:results.servers.admins_on_server.length, results:results.servers.admins_on_server, status:"okay"});
 		}).catch (function(err){
 			console.log(err);
 		});
@@ -833,11 +835,11 @@ module.exports = {
 					if (error){
 						console.log(error);
 					} else {
-						res.json({results:results, is_admin:getadmin});
+						res.json({results:results, is_admin:getadmin, status:"okay"});
 					}
 				})
 			} else {
-				res.json({results:results, is_admin:0});
+				res.json({results:results, is_admin:0, status:"okay"});
 			}
 				
 		}).catch (function(err){
@@ -855,11 +857,11 @@ module.exports = {
 					if (error){
 						console.log(error);
 					} else {
-						res.json({is_admin:getadmin});
+						res.json({is_admin:getadmin, status:"okay"});
 					}
 				})
 			} else {
-				res.json({is_admin:0});
+				res.json({is_admin:0, status:"okay"});
 			}
 				
 		}).catch (function(err){
@@ -872,9 +874,9 @@ module.exports = {
 			player: PlayersData.findOne({'player_guid': req.params.player_guid}).execAsync()
 		}).then (function(results){
 			if (results.player){
-				res.json({count:results.player.player_name_aliases.length, results:results.player.player_name_aliases});
+				res.json({count:results.player.player_name_aliases.length, results:results.player.player_name_aliases, status:"okay"});
 			} else {
-				res.json({results:[]});
+				res.json({results:[], status:"okay"});
 			}	
 		}).catch (function(err){
 			console.log(err);
@@ -885,7 +887,7 @@ module.exports = {
 		BluebirdPromise.props({
 			permbans: Bans.find({}, 'player_name admin_name -_id').limit(10).sort({ 'updatedAt': -1}).execAsync()
 		}).then (function(results){
-				res.json({results:results});
+				res.json({results:results, status:"okay"});
 		}).catch (function(err){
 			console.log(err);
 		});
@@ -895,7 +897,7 @@ module.exports = {
 		BluebirdPromise.props({
 			tempbans: TempBans.find({}, 'admin_command player_name admin_name -_id').limit(10).sort({ 'updatedAt': -1}).execAsync()
 		}).then (function(results){
-				res.json({results:results});
+				res.json({results:results, status:"okay"});
 		}).catch (function(err){
 			console.log(err);
 		});
@@ -903,72 +905,59 @@ module.exports = {
 
 	updatePlayerInfo: function(req, res, next) {
 		BluebirdPromise.props({
-			player: PlayersData.findOne({'player_guid': req.params.player_guid}, 'player_guid player_registered player_fov player_fps player_promod player_emblem_color player_emblem_text player_icon -_id').execAsync()
+			player: PlayersData.findOne({'player_guid': req.params.player_guid}, 'player_guid player_registered player_fov player_fps player_promod player_emblem_color player_emblem_text player_icon _id').execAsync()
 		}).then (function(results){
 				if (results.player){
 					PlayersData.updateOne({'player_guid':req.params.player_guid},function(err){
 						if (err){
 							console.log(err);
 						} else {
-							//Registered
-							if (req.body.player_registered){
-								new_registered = req.body.player_registered;
-							} else {
-								new_registered = results.player.player_registered;
-							};
 
-							//Fov
-							if (req.body.player_fov){
-								new_fov = req.body.player_fov;
-							} else {
-								new_fov = results.player.player_fov;
-							};
+							if (req.method === 'POST') {
+								let body = '';
+								req.on('data', chunk => {
+										body += chunk;
+								});
+								req.on('end', () => {
+										var resultsplayer = stringToObject(body);
 
-							//Fps
-							if (req.body.player_fps){
-								new_fps = req.body.player_fps;
-							} else {
-								new_fps = results.player.player_fps;
-							};
+										console.log(resultsplayer);
 
-							//Promod
-							if (req.body.player_promod){
-								new_promod = req.body.player_promod;
-							} else {
-								new_promod = results.player.player_promod;
-							};
+										if (resultsplayer.player_fov){
+											new_fov = resultsplayer.player_fov;	
+										} else {
+											new_fov = results.player.player_fov;
+										};
 
-							//Emblem Color
-							if (req.body.player_emblem_color){
-								new_emblem_color = req.body.player_emblem_color;
-							} else {
-								new_emblem_color = results.player.player_emblem_color;
-							};
+										if (resultsplayer.player_fps){
+											new_fps = resultsplayer.player_fps;
+										} else {
+											new_fps = results.player.player_fps;
+										};
 
-							//Emblem Text
-							if (req.body.player_emblem_text){
-								new_emblem_text = req.body.player_emblem_text;
-							} else {
-								new_emblem_text = results.player.player_emblem_text;
-							};
+										if (resultsplayer.player_promod){
+											new_promod = resultsplayer.player_promod;
+										} else {
+											new_promod = results.player.player_promod;
+										};
 
-							//Player Icon
-							if (req.body.player_icon){
-								new_icon = req.body.player_icon;
-							} else {
-								new_icon = results.player.player_icon;
-							};
-							
-							playerinfo.player_registered = new_registered,
-							playerinfo.player_fov = new_fov,
-							playerinfo.player_fps = new_fps,
-							playerinfo.player_promod = new_promod,
-							playerinfo.player_emblem_color = new_emblem_color,
-							playerinfo.player_emblem_text = new_emblem_text,
-							playerinfo.player_icon = new_icon
-							playerinfo.saveAsync()
+										if (resultsplayer.player_icon){
+											new_icon = resultsplayer.player_icon;
+										} else {
+											new_icon = results.player.player_icon;
+										};
+
+										results.player.player_fov = new_fov,
+										results.player.player_fps = new_fps,
+										results.player.player_promod = new_promod,
+										results.player.player_icon = new_icon
+										
+								});
+								results.player.saveAsync()
+							}	
 						}
 					});
+					return res.status(200).json({status:"okay"});
 				}
 		}).catch (function(err){
 			console.log(err);
@@ -978,6 +967,25 @@ module.exports = {
 
 
 };
+
+// Convert javascript object to json string.
+function objectToString(jsObject) {
+
+	var jsonString = JSON.stringify(jsObject);
+
+	//console.log("New JSON String : " + jsonString);
+
+	return jsonString;
+}
+
+function stringToObject(JSONString) {
+
+	var jsonObject = JSON.parse(JSONString);
+
+	//console.log(jsonObject);
+
+	return jsonObject;
+}
 
 function finalMapName(string) {
 	var starter = string.slice(3);

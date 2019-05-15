@@ -15,12 +15,12 @@ const PlayersdataSchema = new Schema({
     server_id: [{type: Schema.Types.ObjectId, ref: 'Servers'}],
     sshack:  { type: Boolean, default:true},
     player_registered: {type: Number, default: 0},
-    player_fov: {type: Number, default: 0},
-    player_fps: {type: Number, default: 0},
-    player_promod: {type: Number, default: 0},
+    player_fov: {type: Number, default: 1},
+    player_fps: {type: Number, default: 1},
+    player_promod: {type: Number, default: 1},
     player_emblem_color: {type: Number, default: 0},
     player_emblem_text: {type: String, default: "I love CoD4"},
-    player_icon: {type: Number, default: 0},
+    player_icon: {type: Number, default: 1},
 }, { timestamps: true });
 
 module.exports = mongoose.model('Playersdata', PlayersdataSchema);
