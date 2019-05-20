@@ -8,7 +8,7 @@ const Cod4xversion = require("../models/cod4x_version");
 const CronJob = require('cron').CronJob;
 const schedule = require('node-schedule');
 const async = require('async');
-const geoip = require('geoip-lite-country-only');
+const geoip = require('geoip-lite');
 const countries = require('country-list');
 const fs = require('fs');
 const S = require('underscore.string');
@@ -368,12 +368,12 @@ function download_cod4_github(req, res, next) {
 	});
 	ssh.exec('cd '+config.cod4_server_plugin.servers_root, {
 		out: console.log.bind('Entering the servers root directory')
-	}).exec('git clone -b dev_newarch --single-branch https://github.com/callofduty4x/CoD4x_Server.git CoD4x_Server-dev_newarch && exit', {
+	}).exec('git clone -b master --single-branch https://github.com/callofduty4x/CoD4x_Server.git CoD4x_Server-master && exit', {
 		pty: true,	
-		out: console.log.bind('Start CoD4x New Arch files download')
+		out: console.log.bind('Start CoD4x Master files download')
 	}).start();
 	var newSystemlogs = new Systemlogs ({
-		logline:'Latest Files from CoD4x Github branch dev_newarch downloaded',
+		logline:'Latest Files from CoD4x Github branch master downloaded',
 		successed: true
 	});
 	newSystemlogs.saveAsync()
@@ -388,9 +388,9 @@ function remove_cod4_github(req, res, next) {
 	});
 	ssh.exec('cd '+config.cod4_server_plugin.servers_root, {
 		out: console.log.bind('Entering the servers root directory')
-	}).exec('sudo rm -rf '+config.cod4_server_plugin.servers_root+'/CoD4x_Server-dev_newarch && exit', {
+	}).exec('sudo rm -rf '+config.cod4_server_plugin.servers_root+'/CoD4x_Server-master && exit', {
 		pty: true,	
-		out: console.log.bind('Start CoD4x New Arch files download')
+		out: console.log.bind('Start CoD4x Master files download')
 	}).start();
 };
 

@@ -3,8 +3,6 @@ const mongoose = require('mongoose');
 const BluebirdPromise = require('bluebird');
 const jsonfile = require('jsonfile');
 const githubLatestRelease = require('github-latest-release');
-const backup = require('mongodb-backup');
-const restore = require('mongodb-restore');
 const SSH = require('simple-ssh');
 const os = require('os');
 const S = require('underscore.string');
@@ -69,8 +67,8 @@ module.exports = {
 		});
 		ssh.exec('cd '+config.cod4x_compile.dir_root, {
 			out: console.log.bind('Entering the servers root directory')
-		}).exec('git pull origin dev_newarch && exit', {
-			out: console.log.bind('Start CoD4x New Arch file Compiling')
+		}).exec('git pull origin master && exit', {
+			out: console.log.bind('Start CoD4x file Compiling')
 		}).start();
 		req.flash('success_messages', 'New CoD4x Files will be downloaded soon, wait about 10-15 seconds and Compile your new binary files!');
 		res.redirect('back');
@@ -87,7 +85,7 @@ module.exports = {
 			out: console.log.bind('Entering the servers root directory')
 		}).exec('make && exit', {
 			pty: true,	
-			out: console.log.bind('Start CoD4x New Arch file Compiling')
+			out: console.log.bind('Start CoD4x file Compiling')
 		}).start();
 
 		setTimeout(function() {  
@@ -134,7 +132,7 @@ module.exports = {
 			out: console.log.bind('Entering the plugins directory')
 		}).exec('make && exit', {
 			pty: true,	
-			out: console.log.bind('Start CoD4x New Arch Plugin Compiling')
+			out: console.log.bind('Start CoD4x Plugin Compiling')
 		}).start();
 		setTimeout(function() {  
 			var newCod4xbinary = new Cod4xbinary ({

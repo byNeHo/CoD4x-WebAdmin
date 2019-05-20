@@ -3,8 +3,6 @@ const mongoose = require('mongoose');
 const BluebirdPromise = require('bluebird');
 const jsonfile = require('jsonfile');
 const githubLatestRelease = require('github-latest-release');
-const backup = require('mongodb-backup');
-const restore = require('mongodb-restore');
 const SSH = require('simple-ssh');
 const os = require('os');
 const osName = require('os-name');
@@ -72,57 +70,6 @@ module.exports = {
 			req.flash('success_messages', 'Players Data successfully deleted');
 			res.redirect('back');
 		});
-	},
-
-
-	getMongoDBbackup: function(req, res, next) {
-		var dburi = "mongodb://" + 
-			encodeURIComponent(config.db.username) + ":" + 
-			encodeURIComponent(config.db.password) + "@" + 
-			config.db.host + ":" + 
-			config.db.port + "/" + 
-			config.db.name;
-		backup({
-			uri: dburi, // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
-			root: './backup', // write files into this dir
-			tar: 'mydb.tar',
-			callback: function(err) {
-				if (err) {
-					console.error(err);
-					req.flash('error_messages', 'MongoDB backup error: '+err);
-					res.redirect('back');
-				} else {
-					req.flash('success_messages', 'MongoDB successfully backed up!');
-					res.redirect('back');
-				}
-			}
-		});
-
-	},
-
-	getMongoDBrestore: function(req, res, next) {
-		var dburi = "mongodb://" + 
-			encodeURIComponent(config.db.username) + ":" + 
-			encodeURIComponent(config.db.password) + "@" + 
-			config.db.host + ":" + 
-			config.db.port + "/" + 
-			config.db.name;
-		restore({
-			uri: dburi, // mongodb://<dbuser>:<dbpassword>@<dbdomain>.mongolab.com:<dbport>/<dbdatabase>
-			root: './backup', // write files into this dir
-			tar: 'mydb.tar',
-			callback: function(err) {
-				if (err) {
-					console.error(err);
-					req.flash('error_messages', 'MongoDB restore error: '+err);
-					res.redirect('back');
-				} else {
-					req.flash('success_messages', 'MongoDB successfully restored to lastest backup!');
-					res.redirect('back');
-				}
-			}
-		});
-
 	},
 
 	getGithubRelase: function(req, res, next) {
