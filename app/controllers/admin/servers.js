@@ -359,7 +359,7 @@ module.exports = {
 
 	ServerRconByID: function(req, res, next) {
 		BluebirdPromise.props({
-			server: Servers.findOne({'_id':req.params.id, rcon_password: { $gt: [] }}).execAsync(),
+			server: Servers.findOne({'_id':req.params.id}).execAsync(),
 			rconcmds: Rconconsole.find({'rcon_server':req.params.id}).populate('rcon_server').populate('rcon_user').sort({createdAt: 'desc'}).execAsync()
 		}).then (function(results){
 			if (results){
@@ -378,7 +378,7 @@ module.exports = {
 	RconConsoleAction: function(req, res, next) {
 		BluebirdPromise.props({
 			requiredpower: ExtraRcon.findOne({'name': 'extra_rcon'}).execAsync(),
-			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id, rcon_password: { $gt: [] }}).execAsync(),
+			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id}).execAsync(),
 		}).then(function(results) {
 			if (results.getserver){
 				if (req.user.local.user_role >=99){
