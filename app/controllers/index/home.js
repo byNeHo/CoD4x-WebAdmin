@@ -92,7 +92,7 @@ module.exports = {
 				}
 				
 				if (req.user){
-					Servers.countDocuments({'admins_on_server':req.user._id, 'name_alias':req.params.name_alias}, function( err, check_admin ) {
+					Servers.countDocuments({'admins_on_server':req.user._id, 'name_alias':req.params.name_alias, 'rcon_password': { $exists: true }}, function( err, check_admin ) {
 						if( !err ) {
 							res.render('frontpage/server/index.pug', {title: results.server.name, results:results, check_admin:check_admin, current_map_image:current_map_image, csrfToken: req.csrfToken()});
 						} else {

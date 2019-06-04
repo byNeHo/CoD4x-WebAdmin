@@ -74,13 +74,21 @@ module.exports = {
 			result.saveAsync()
 			var userID = req.params.id;
 			var selected_servers = req.body.admin_on_servers;
-			Servers.updateMany({},{$pull:{'admins_on_server':req.params.id}}, {multi: true},function(error){	
+			Servers.updateMany({},{$pull:{'admins_on_server':result.id}}, {multi: true},function(error){	
 				if (!error){
 					if (typeof req.body.admin_on_servers !== 'undefined' && req.body.admin_on_servers){
 						//loop trough array req.body.admin_on_servers and add the user to the newly selected servers
-						for (var i =0; i < selected_servers.length; i++) {
-						    var currentServer = selected_servers[i];
-						    Servers.updateOne({'_id':currentServer},{$push:{'admins_on_server':req.params.id}},function(err){
+						if ( Array.isArray(req.body.admin_on_servers) ) {
+							for (var i =0; i < selected_servers.length; i++) {
+							    var currentServer = selected_servers[i];
+							    Servers.updateOne({'_id':currentServer},{$push:{'admins_on_server':result.id}},function(err){
+									if (err){
+										console.log(err);
+									}
+								});
+							}
+						} else {
+							Servers.updateOne({'_id':selected_servers},{$push:{'admins_on_server':result.id}},function(err){
 								if (err){
 									console.log(err);
 								}

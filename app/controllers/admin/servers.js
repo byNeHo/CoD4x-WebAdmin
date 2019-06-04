@@ -43,7 +43,7 @@ module.exports = {
 		.then (function(results){
 			if (results){
 				req.flash('error_messages', 'There was an error, this server already exist');
-				res.redirect('/admin/my-servers');
+				res.redirect('back');
 			}else {
 				var sq = new SourceQuery(2000);
 				sq.open(req.body.ip, req.body.port);
@@ -359,26 +359,26 @@ module.exports = {
 
 	ServerRconByID: function(req, res, next) {
 		BluebirdPromise.props({
-			server: Servers.findOne({'_id':req.params.id}).execAsync(),
+			server: Servers.findOne({'_id':req.params.id, 'rcon_password': { $exists: true }}).execAsync(),
 			rconcmds: Rconconsole.find({'rcon_server':req.params.id}).populate('rcon_server').populate('rcon_user').sort({createdAt: 'desc'}).execAsync()
 		}).then (function(results){
 			if (results){
 				res.render('admin/servers/rcon.pug', {title: 'Rcon Console', csrfToken: req.csrfToken(), results:results});
 			}else{
 				req.flash('error_messages', 'Rcon Password is not provided for this server');
-				res.redirect('/admin/my-servers');
+				res.redirect('back');
 			}
 		}).catch(function(err) {
 			req.flash('error_messages', 'There was an error, please try again or Contact the script Owner');
 			console.log(err);
-			res.redirect('/admin/my-servers');
+			res.redirect('back');
 		});
 	},
 
 	RconConsoleAction: function(req, res, next) {
 		BluebirdPromise.props({
 			requiredpower: ExtraRcon.findOne({'name': 'extra_rcon'}).execAsync(),
-			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id}).execAsync(),
+			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id, 'rcon_password': { $exists: true }}).execAsync(),
 		}).then(function(results) {
 			if (results.getserver){
 				if (req.user.local.user_role >=99){
@@ -622,5 +622,3 @@ function uncolorize(string){
 	string = replaceString(string, '^9', '');
 	return string
 }
-
-

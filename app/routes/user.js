@@ -13,7 +13,7 @@ const formatNum = require('format-num');
 const BluebirdPromise = require('bluebird');
 const fs = require('fs');
 const multiparty = require('multiparty');
-const Recaptcha = require('express-recaptcha').Recaptcha;
+const Recaptcha = require('express-recaptcha').RecaptchaV2;
 const config = require('../config/config');
 const moment = require('moment');
 

@@ -53,7 +53,7 @@ module.exports = {
 	RconConsoleCommand: function(req, res, next) {
 		BluebirdPromise.props({
 			requiredpower: ExtraRcon.findOne({'name': 'extra_rcon'}).execAsync(),
-			getserver: Servers.findOne({'_id':req.params.id}).execAsync(),
+			getserver: Servers.findOne({'_id':req.params.id, 'rcon_password': { $exists: true }}).execAsync(),
 		}).then(function(results) {
 			if (results.getserver){
 				if (req.user.local.user_role >= 99){
@@ -90,7 +90,7 @@ module.exports = {
 	RconMaprotate: function(req, res, next) {
 		BluebirdPromise.props({
 			requiredpower: ExtraRcon.findOne({'name': 'extra_rcon'}).execAsync(),
-			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id}).execAsync(),
+			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id, 'rcon_password': { $exists: true }}).execAsync(),
 		}).then(function(results) {			
 			if (results.getserver){
 				if ( results.requiredpower.enable_maprotate !== 'undefined' && results.requiredpower.enable_maprotate){
@@ -130,7 +130,7 @@ module.exports = {
 	RconGetssAll: function(req, res, next) {
 		BluebirdPromise.props({
 			requiredpower: ExtraRcon.findOne({'name': 'extra_rcon'}).execAsync(),
-			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id}).execAsync(),
+			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id, 'rcon_password': { $exists: true }}).execAsync(),
 		}).then(function(results) {			
 			if (results.getserver){
 				if ( results.requiredpower.enable_screenshot_all !== 'undefined' && results.requiredpower.enable_screenshot_all){
@@ -172,7 +172,7 @@ module.exports = {
 		BluebirdPromise.props({
 			requiredpower: ExtraRcon.findOne({'name': 'extra_rcon'}).execAsync(),
 			maps: Maps.findOne({'map_name': req.body.map_name}).execAsync(),
-			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id}).execAsync(),
+			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id, 'rcon_password': { $exists: true }}).execAsync(),
 		}).then(function(results) {	
 			if (results.getserver){
 				if ( results.requiredpower.enable_map_change !== 'undefined' && results.requiredpower.enable_map_change){
@@ -212,7 +212,7 @@ module.exports = {
 
 	RconTempban: function(req, res, next) {
 		BluebirdPromise.props({
-			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id}).execAsync(),
+			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id, 'rcon_password': { $exists: true }}).execAsync(),
 			checkifbanned: Bans.findOne({'player_guid':req.body.player_slot}).execAsync(),
 			tempbanselect_enabled: ExtraRcon.findOne({'name': 'extra_rcon'}).execAsync(),
 			getcommand: Rconcommand.findOne({'command_name': 'tempban'}).execAsync(),
@@ -382,7 +382,7 @@ module.exports = {
 	RconAdminAction: function(req, res, next) {
 		BluebirdPromise.props({
 			getcommand: Rconcommand.findOne({'command_name': req.body.rcon_cmd}).execAsync(),
-			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id}).execAsync(),
+			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id, 'rcon_password': { $exists: true }}).execAsync(),
 		}).then(function(results) {
 			if (results.getserver){
 				if (results.getcommand){
@@ -452,7 +452,7 @@ module.exports = {
 
 	RconChatAction: function(req, res, next) {
 		BluebirdPromise.props({
-			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id}).execAsync(),
+			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id, 'rcon_password': { $exists: true }}).execAsync(),
 			checkifbanned: Bans.findOne({'player_guid':req.body.player_slot}).execAsync(),
 			tempbanselect_enabled: ExtraRcon.findOne({'name': 'extra_rcon'}).execAsync(),
 			getcommand: Rconcommand.findOne({'command_name': 'tempban'}).execAsync(),
@@ -643,8 +643,8 @@ module.exports = {
 		var start = moment().toDate();
 		BluebirdPromise.props({
 			requiredpower: ExtraRcon.findOne({'name': 'extra_rcon'}).execAsync(),
-			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id}).execAsync(),
-			screenshotserver: Servers.findOne({'_id':req.params.id}).execAsync(),
+			getserver: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id, 'rcon_password': { $exists: true }}).execAsync(),
+			screenshotserver: Servers.findOne({'_id':req.params.id, 'rcon_password': { $exists: true }}).execAsync(),
 			countscreenshots: UserScreenshots.countDocuments({'get_user':req.user._id, updatedAt: {$gt: (start -59*60000)}}).execAsync()
 		}).then(function(results) {
 			if(results.requiredpower.screenshots_for_users_enabled !== 'undefined' && results.requiredpower.screenshots_for_users_enabled){
@@ -729,7 +729,7 @@ module.exports = {
 			getcommand: Rconcommand.findOne({'command_name': 'permban'}).execAsync()
 		}).then(function(results) {
 			if (results.getscreenshot){
-				Servers.findOne({'_id':results.getscreenshot.get_server, 'admins_on_server':req.user._id})
+				Servers.findOne({'_id':results.getscreenshot.get_server, 'admins_on_server':req.user._id, 'rcon_password': { $exists: true }})
 					.then(function(server_admins) {
 						if (server_admins){
 							if (req.user.local.user_role >= results.requiredpower.minimum_admin_power_for_screenshots){
@@ -881,7 +881,7 @@ module.exports = {
 
 	RconPermbanNoImage: function(req, res, next) {
 		BluebirdPromise.props({
-			servers: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id}).execAsync(),
+			servers: Servers.findOne({'admins_on_server':req.user._id, '_id':req.params.id, 'rcon_password': { $exists: true }}).execAsync(),
 			getcommand: Rconcommand.findOne({'command_name': 'permban'}).execAsync(),
 			checkbanned: Bans.findOne({'player_guid': req.body.player_slot}).execAsync()
 		}).then(function(results) {
@@ -1014,7 +1014,7 @@ module.exports = {
 			requiredpower: ExtraRcon.findOne({'name': 'extra_rcon'}).execAsync()
 		}).then(function(results) {
 			if (results.getreport){
-				Servers.findOne({'_id':results.getreport.rcon_server, 'admins_on_server':req.user._id})
+				Servers.findOne({'_id':results.getreport.rcon_server, 'admins_on_server':req.user._id, 'rcon_password': { $exists: true }})
 					.then(function(server_admins) {
 						if (server_admins){
 							Bans.findOne({'player_guid':results.getreport.player_guid}, function( err, checkbanned ) {
@@ -1213,7 +1213,7 @@ module.exports = {
 			requiredpower: ExtraRcon.findOne({'name': 'extra_rcon'}).execAsync()
 		}).then(function(results) {
 			if (results.getban){
-				Servers.findOne({'slug_name':results.getban.server_name, 'admins_on_server':req.user._id})
+				Servers.findOne({'slug_name':results.getban.server_name, 'admins_on_server':req.user._id, 'rcon_password': { $exists: true }})
 					.then(function(server_admins) {
 						if (server_admins){
 							if (req.user.local.user_role >= results.requiredpower.minimum_power_for_player_unban){
@@ -1298,7 +1298,7 @@ module.exports = {
 			requiredpower: ExtraRcon.findOne({'name': 'extra_rcon'}).execAsync()
 		}).then(function(results) {
 			if (results.getban){
-				Servers.findOne({'slug_name':results.getban.game_server, 'admins_on_server':req.user.id})
+				Servers.findOne({'slug_name':results.getban.game_server, 'admins_on_server':req.user.id, 'rcon_password': { $exists: true }})
 					.then(function(server_admins) {
 						if (server_admins){
 							if (req.user.local.user_role >= results.requiredpower.minimum_power_for_player_unban){
