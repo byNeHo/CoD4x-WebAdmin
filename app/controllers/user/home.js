@@ -1,6 +1,7 @@
 // Require needed modules
 const mongoose = require('mongoose');
 const moment = require('moment');
+const crypto = require('crypto');
 const fs = require('fs');
 const multiparty = require('multiparty');
 const Jimp = require("jimp");
@@ -11,6 +12,8 @@ const formatNum = require('format-num');
 const NodeGeocoder = require('node-geocoder');
 const BluebirdPromise = require('bluebird');
 const Recaptcha = require('express-recaptcha').RecaptchaV2;
+const sgMail = require('@sendgrid/mail');
+const { validationResult } = require('express-validator/check');
 const config = require('../../config/config');
 const User = require("../../models/user");
 const Plugins = require("../../models/plugins");
@@ -40,8 +43,10 @@ var deleteFolderRecursive = function(path) {
 module.exports = {
 
 	getLogin: function(req, res, next) {
-		Plugins.findAsync({'category' : 'sso', 'status':true})
-		.then (function(results){
+		BluebirdPromise.props({
+			plugins:Plugins.find({'category' : 'sso', 'status':true}).execAsync(),
+			resetpassword:Plugins.findOne({'category' : 'emailer', 'status':true}).execAsync()
+		}).then (function(results){
 			var translation = req.t("pagetitles:pageTitle.login");
 			res.render('auth/login.pug', { title: translation, results: results, csrfToken: req.csrfToken(), message: req.flash('loginMessage') });
 		}).catch (function(err){
@@ -62,6 +67,128 @@ module.exports = {
 			res.redirect('back');
 		});
 	},
+
+
+	getResetPassword: function(req, res, next) {
+		Plugins.findOneAsync({'category': 'emailer', 'name_alias': 'emailer-sendgrid', 'status':true})
+		.then (function(results){
+			if (!results){
+				res.redirect('/user/login');
+			} else {
+				var newdate = Date.now() + 3600000;
+				var translation = req.t("pagetitles:pageTitle.reset");
+				res.render('auth/reset-password.pug', { title: translation, results: results, csrfToken: req.csrfToken(), message: req.flash('resetMessage') });
+			}
+		}).catch (function(err){
+			console.log(err);
+			res.redirect('back');
+		});
+	},
+
+	ResetPasswordUpdate: function(req, res, next) {
+		BluebirdPromise.props({
+			user:User.findOne({'local.email': req.body.email}).execAsync(),
+			resetpassword:Plugins.findOne({'category': 'emailer', 'name_alias': 'emailer-sendgrid','status':true}, 'extra_field').execAsync()
+		}).then (function(results){
+			if (!results.user){
+				req.flash('error_messages', req.t("auth:reset.reset_no_user_found"));
+				res.redirect('back');
+			} else if (!results.resetpassword){
+				res.redirect('/user/login');
+			} else {
+				crypto.randomBytes(32, (err, buffer)=>{
+					if (err){
+						console.log(err);
+						res.redirect('back');
+					}
+					var newdate = Date.now() + 3600000;
+					const reset_token = buffer.toString('hex');
+					results.user.reset.resetToken = reset_token,
+					results.user.reset.resetTokenExpiration = newdate;
+					results.user.save();
+					req.flash('success_messages', req.t("auth:reset.reset_email_sent"));
+					
+					sgMail.setApiKey(results.resetpassword.extra_field);
+
+					const msg = {
+						to: req.body.email,
+						from: 'cod4xwebadmin@noreplay.com',
+						subject: req.t("auth:reset.reset_h2"),
+						html: `
+						<p>${req.t('auth:reset.reset_email_h1', { name: results.user.local.user_name })},</p>
+						<p>${req.t('auth:reset.reset_email_content_1', { community: config.website_name })}. <strong>${req.t("auth:reset.reset_email_content_2")}.</strong></p>
+						<p><a href="${config.website_url}/user/update-password/${reset_token}">${req.t("auth:reset.reset_email_content_3")}</a></p>
+						<p>${req.t("auth:reset.reset_email_content_4")}<br />${config.website_url}/user/update-password/${reset_token}</p>
+						<p>${req.t("auth:reset.reset_email_content_5")}.</p>
+						<p>${req.t("auth:reset.reset_email_content_6")},<br />${req.t('auth:reset.reset_email_content_7', { community: config.website_name })}</p>
+						`
+					  };
+					  sgMail.send(msg);
+					res.redirect('back');
+				});
+			}
+		}).catch (function(err){
+			console.log(err);
+			res.redirect('back');
+		});
+	},
+
+	getNewPassword: function(req, res, next) {
+		const token = req.params.token;
+		BluebirdPromise.props({
+			resetpassword:Plugins.findOne({'category': 'emailer', 'name_alias': 'emailer-sendgrid','status':true}, 'extra_field').execAsync(),
+			user: User.findOne({'reset.resetToken': token , 'reset.resetTokenExpiration': { $gt: Date.now() }}, 'id reset.resetToken').execAsync()
+		}).then (function(results){
+			if (!results.user){
+				req.flash('error_messages', req.t("auth:reset.reset_no_user_found"));
+				res.redirect('/user/reset-password');
+			} else if (!results.resetpassword){
+				res.redirect('/user/login');
+			} else {
+				var translation = req.t("pagetitles:pageTitle.update_password");
+				res.render('auth/update-password.pug', { title: translation, results: results, csrfToken: req.csrfToken(), message: req.flash('newpasswordMessage') });
+			}
+		}).catch (function(err){
+			console.log(err);
+			res.redirect('back');
+		});
+	},
+
+	NewPasswordUpdate: function(req, res, next) {
+		
+		const errors = validationResult(req);
+		if (!errors.isEmpty()) {
+			req.flash('newpasswordMessage', req.t("auth:reset.reset_wrong_new_password"));
+			return res.redirect('back');
+		}
+	
+		const newPassword = req.body.password;
+		const userId = req.body.userId;
+		const passwordToken = req.body.passwordToken;
+		let resetUser;
+
+		BluebirdPromise.props({
+			resetpassword:Plugins.findOne({'category': 'emailer', 'name_alias': 'emailer-sendgrid','status':true}, 'extra_field').execAsync(),
+			user: User.findOne({'reset.resetToken': passwordToken , '_id': userId, 'reset.resetTokenExpiration': { $gt: Date.now() }}).execAsync()
+		}).then (function(results){
+			if (!results.resetpassword){
+				res.redirect('/user/login');
+			} else {
+				resetUser = results.user;
+				results.user.local.password = resetUser.generateHash(newPassword);
+				results.user.reset.resetToken = undefined,
+				results.user.reset.resetTokenExpiration = undefined
+				results.user.saveAsync()
+
+				req.flash('loginMessage', req.t("auth:reset.new_password_updated_msg"));
+				res.redirect('/user/login');
+			}
+		}).catch (function(err){
+			console.log(err);
+			res.redirect('back');
+		});
+	},
+
 
 
 	getProfile: function(req, res, next) {

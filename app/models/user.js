@@ -47,6 +47,10 @@ const userSchema = new Schema({
     socketio : {
         socket_id : { type: String },
         is_online : { type: Boolean, default: false }
+    },
+    reset : {
+        resetToken : { type: String },
+        resetTokenExpiration : { type: Date }
     }
 }, { timestamps: true });
 

@@ -1,0 +1,24 @@
+{
+  "login": {
+    "login_forgott_password": "login.login_forgott_password",
+    "new_password_form_password_label": "login.new_password_form_password_label",
+    "login_form_email": "login.login_form_email",
+    "login_form_email_placeholder": "login.login_form_email_placeholder"
+  },
+  "reset": {
+    "reset_2_save_btn": "reset.reset_2_save_btn",
+    "reset_2_pass_input": "reset.reset_2_pass_input",
+    "reset_wrong_new_password": "reset.reset_wrong_new_password",
+    "reset_email_sent": "reset.reset_email_sent",
+    "reset_h2": "reset.reset_h2",
+    "reset_email_h1": "reset.reset_email_h1",
+    "reset_email_content_1": "reset.reset_email_content_1",
+    "reset_email_content_2": "reset.reset_email_content_2",
+    "reset_email_content_3": "reset.reset_email_content_3",
+    "reset_email_content_4": "reset.reset_email_content_4",
+    "reset_email_content_5": "reset.reset_email_content_5",
+    "reset_email_content_6": "reset.reset_email_content_6",
+    "reset_email_content_7": "reset.reset_email_content_7",
+    "reset_h2_small": "reset.reset_h2_small"
+  }
+}

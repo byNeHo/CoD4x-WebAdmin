@@ -15,6 +15,7 @@ const fs = require('fs');
 const multiparty = require('multiparty');
 const Recaptcha = require('express-recaptcha').RecaptchaV2;
 const config = require('../config/config');
+const validate = require("../middleware/validator");
 const moment = require('moment');
 
 module.exports = function(router, passport){
@@ -28,6 +29,10 @@ module.exports = function(router, passport){
 	router.get('/signup', notLoggedIn, user.getSignup);
 	router.get('/profile', isLoggedIn, user.getProfile);
 	router.get('/logout', isLoggedIn, user.getLogout);
+	router.get('/reset-password', notLoggedIn, user.getResetPassword);
+	router.post('/reset-password', notLoggedIn, user.ResetPasswordUpdate);
+	router.get('/update-password/:token', notLoggedIn, user.getNewPassword);
+	router.post('/update-password', notLoggedIn, validate.NewPasswordUpdate, user.NewPasswordUpdate);
 
 	// facebook -------------------------------
 	// send to facebook to do the authentication

@@ -6,6 +6,7 @@
     "start": "node ./bin/www"
   },
   "dependencies": {
+    "@sendgrid/mail": "^6.4.0",
     "anglicize": "^1.0.0",
     "array": "^0.4.3",
     "arrify": "^1.0.1",
@@ -16,7 +17,7 @@
     "color-difference": "^0.3.4",
     "compression": "^1.7.3",
     "connect-flash": "^0.1.1",
-    "connect-mongo": "^2.0.3",
+    "connect-mongo": "^3.2.0",
     "cookie-parser": "~1.4.3",
     "cors": "^2.8.4",
     "country-list": "^2.1.0",

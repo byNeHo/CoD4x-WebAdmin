@@ -42,13 +42,16 @@ block content
 												label.ts-helper(for='rememberMe')
 									.col-sm-12.m-b-20.text-center
 										a(href='/user/signup')  #{t('auth:login.login_create_new_account')}
+									if (results.resetpassword)
+										.col-sm-12.m-b-20.text-center
+											a(href='/user/reset-password')  #{t('auth:login.login_forgott_password')}
 									.clearfix
-									if (results.length > 0)
+									if (results.plugins.length > 0)
 										.col-sm-12-m-t-20.text-center
 											h5 #{t('auth:login.login_login_sso_btns')}
 										hr
 										.col-sm-12-m-t-20.btn-demo.text-center
-											each row in results
+											each row in results.plugins
 												if (row.name_alias=='sso-facebook')
 													a.btn.bgm-indigo.btn-icon.waves-effect.waves-circle.waves-float(href='/user/auth/facebook')
 														span.zmdi.zmdi-facebook

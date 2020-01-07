@@ -55,9 +55,9 @@
 		"servers_root" : "/home/linux_user"
 	},
 	"cod4x_compile": {
-		"download_link" : "https://github.com/callofduty4x/CoD4x_Server/archive/dev_newarch.zip",
-		"dir_root" : "/home/linux_user/CoD4x_Server-dev_newarch",
-		"zip_file_name" : "dev_newarch.zip",
+		"download_link" : "https://github.com/callofduty4x/CoD4x_Server/archive/master.zip",
+		"dir_root" : "/home/linux_user/CoD4x_Server-master",
+		"zip_file_name" : "master.zip",
 		"save_directory_path" : "/var/www/mywebsite.com/html/public"
 	},
 	"website_language": "en",

@@ -7,6 +7,8 @@
         "latest_notifications":"Latest Notifications",
         "view_all":"View All",
         "login":"Login",
+        "reset":"Reset Password",
+        "update_password":"Update Password",
         "register":"Register",
         "admin":"Admin",
         "profile":"Profile",

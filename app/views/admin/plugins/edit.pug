@@ -49,6 +49,8 @@ block content
 												input(type='hidden', name='min_power', value='1')
 											else if (results.plugins.name_alias === 'download-cod4x-files-from-github')
 												input(type='hidden', name='min_power', value='1')
+											else if (results.plugins.name_alias === 'emailer-sendgrid')
+												input(type='hidden', name='min_power', value='1')
 											else
 												.col-md-4
 													.form-group
@@ -74,6 +76,13 @@ block content
 														label(for='extra_field')
 															span.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content='Only numbers, without commas, points' title="" data-original-title="CoD4x AuthToken")
 															|  * Token
+														input#extra_field.form-control.input-sm(type='text', name='extra_field', required, value=results.plugins.extra_field)
+											if (results.plugins.category == "emailer")
+												.col-md-6
+													.form-group.fg-line
+														label(for='extra_field')
+															span.zmdi.zmdi-info-outline.md-12(data-trigger="hover", data-toggle="popover" data-placement="top" data-content='Your Sendgrid API key' title="" data-original-title="Sendgrid API key")
+															|  * API key
 														input#extra_field.form-control.input-sm(type='text', name='extra_field', required, value=results.plugins.extra_field)
 											.col-md-12
 												.form-group

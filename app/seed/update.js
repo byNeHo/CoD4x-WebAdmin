@@ -7,7 +7,7 @@ var dbURI = "mongodb://" +
 			config.db.host + ":" + 
 			config.db.port + "/" + 
 			config.db.name;
-mongoose.connect(dbURI, {useNewUrlParser:true});
+mongoose.connect(dbURI, {useNewUrlParser:true, useUnifiedTopology: true});
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
@@ -25,13 +25,13 @@ const Plugins = require("../models/plugins");
 
 var plugins = [
 	new Plugins({
-		name:'Download cod4x files from GitHub',
-		category:'cronjobs',
-		description:'Download cod4x files from GitHub Daily',
-		instructions:'<p>This plugin will Download cod4x source files from GitHub Daily.</p><p class=\"c-red\">If you have just enabled this plugin please wait 24 hours before you Compile server Binary or Plugin files.</p><p>The plugin downloads the source files every day at 5:30 in morning</p><br><br>\r\n<span style=\"font-weight: bold;\">Configuration:\r\n</span><ol>\r\n\r\n<li>Navigate to your app (app/config/config.json and locate section \"ssh_access\")<br></li>\r\n\r\n<li>Change host, user and password to yours (this user must be in sudo group)</li>\r\n\r\n<li>Locate next section in config.json \"cod4_server_plugin\", replace linux_user in servers_root with your user what you have defined in ssh access in previous step.</li>\r\n\r\n<li>Locate next section in config.json \"cod4x_compile\", replace linux_user in dir_root with your user what you have defined in ssh access in previous step, also replace save_directory_path, the full path to your websites public folder</li>\r\n\r\n</ol>\r\n\r\n<p>If you have set everything as you should, then the cod4x source files from Cod4x_Server Github page will be auto-downloaded every day.</p>',
+		name:'Emailer Sendgrid',
+		category:'emailer',
+		description:'An emailer plugin for Cod4xWebAdmin using SendGrid as a third party service',
+		instructions:'<p>Activate or Deactivate Plugin Sendgrid Emailer on your application (Status checkbox)<br></p><p>This Emailer plugin allows Cod4xWebAdmin to send emails to users through the third-party transactional email service Sendgrid.<br /><br /><strong>Do I need Sendgrid?</strong><br /> If you would like to send emails to users and for example be able to reset your password then yes. Password reset works only if you have configured and activated this plugin.<br /><br /><strong>Where do I get this API key?</strong><br />You get it on: <a href="https://sendgrid.com/" target="_blank">https://sendgrid.com/</a>. Sign up, make sure you activate your account after registration via your email, choose the free option it is more than enough for our purpose. After Logging in go to Settings -> API keys and create a new API key. <strong>After you get your API key insert it here in the API key field, save changes and activate the plugin</strong><br /><br />If everything is working as it should you will see on your Log In page a Forgot Password? link. You can test it out with your own account if it works.</p>',
 		min_power:1,
-		require_cronjob:true,
-		cron_job_time_intervals:30,
+		require_cronjob:false,
+		cron_job_time_intervals:2,
 		status:false
 	})
 ];
