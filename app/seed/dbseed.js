@@ -11,7 +11,6 @@ mongoose.connect(dbURI, {useNewUrlParser:true});
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
-// Throw an error if the connection fails
 mongoose.connection.on('error', function(err) {
 	if(err){
 		console.log('Your mongoDB Username, Password is wrong in file app/config/config.json . Could not connect to database! '+err);

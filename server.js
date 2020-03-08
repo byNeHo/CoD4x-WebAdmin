@@ -50,6 +50,7 @@ app.use('/js', express.static(__dirname + '/node_modules/markdown-it/dist')); //
 // view engine setup
 app.set('views', path.join(__dirname, 'app/views'));
 
+
 app.locals.moment = require('moment');
 
 i18next
