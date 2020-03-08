@@ -7,7 +7,7 @@ var dbURI = "mongodb://" +
 			config.db.host + ":" + 
 			config.db.port + "/" + 
 			config.db.name;
-mongoose.connect(dbURI, {useNewUrlParser:true, useUnifiedTopology: true});
+mongoose.connect(dbURI, {useNewUrlParser:true});
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
