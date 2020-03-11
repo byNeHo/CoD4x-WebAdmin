@@ -107,6 +107,9 @@ module.exports = function(router, passport){
 	router.get('/cod4x-github/use-server-version/save/:id', requireRole(100), isLoggedIn, cod4x.UseCoD4xGithubBinary);
 	router.get('/cod4x-github/use-plugin-version/save/:id', requireRole(100), isLoggedIn, cod4x.UseCoD4xGithubPlugin);
 	router.get('/cod4x-github/pull', requireRole(100), isLoggedIn, cod4x.getLatestFiles);
+
+	/*###################### DELETE ALL ADMIN NOTIFICATIONS ##################################################*/
+	router.get('/clear-admin-notifications', requireRole(100), isLoggedIn, index.RemoveAllAdminNotifications);
 };
 
 /*RESTRICT ACCESS BY USER POWER*/

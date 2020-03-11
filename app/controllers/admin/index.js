@@ -17,7 +17,7 @@ const Servers = require("../../models/servers");
 const Cod4xversion = require("../../models/cod4x_version");
 const Systemlogs = require("../../models/system_logs");
 const PlayersData = require("../../models/players_db");
-
+const Notifications = require("../../models/notifications");
 
 //Set dates for testing
 var start = new Date();
@@ -103,4 +103,13 @@ module.exports = {
 			})
 		})
 	},
+
+	RemoveAllAdminNotifications: function(req, res) {
+		Notifications.deleteMany({'notification_type': 'unban-request'}).execAsync()
+		.then (function(result){
+			Notifications.deleteMany({'notification_type': 'admin-app'}).execAsync();
+			req.flash('success_messages', 'All Admin Notifications Deleted');
+			res.redirect('back');
+		});
+	}
 };
