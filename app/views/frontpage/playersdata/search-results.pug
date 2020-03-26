@@ -40,12 +40,9 @@ block content
 									if (user.local.user_role > 1)
 										span.c-amber.zmdi.zmdi-star-circle.m-r-5
 										| #{player.player_guid}
-										span.m-l-15.c-grey.zmdi.zmdi-steam.m-r-5
-										| #{player.player_steam_id}
 									else
 										span.c-amber.zmdi.zmdi-star-circle.m-r-5
 										| #{t('frontpages:players_data.players_data_only_for_server_admins')}
 									span.c-green.zmdi.zmdi-circle.m-l-15.m-r-5
 									| #{moment(player.updatedAt).fromNow()}
-				include ../../partials/pagination.pug
 				.clearfix

@@ -1,0 +1,25 @@
+if (results.paginated.totalPages > 1)
+	.m-t-20.m-b-20
+		ul.pagination.lg-pagination
+			if (results.paginated.prevPage)
+				if (results.paginated.totalPages > 5)
+					li
+						a(href='?page=1')
+							span.zmdi.zmdi-fast-rewind
+				li
+					a(href='?page='+results.paginated.prevPage)
+						span.zmdi.zmdi-chevron-left
+			for item in paginationlinks
+				li(class=(item === results.paginated.page ? "active" : undefined))
+					a(href='?page='+item) #{item}
+			if (results.paginated.nextPage)
+				li
+					a(href='?page='+results.paginated.nextPage)
+						span.zmdi.zmdi-chevron-right
+				if (results.paginated.totalPages > 5)
+					li
+						a(href='?page='+results.paginated.totalPages)
+							span.zmdi.zmdi-fast-forward
+		.text-center
+			| Total: 
+			strong.c-lightgreen #{results.paginated.totalDocs}

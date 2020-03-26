@@ -1,6 +1,5 @@
 const i18next = require('i18next');
 const mongoose = require('mongoose');
-const mongoosePaginate = require('mongoose-paginate');
 const geoip = require('geoip-lite');
 const countries = require('country-list');
 const replace = require("replace");
@@ -44,6 +43,8 @@ const Usermaps = require("../../models/maps");
 const PlayersData = require("../../models/players_db");
 const Systemlogs = require("../../models/system_logs");
 const config = require('../../config/config');
+
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 var start = new Date();
 start.setHours(0,0,0,0);
@@ -159,11 +160,43 @@ module.exports = {
 	},
 
 	getPlayers: function(req, res, next) {
+		const curpage = +req.query.page || 1;
+		var query   = {};
+		var options = {
+			page: curpage,
+			limit: 20,
+			select: 'player_name updatedAt player_country_short player_guid player_steam_id',
+			sort: {'updatedAt': -1}
+		};
+
 		BluebirdPromise.props({
-			players: PlayersData.find({}, 'player_name updatedAt player_country_short player_guid').sort({ 'updatedAt':'desc'}).execAsync()
+			paginated: PlayersData.paginate({}, options)
 		}).then (function(results){
 			var translation = req.t("pagetitles:pageTitle.get_players");
-			res.render('frontpage/playersdata/index.pug', {title: translation, results:results});
+			var paginationlinks = pagination(results.paginated.page, results.paginated.totalPages);
+			res.render('frontpage/playersdata/index.pug', {title: translation, results:results, paginationlinks:paginationlinks});
+		}).catch (function(err){
+			console.log(err);
+			res.redirect('back');
+		});
+	},
+
+	getSearchPlayers: function(req, res, next) {
+		var sw = new RegExp(req.query.sq, 'i');
+		var search = {$or:[ {'player_name':sw}, {'player_guid':sw}]};
+		const curpage = +req.query.page || 1;
+		var options = {
+			page: curpage,
+			limit: 20,
+			select: 'player_name updatedAt player_country_short player_guid player_steam_id',
+			sort: {'updatedAt': -1}
+		};
+		BluebirdPromise.props({
+			paginated: PlayersData.paginate(search,{}, options)
+		}).then (function(results){
+			var translation = req.t("pagetitles:pageTitle.get_players");
+			var paginationlinks = pagination(results.paginated.page, results.paginated.totalPages);
+			res.render('frontpage/playersdata/search-results.pug', {title: translation, results:results, paginationlinks:paginationlinks});
 		}).catch (function(err){
 			console.log(err);
 			res.redirect('back');
@@ -1041,4 +1074,16 @@ function fileExists(filename){
 
 function isEmpty(value) {
 	return typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null;
+}
+
+function pagination(currentPage, pageCount) {
+	let delta = 2,
+		left = currentPage - delta,
+		right = currentPage + delta + 1,
+		result = [];
+
+	result = Array.from({length: pageCount}, (v, k) => k + 1)
+		.filter(i => i && i >= left && i < right);
+
+	return result;
 }
