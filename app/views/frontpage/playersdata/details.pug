@@ -16,9 +16,19 @@ block content
 					small
 						| #{t('frontpages:players_data.players_data_lt_seen')} #{moment(results.player.updatedAt).fromNow()}
 			.row.wall
-				.col-md-8
+				.col-md-8.col-sm-6
 					.card
 						.card-body.card-padding
+							if (success_messages.length > 0)
+								.row
+									.col-sm-12.col-md-12.m-t-30
+										.alert.alert-success
+											| #{success_messages}
+							if (error_messages.length > 0)
+								.row
+									.col-sm-12.col-md-12.m-t-30
+										.alert.alert-danger
+											| #{error_messages}
 							.pmo-contact
 								ul
 									li.ng-binding
@@ -42,3 +52,20 @@ block content
 									li
 										| #{item}
 							.clearfix
+				.col-md-4.col-sm-6
+					if (user)
+						if (user.local.user_role > 1)
+							.card
+								.card-header
+									h2
+										| Permanent Ban
+										small 
+											| Ban Permanently #{results.player.player_name}
+								.card-body.card-padding
+									form.m-t-15(method='post', action='/rconcmd/offline/permban/playersdata')
+										.fg-line.form-group
+											input.form-control(type='text', name='message', placeholder=t('frontpages:server.server_input_placeholder'), required)
+										.form-group
+											button.btn.bgm-red.btn-block(type='submit') PermBan
+										input(type='hidden', name='player_slot', value=results.player.player_guid)
+										input(type='hidden', name='_csrf', value=csrfToken)

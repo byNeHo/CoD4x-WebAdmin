@@ -14,6 +14,7 @@ module.exports = function(app, passport){
 	app.post('/:id/cmd', isLoggedIn, rconcmd.RconAdminAction);
 	app.post('/:id/cmd-chat', isLoggedIn, rconcmd.RconChatAction);
 	app.post('/:id/permban', isLoggedIn, rconcmd.RconPermbanNoImage);
+	app.post('/offline/permban/playersdata', isLoggedIn, rconcmd.RconPermbanOffline);
 	app.post('/:id/tempban', isLoggedIn, rconcmd.RconTempban);
 	app.post('/:id/changemap', isLoggedIn, rconcmd.RconChangeMap);
 	app.post('/:id/getssall', isLoggedIn, rconcmd.RconGetssAll);

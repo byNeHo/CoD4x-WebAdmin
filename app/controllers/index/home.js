@@ -208,7 +208,7 @@ module.exports = {
 			player: PlayersData.findOne({'_id':req.params.id}).execAsync()
 		}).then (function(results){
 			var translation = req.t("pagetitles:pageTitle.get_players");
-			res.render('frontpage/playersdata/details.pug', {title: translation+' '+results.player.player_name, results:results});				
+			res.render('frontpage/playersdata/details.pug', {title: translation+' '+results.player.player_name, results:results, csrfToken: req.csrfToken()});				
 		}).catch (function(err){
 			console.log(err);
 			res.redirect('back');

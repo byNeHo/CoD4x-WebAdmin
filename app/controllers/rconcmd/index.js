@@ -1205,6 +1205,71 @@ module.exports = {
 		});
 	},
 
+	RconPermbanOffline: function(req, res, next) {
+		BluebirdPromise.props({
+			getcommand: Rconcommand.findOne({'command_name': 'permban'}).execAsync(),
+			checkbanned: Bans.findOne({'player_guid': req.body.player_slot}).execAsync()
+		}).then(function(results) {
+				if (req.user.local.user_role >= results.getcommand.req_power){
+					Bans.findOne({'player_guid':req.body.player_slot}, function( err, checkbanned ) {
+						if (err){
+							console.log(err)
+						} else{
+							if (checkbanned){
+								req.flash('error_messages', req.t('rcon_commands:general.already_banned_guid'));
+								res.redirect('back');
+							} else {
+								PlayersData.findOne({'player_guid':req.body.player_slot}, function( err, checkplayerdata ) {
+									if (err){
+										console.log(err)
+									} else{
+										if (checkplayerdata){
+											User.findOne({'steam.id':checkplayerdata.player_steam_id, 'local.user_role': {$gt: 1}}, function( err, checkifimune ) {
+												if (checkifimune){
+													req.flash('error_messages', req.t('rcon_commands:general.is_imune', {get_AdminName:checkifimune.local.user_name}));
+													res.redirect('back');
+												} else {
+													if (req.body.message){
+								  						var newBan = new Bans ({
+									  						player_name: checkplayerdata.player_name,
+									  						player_guid: checkplayerdata.player_guid,
+									  						player_steam_id: checkplayerdata.player_steam_id,
+									  						admin_name: req.user.local.user_name,
+									  						admin_id: req.user._id,
+									  						admin_steam_id: req.user.steam.id,
+															admin_message: req.body.message,
+															rcon_command: 'permban',
+															server_name: 'Offline Ban',
+															rcon_admin: req.user._id
+														});
+														newBan.saveAsync();
+														req.flash('success_messages', checkplayerdata.player_name+' successfully Banned');
+														res.redirect('back');
+													} else {
+														req.flash('error_messages', req.t('rcon_commands:RconPermbanNoImage.no_reason_given_error'));
+														res.redirect('back');
+													}
+												}
+											})
+										} else {
+											req.flash('error_messages', 'No player found');
+											res.redirect('back');
+										}
+									}
+								})
+							}
+						}
+					});
+				}else{
+					req.flash('error_messages', req.t('rcon_commands:general.general_no_permission'));
+					res.redirect('back');
+				}
+		}).catch(function(err) {
+			console.log("There was an error: " +err);
+			res.redirect('back');
+		});
+	},
+
 	RconUnban: function(req, res, next) {
 		BluebirdPromise.props({
 			getban: Bans.findOne({'_id': req.params.id}).execAsync(),
@@ -1215,71 +1280,65 @@ module.exports = {
 			if (results.getban){
 				Servers.findOne({'slug_name':results.getban.server_name, 'admins_on_server':req.user._id, 'rcon_password': { $exists: true }})
 					.then(function(server_admins) {
-						if (server_admins){
+						if (results.getban.server_name=='Offline Ban'){
+							var allowed = true;
+						} else if (server_admins) {
+							var allowed = true;
+						} else {
+							var allowed = false;
+						}
+						if (allowed=true){
 							if (req.user.local.user_role >= results.requiredpower.minimum_power_for_player_unban){
-								var	rcon = require('srcds-rcon')({address:server_admins.ip+':'+server_admins.port,password: server_admins.rcon_password});
-								rcon.connect()
-								.then(function(connected){
-									if ( typeof results.getcommand.send_back_message_to_server !== 'undefined' && results.getcommand.send_back_message_to_server==true){
-										var cmdinform = 'say '+main_lng('rcon_commands:RconUnban.success_unban_server_msg', {unbaned_PlayerName:results.getban.player_name, unban_AdminName:req.user.local.user_name});
-										return rcon.command(cmdinform);
-									}
-								}).then(function(disconnect){
-									rcon.disconnect();
-									var newUnban = new Unbans ({
-										player_name: results.getban.player_name,
-										player_guid: results.getban.player_guid,
-										rcon_command: 'unban',
-										admin_name: results.getban.admin_name,
-									  admin_id: results.getban.admin_id
-									});
-									newUnban.saveAsync();
-									if (results.checkunbanrequest){
-										  var newGlobalnotifications = new Globalnotifications ({
-											  sender_id: req.user._id,
-											  recipient_id: results.checkunbanrequest.sender_id,
-											  link_title:main_lng('rcon_commands:globalnotifications.globalnotifications_display_responses_link_title_unban_request_accepted'),
-											  link_text: main_lng('rcon_commands:globalnotifications.globalnotifications_display_responses_link_text_unban_request_accepted'),
-											  link_url: '/notifications',
-											  message:main_lng('rcon_commands:globalnotifications.globalnotifications_display_responses_message_unban_request_accepted'),
-											  reported_player: results.getban.player_name,
-											  admin_decision: 1,
-											  notification_type:'unban_request'
-										  });
-										  newGlobalnotifications.saveAsync()
-									}
-									if (results.getban.player_screenshot){
-										var filePath = './public/'+results.getban.player_screenshot;
-										fs.unlink(filePath, function(err) {
-											  if (err) {
-												  console.log("failed to delete local image:"+err);
-											  } else {
-												  Notifications.deleteOne({'bann_id' : req.params.id}).exec();
-												  Bans.deleteOne({'_id': req.params.id}).exec();
-											  }
-										  });	
-									} else {
-										Bans.deleteOne({'_id': req.params.id}).exec();
-								  	}		
-									req.flash('success_messages', req.t('rcon_commands:RconUnban.success_unban'));
-									res.redirect('/banlist');	
-								}).catch(function(err) {
-									console.log("There was an error: " +err);
-									console.log(err.stack);
-									res.redirect('back');
-								});					  			
-							}else{
-								req.flash('error_messages', req.t('rcon_commands:general.general_no_permission'));
-								res.redirect('back');
-							}
-						}else{
-							req.flash('error_messages', req.t('rcon_commands:general.general_no_admin_rights_on_server'));
+								var newUnban = new Unbans ({
+									player_name: results.getban.player_name,
+									player_guid: results.getban.player_guid,
+									rcon_command: 'unban',
+									admin_name: results.getban.admin_name,
+								  admin_id: results.getban.admin_id
+								});
+								newUnban.saveAsync();
+
+								if (results.checkunbanrequest){
+									  var newGlobalnotifications = new Globalnotifications ({
+										  sender_id: req.user._id,
+										  recipient_id: results.checkunbanrequest.sender_id,
+										  link_title:main_lng('rcon_commands:globalnotifications.globalnotifications_display_responses_link_title_unban_request_accepted'),
+										  link_text: main_lng('rcon_commands:globalnotifications.globalnotifications_display_responses_link_text_unban_request_accepted'),
+										  link_url: '/notifications',
+										  message:main_lng('rcon_commands:globalnotifications.globalnotifications_display_responses_message_unban_request_accepted'),
+										  reported_player: results.getban.player_name,
+										  admin_decision: 1,
+										  notification_type:'unban_request'
+									  });
+									  newGlobalnotifications.saveAsync()
+								}
+								if (results.getban.player_screenshot){
+									var filePath = './public/'+results.getban.player_screenshot;
+									fs.unlink(filePath, function(err) {
+										  if (err) {
+											  console.log("failed to delete local image:"+err);
+										  } else {
+											  Notifications.deleteOne({'bann_id' : req.params.id}).exec();
+											  Bans.deleteOne({'_id': req.params.id}).exec();
+										  }
+									  });	
+								} else {
+									Bans.deleteOne({'_id': req.params.id}).exec();
+							  	}		
+								req.flash('success_messages', req.t('rcon_commands:RconUnban.success_unban'));
+								res.redirect('/banlist');				  			
+						} else {
+							req.flash('error_messages', req.t('rcon_commands:general.general_no_permission'));
 							res.redirect('back');
 						}
-					}).catch(function(err) {
-						console.log("There was an error: " +err);
+					} else {
+						req.flash('error_messages', req.t('rcon_commands:general.general_no_admin_rights_on_server'));
 						res.redirect('back');
-					});					
+					}
+				}).catch(function(err) {
+					console.log("There was an error: " +err);
+					res.redirect('back');
+				});					
 			} else {
 				req.flash('error_messages', req.t('rcon_commands:RconUnban.permban_not_found'));
 				res.redirect('back');
