@@ -26,9 +26,8 @@ module.exports = {
 
 	getManageUsers: function(req, res, next) {
 	BluebirdPromise.props({
-		user: User.find({}).sort({'local.user_role': 'desc', 'local.user_name': 'asc'}).populate('local.admin_on_servers', 'name _id name_alias').execAsync(),
-		admingroups: AdminGroups.find({}).sort({'power': 'asc'}).execAsync(),
-		servers: Servers.find({}).sort({'name_alias': 'asc'}).execAsync()
+		users: User.find({'local.user_role':{$lte: 1}}, 'local.user_name local.avatar_60').sort({ 'local.user_name': 'asc'}).execAsync(),
+		admins: User.find({'local.user_role':{$gte: 2}}, 'local.user_name local.avatar_60').populate('local.admin_on_servers', 'name _id name_alias').sort({'local.user_role': 'desc', 'local.user_name': 'desc'}).execAsync()
 	}).then (function(results){
     		res.render('admin/manage-users/index.pug', {title: 'Manage Users', results: results, csrfToken: req.csrfToken()});
   		}).catch(function(err) {
@@ -58,8 +57,8 @@ module.exports = {
 			result.local.block_user = req.body.block_user,
 			result.saveAsync()
 		}).then(function(success) {
-			req.flash('success_messages', 'User successfully edited');
-			res.redirect('/admin/manage-users');
+			req.flash('success_messages', 'User Power successfully edited');
+			res.redirect('back');
 		}).catch(function(err) {
 			console.log("There was an error: " +err);
 			req.flash('error_messages', 'There was an error, please try again or Contact the script Owner');
@@ -98,8 +97,8 @@ module.exports = {
 				}
 			});
 		}).then(function(success) {
-			req.flash('success_messages', 'User successfully edited');
-			res.redirect('/admin/manage-users');
+			req.flash('success_messages', 'Server List successfully edited');
+			res.redirect('back');
 		}).catch(function(err) {
 			console.log("There was an error: " +err);
 			req.flash('error_messages', 'There was an error, please try again or Contact the script Owner');

@@ -29,40 +29,37 @@ block content
 								.card-header
 									h2 Manage Users
 										small manage users here
-								.table-responsive.m-t-20
-									table.table.table-striped.m-t-20.m-b-20
-										thead
-											th User Name
-											th Admin on Servers
-											th #
-										tbody
-											each row in results.user
-												tr
-													td
-														span.btn.btn-xs.bgm-red #{row.local.user_role} 
-														a(href='/admin/manage-users/edit/'+row._id)
-															|  #{row.local.user_name}
-													td
-														if ( typeof row.local.admin_on_servers !== 'undefined' && row.local.admin_on_servers )
-															span#profile-main.no-padding
-																.pmb-block
-																	.pmbb-body
-																		.pmbb-view
-																			a.btn.btn-primary.btn-xs.pull-right(data-ma-action='profile-edit', href='') Admin on Server
-																			ul.list-inline.commaseparated.pull-left.nowrap
-																				each item in row.local.admin_on_servers
-																					li
-																						a(href="/"+item.name_alias, target="_blank")
-																							| #{item.name}
-																		.pmbb-edit
-																			form(method='post', action='/admin/manage-users/edit/update/servers/'+row._id)
-																				.fg-line
-																					select.chosen(multiple='', name="admin_on_servers", data-placeholder='Choose Servers')
-																						each row in results.servers
-																							option(value=row._id) #{row.name}
-																				.m-t-10
-																					input(type='hidden', name='_csrf', value=csrfToken)
-																					button.btn.btn-primary.btn-sm(type='submit') Save
-																					button.btn.btn-link.btn-sm(data-ma-action='profile-edit-cancel') Cancel
-													td
-														a.btn.btn-danger.btn-xs(href="/admin/manage-users/delete/"+row._id) Delete User
+								.card-body.card-padding
+									.row
+										ul.tab-nav(role='tablist')
+											li.active
+												a(href='#admins', aria-controls='admins', role='tab', data-toggle='tab')
+													| #{t('frontpages:members.members_tab_name_admins')}
+													span.m-l-10.label.label-danger=results.admins.length
+											li
+												a(href='#users', aria-controls='users', role='tab', data-toggle='tab')
+													| #{t('frontpages:members.members_tab_name_members')}
+													span.m-l-10.label.label-warning=results.users.length
+										.tab-content
+											#admins.tab-pane.active(role='tabpanel')
+												ul#users-container.users-container
+													each row in results.admins
+														li.users-box.registered-user
+															a(href='/admin/manage-users/edit/'+row._id)
+																img.user-picture(src=row.local.avatar_60, alt='img')
+															br
+															.user-info
+																div
+																	a(href='/admin/manage-users/edit/'+row._id)  #{row.local.user_name}
+												.clearfix
+											#users.tab-pane(role='tabpanel')
+												ul#users-container.users-container
+													each row in results.users
+														li.users-box.registered-user
+															a(href='/admin/manage-users/edit/'+row._id)
+																img.user-picture(src=row.local.avatar_60, alt='img')
+															br
+															.user-info
+																div
+																	a(href='/admin/manage-users/edit/'+row._id)  #{row.local.user_name}
+									.clearfix

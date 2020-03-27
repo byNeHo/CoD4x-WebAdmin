@@ -13,10 +13,22 @@ block content
 			.container.container-alt
 				.row
 					.col-md-12
+						if (success_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-success
+										| #{success_messages}
+						if (error_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-danger
+										| #{error_messages}
+				.row
+					.col-md-8
 						.card
-							.card-header.bgm-blue
-								h2 Manage Users
-									small Edit User
+							.card-header
+								h2=results.user.local.user_name
+									small Admin Power
 							.card-body.card-padding
 								form(method='post', action='/admin/manage-users/edit/update/'+results.user._id)
 									.form-group
@@ -36,4 +48,40 @@ block content
 									.col-sm-12.m-b-20.text-right
 										input(type='hidden', name='_csrf', value=csrfToken)
 										button.btn.btn-primary.waves-effect(type='submit') Edit
+								.clearfix
+						.card
+							.card-header
+								h2 Admin on Server(s)
+									small Edit Server(s) List
+							.card-body.card-padding
+								span#profile-main.no-padding
+									.pmb-block
+										.pmbb-body
+											.pmbb-view
+												a.btn.btn-primary.pull-right.m-b-15(data-ma-action='profile-edit', href='') Edit List
+												.clearfix
+												.pmo-block.pmo-contact
+													ul
+														each item in results.user.local.admin_on_servers
+															li
+																a(href="/"+item.name_alias, target="_blank")
+																	| #{item.name}
+											.pmbb-edit
+												form(method='post', action='/admin/manage-users/edit/update/servers/'+results.user._id)
+													.fg-line
+														select.chosen(multiple='', name="admin_on_servers", data-placeholder='Choose Servers')
+															each row in results.servers
+																option(value=row._id) #{row.name}
+													.m-t-10
+														input(type='hidden', name='_csrf', value=csrfToken)
+														button.btn.btn-primary.btn-sm(type='submit') Save
+														button.btn.btn-link.btn-sm(data-ma-action='profile-edit-cancel') Cancel
+								.clearfix
+					.col-md-4
+						.card
+							.card-header
+								h2=results.user.local.user_name
+									small  Delete User
+							.card-body.card-padding
+								a.btn.btn-danger.btn-block.m-t-30(href="/admin/manage-users/delete/"+results.user._id) Delete User
 								.clearfix
