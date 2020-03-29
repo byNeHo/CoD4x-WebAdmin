@@ -7,7 +7,7 @@ var dbURI = "mongodb://" +
 			config.db.host + ":" + 
 			config.db.port + "/" + 
 			config.db.name;
-mongoose.connect(dbURI, {useNewUrlParser:true});
+mongoose.connect(dbURI, {useNewUrlParser:true, useUnifiedTopology: true});
 mongoose.set('useFindAndModify', false);
 mongoose.set('useCreateIndex', true);
 
@@ -33,7 +33,17 @@ var plugins = [
 		require_cronjob:false,
 		cron_job_time_intervals:2,
 		status:false
-	})
+	}),
+	new Plugins({
+		name:'Remove old Player Data',
+		category:'cronjobs',
+		description:'Remove older player data from the website',
+		instructions:'<p>Activate or Deactivate Plugin Remove old Player Data on your application (Status checkbox)<br></p><p>This plugin will remove all older not active Player Data (then x days) from the website, enter a valid number for days, do not use commas, points. The plugin will run once a day at 3:05</p>',
+		min_power:1,
+		require_cronjob:true,
+		cron_job_time_intervals:180,
+		status:false
+	}),
 ];
 
 var done = 0;

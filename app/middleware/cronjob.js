@@ -66,13 +66,15 @@ var rmadminactions = schedule.scheduleJob('46 1 * * *', function(){
 });
 
 // ################################ Plugin remove Old Tempbans from the website ################################ //
-var rmadminactions = schedule.scheduleJob('1 3 * * *', function(){
+var rmadminactions = schedule.scheduleJob('37 15 * * *', function(){
 	var start = new Date();
-	var daysToDeletion = parseInt(14);
-	var deletionDate = new Date(now.setDate(now.getDate() - daysToDeletion));
 	Plugins.findOne({'name_alias':'remove-old-tempbans'},function(error, plugintempbandelete){	
 		if (!error){
 			if (plugintempbandelete.status==true){
+				
+				var daysToDeletion = parseInt(plugintempbandelete.cron_job_time_intervals);
+				var deletionDate = new Date(now.setDate(now.getDate() - daysToDeletion));
+
 				TempBans.deleteMany({'createdAt':{$lt : deletionDate}, 'expire':{$lt : start}}, function(err) {
 					if (err){
 						console.log('Remove old tempbbans cronjob error: '+err)
@@ -312,6 +314,33 @@ var downloadcod4xgithub = schedule.scheduleJob('27 5 * * *', function(){
 		if (!error){
 			if (plugincod4x.status==true){
 				remove_cod4_github();
+			}
+		}
+	});	
+});
+
+
+// ################################ Plugin remove Old Player Data from the website ################################ //
+var rmadminactions = schedule.scheduleJob('5 3 * * *', function(){
+	var start = new Date();
+	Plugins.findOne({'name_alias':'remove-old-player-data'},function(error, pluginplayerdatadelete){	
+		if (!error){
+			if (pluginplayerdatadelete.status==true){
+				
+				var daysToDeletion = parseInt(pluginplayerdatadelete.cron_job_time_intervals);
+				var deletionDate = new Date(now.setDate(now.getDate() - daysToDeletion));
+
+				PlayersData.deleteMany({'updatedAt':{$lt : deletionDate}}, function(err) {
+					if (err){
+						console.log('Remove old player data cronjob error: '+err)
+					} else {
+						var newSystemlogs = new Systemlogs ({
+							logline: 'Old Player Data removed',
+							successed: true
+						});
+						newSystemlogs.saveAsync()
+					}
+				});
 			}
 		}
 	});	
