@@ -141,7 +141,11 @@
         "home_latest_admin_actions": "Latest Admin actions on Server(s)",
         "home_by_admin": "by admin",
         "home_latest_permbans": "Latest PermBanns",
-        "home_latest_permbans_text": "Latest Server Bans made by our Admins"
+        "home_latest_permbans_text": "Latest Server Bans made by our Admins",
+        "home_latest_unbans": "Latest Unbans",
+        "home_latest_unbans_text": "Latest Server Unbans made by our Admins",
+        "home_top_countries": "Players by Country",
+        "home_top_countries_text": "Most popular countries based on Game Server(s) visits"
     },
 
     "members": {

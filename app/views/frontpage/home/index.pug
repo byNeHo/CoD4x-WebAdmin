@@ -51,6 +51,81 @@ block content
 											else
 												span.c-red
 													| #{t('frontpages:home.home_server_offline')}
+					.row
+						.col-md-12
+							.block-header
+								h2
+									i.zmdi.zmdi-account
+									|  #{t('frontpages:home.home_latest_admin_actions')}
+					.row
+						.col-md-4
+							.card
+								.card-header
+									h2
+										| #{t('frontpages:home.home_admin_actions')}
+										small 
+											| #{t('frontpages:home.home_latest_admin_actions')}
+								.card-body
+									.list-group
+										each tempban in results.tempbans
+											a.list-group-item.media.animated.zoomIn(href='/members/'+tempban.admin_id)
+												.media-body
+													.lgi-heading
+														span(class="btn btn-circle m-r-15 btn-xs bgm-deeporange")
+															if (tempban.admin_command=='chat')
+																| VCM
+															else if (tempban.admin_command=='mute')
+																| VM
+															else
+																| TB
+														| #{tempban.player_name}
+													ul.lgi-attrs
+														li
+															| #{t('frontpages:home.home_by_admin')} #{tempban.admin_name}
+														li
+															| #{moment(tempban.createdAt).fromNow()}
+						.col-md-4
+							.card
+								.card-header
+									h2
+										| #{t('frontpages:home.home_latest_permbans')}
+										small 
+											| #{t('frontpages:home.home_latest_permbans_text')}
+								.card-body
+									.list-group
+										each ban in results.serverbans
+											a.list-group-item.media.animated.zoomIn(href='/banlist/'+ban._id)
+												.media-body
+													.lgi-heading
+														span(class="btn btn-circle m-r-15 btn-xs bgm-red")
+															| PB
+														| #{ban.player_name}
+													ul.lgi-attrs
+														li
+															| #{t('frontpages:home.home_by_admin')} #{ban.admin_name}
+														li
+															| #{moment(ban.createdAt).fromNow()}
+						.col-md-4
+							.card
+								.card-header
+									h2
+										| #{t('frontpages:home.home_latest_unbans')}
+										small 
+											| #{t('frontpages:home.home_latest_unbans_text')}
+								.card-body
+									.list-group
+										each unban in results.serverunbans
+											.list-group-item.media.animated.zoomIn
+												.media-body
+													.lgi-heading
+														span(class="btn btn-circle m-r-15 btn-xs bgm-green")
+															| Unban
+														| #{unban.player_name}
+													ul.lgi-attrs
+														li
+															| #{t('frontpages:home.home_by_admin')} #{unban.admin_name}
+														li
+															| #{moment(unban.createdAt).fromNow()}
 				.col-md-3.col-sm-6
 					if (user)
 						if (user.local.user_role < 2)
@@ -74,45 +149,18 @@ block content
 					.card
 						.card-header
 							h2
-								| #{t('frontpages:home.home_admin_actions')}
+								| #{t('frontpages:home.home_top_countries')}
 								small 
-									| #{t('frontpages:home.home_latest_admin_actions')}
-						.card-body
-							.list-group
-								each tempban in results.tempbans
-									a.list-group-item.media.animated.zoomIn(href='/members/'+tempban.admin_id)
-										.media-body
-											.lgi-heading
-												span(class="btn btn-circle m-r-15 btn-xs bgm-deeporange")
-													if (tempban.admin_command=='chat')
-														| VCM
-													else if (tempban.admin_command=='mute')
-														| VM
-													else
-														| TB
-												| #{tempban.player_name}
+									| #{t('frontpages:home.home_top_countries_text')}
+						if (results.getcountries)
+							.card-body
+								.list-group.lg-odd-black
+									each country in results.getcountries
+										.list-group-item
 											ul.lgi-attrs
 												li
-													| #{t('frontpages:home.home_by_admin')} #{tempban.admin_name}
+													i(class='m-r-5 flag-icon flag-icon-'+country.player_country_short)
+													| #{country._id}
 												li
-													| #{moment(tempban.createdAt).fromNow()}
-					.card
-						.card-header
-							h2
-								| #{t('frontpages:home.home_latest_permbans')}
-								small 
-									| #{t('frontpages:home.home_latest_permbans_text')}
-						.card-body
-							.list-group
-								each ban in results.serverbans
-									a.list-group-item.media.animated.zoomIn(href='/banlist/'+ban._id)
-										.media-body
-											.lgi-heading
-												span(class="btn btn-circle m-r-15 btn-xs bgm-red")
-													| PB
-												| #{ban.player_name}
-											ul.lgi-attrs
-												li
-													| #{t('frontpages:home.home_by_admin')} #{ban.admin_name}
-												li
-													| #{moment(ban.createdAt).fromNow()}
+													span.zmdi.zmdi-accounts.m-r-5
+													| #{country.count}

@@ -55,11 +55,14 @@ const main_lng = i18next.getFixedT(config.website_language);
 module.exports = {
 
 	getHome: function(req, res, next) {
+		const aggregatorOpts = [{$group: {"_id": "$player_country","player_country_short": { "$first": "$player_country_short" },"count": { $sum: 1 }}},{$sort:{count:-1}},{$limit : 10 }]
 		BluebirdPromise.props({
 			servers: Servers.find({}, 'name name_alias ip port country_shortcode color online_players map_playing is_stoped updatedAt').execAsync(),
 			tempbans: Tempbans.find({$or:[ {'admin_command':'tempban'}, {'admin_command':'chat'}, {'admin_command':'mute'} ]}, 'admin_id player_name admin_name createdAt admin_command').sort({ 'createdAt': -1}).limit(3).execAsync(),
 			serverbans: Bans.find({}, 'player_name admin_name createdAt').sort({ 'createdAt': -1}).limit(3).execAsync(),
-			adminconversations: AdminConversation.countDocuments().execAsync()
+			serverunbans: Unbans.find({}, 'player_name admin_name createdAt').sort({ 'createdAt': -1}).limit(3).execAsync(),
+			adminconversations: AdminConversation.countDocuments().execAsync(),
+			getcountries: PlayersData.aggregate(aggregatorOpts).execAsync()
 		}).then (function(results){
 			var translation = req.t("pagetitles:pageTitle.home");
 			res.render('frontpage/home/index.pug', {title: translation, results:results});

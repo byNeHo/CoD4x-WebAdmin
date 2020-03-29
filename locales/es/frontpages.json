@@ -141,7 +141,11 @@
         "home_latest_admin_actions": "Últimas acciones de administrador en servidor(es)",
         "home_by_admin": "por admin",
         "home_latest_permbans": "Ultimos baneos permanentes",
-        "home_latest_permbans_text": "Últimos baneos de servidores hechos por nuestros administradores"
+        "home_latest_permbans_text": "Últimos baneos de servidores hechos por nuestros administradores",
+        "home_latest_unbans": "Últimos Unbans",
+        "home_latest_unbans_text": "Últimos unbaneos de servidores hechos por nuestros administradores",
+        "home_top_countries": "Jugadores por país",
+        "home_top_countries_text": "Países más populares basados en visitas a Game Server"
     },
 
     "members": {

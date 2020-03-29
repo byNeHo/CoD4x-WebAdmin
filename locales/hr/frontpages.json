@@ -141,7 +141,11 @@
         "home_latest_admin_actions": "Najnovije Admin radnje na Serverima",
         "home_by_admin": "od strane admina",
         "home_latest_permbans": "Posljednji Trajni Banovi",
-        "home_latest_permbans_text": "Posljednji Trajni Banovi od strane naših Admina"
+        "home_latest_permbans_text": "Posljednji Trajni Banovi od strane naših Admina",
+        "home_latest_unbans": "Posljednji Unbanovi",
+        "home_latest_unbans_text": "Posljednji Unbanovi od strane naših Admina",
+        "home_top_countries": "Igrači po Državama",
+        "home_top_countries_text": "Najpopularnije države na temelju posjeta Game Servera"
     },
 
     "members": {
@@ -206,7 +210,7 @@
     },
 
     "players_data": {
-        "players_data_name_details": "podaci",
+        "players_data_name_details": "Podaci",
         "players_data_name_aliases": "Imena u Igri",
         "players_data_name": "Ime",
         "players_data_lt_seen": "Posljednji put viđen",
