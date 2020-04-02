@@ -93,35 +93,11 @@ var rmadminactions = schedule.scheduleJob('37 15 * * *', function(){
 
 // ################################ Remove players data from DB where name is empty ################################ //
 var rmadminactions = schedule.scheduleJob('27 15 * * *', function(){
-	BluebirdPromise.props({
-		playersdata: PlayersData.find({}, 'player_name id').execAsync()
-	}).then (function(results){
-		if (results.playersdata.length > 0){
-			async.eachSeries(results.playersdata, function (player, next){
-				setTimeout(function() {
-					if (player){
-						PlayersData.updateMany({"_id": player._id}, {"$set":{ "player_name":player.player_name.trim()}}
-						).exec(function(err, done){
-							if(err) {
-								console.log(err);
-							}
-						});
-					}
-					next();
-				}, 100);
-			}, function () {
-				console.log('Done going through Servers!');
-			});
-		}
-	}).then(function(){
 		PlayersData.deleteMany({ 'player_name': {$exists:false}}, function(err) {
 			if (err){
 				console.log('There was an error (Delete playersdata -cronjob) '+err)
 			}
 		})
-	}).catch(function(err) {
-		console.log("There was an error in plugin Remove players data from DB where name is empty: " +err);
-	});
 });
 
 // ################################ Restart server every day at X hours ################################ //
