@@ -93,11 +93,11 @@ var rmadminactions = schedule.scheduleJob('37 15 * * *', function(){
 
 // ################################ Remove players data from DB where name is empty ################################ //
 var rmadminactions = schedule.scheduleJob('27 15 * * *', function(){
-		PlayersData.deleteMany({ 'player_name': {$exists:false}}, function(err) {
-			if (err){
-				console.log('There was an error (Delete playersdata -cronjob) '+err)
-			}
-		})
+	PlayersData.deleteMany({ 'player_name': {$exists:false}}, function(err) {
+		if (err){
+			console.log('There was an error (Delete playersdata -cronjob) '+err)
+		}
+	})
 });
 
 // ################################ Restart server every day at X hours ################################ //
