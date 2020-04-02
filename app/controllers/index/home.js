@@ -210,6 +210,7 @@ module.exports = {
 
 	getplayerById: function(req, res, next) {
 		BluebirdPromise.props({
+			requiredpower: ExtraRcon.findOne({'name': 'extra_rcon'}).execAsync(),
 			player: PlayersData.findOne({'_id':req.params.id}).execAsync()
 		}).then (function(results){
 			var translation = req.t("pagetitles:pageTitle.get_players");

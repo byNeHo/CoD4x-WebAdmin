@@ -732,7 +732,7 @@ module.exports = {
 				Servers.findOne({'_id':results.getscreenshot.get_server, 'admins_on_server':req.user._id, 'rcon_password': { $exists: true }})
 					.then(function(server_admins) {
 						if (server_admins){
-							if (req.user.local.user_role >= results.requiredpower.minimum_admin_power_for_screenshots){
+							if (req.user.local.user_role >= results.requiredpower.minimum_power_for_player_unban){
 								Bans.findOne({'player_guid':results.getscreenshot.player_guid}, function( err, checkbanned ) {
 									if (err){
 										console.log(err)
@@ -1046,7 +1046,7 @@ module.exports = {
 										req.flash('error_messages', req.t('rcon_commands:general.already_banned_guid'));
 										res.redirect('back');
 									} else {
-										if (req.user.local.user_role >= results.requiredpower.minimum_admin_power_for_screenshots){
+										if (req.user.local.user_role >= results.requiredpower.minimum_power_for_player_unban){
 											PlayersData.findOne({'player_guid':results.getreport.player_guid}, function( err, checkplayerdata ) {
 												if (err){
 													console.log(err)

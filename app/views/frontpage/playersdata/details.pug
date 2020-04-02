@@ -54,7 +54,7 @@ block content
 							.clearfix
 				.col-md-4.col-sm-6
 					if (user)
-						if (user.local.user_role > 1)
+						if (user.local.user_role >= results.requiredpower.minimum_power_for_player_unban)
 							.card
 								.card-header
 									h2
