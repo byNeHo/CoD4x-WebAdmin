@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const mongoosePaginate = require('mongoose-paginate');
 const BluebirdPromise = require("bluebird");
 BluebirdPromise.promisifyAll(require("mongoose"));
 const Schema = mongoose.Schema;
@@ -21,5 +20,5 @@ const TempBansSchema = new Schema({
     admin_steam_id: {type: String, required: true},
     expire: { type: Date}
 }, { timestamps: true });
-TempBansSchema.plugin(mongoosePaginate);
+
 module.exports = mongoose.model('TempBans', TempBansSchema);

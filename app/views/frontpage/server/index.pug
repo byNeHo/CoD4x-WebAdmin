@@ -64,8 +64,12 @@ block content
 										|  #{t('frontpages:server.server_screenshots')}
 								li(role='server_rules')
 									a(href='#server_rules', aria-controls='server_rules', role='tab', data-toggle='tab')
-										i.zmdi.zmdi-star.m-r-10
+										i.zmdi.zmdi-keyboard-hide.m-r-10
 										|  #{t('frontpages:server.server_server_rules')}
+								li(role='server_top_players')
+									a(href='#server_top_players', aria-controls='server_top_players', role='tab', data-toggle='tab')
+										i.zmdi.zmdi-star.m-r-10
+										|  Top 25 Players
 							.tab-content
 								#server.tab-pane.active.animated.fadeIn(role='tabpanel')
 									if (success_messages.length > 0)
@@ -234,6 +238,34 @@ block content
 										.card-body.card-padding
 											| !{results.server.server_rules}
 										.clearfix
+								#server_top_players.tab-pane.animated.fadeIn(role='tabpanel')
+									.table-responsive.no-padding
+										table.table.table-striped
+											thead
+												tr
+													th #
+													th Name
+													th Kills
+													th Deaths
+													th Ratio
+											tbody
+												if (results.top_players)
+													- var i = 1
+													- function toFixedIfNecessary( value, dp ){return +parseFloat(value).toFixed( dp );}
+													each row in results.top_players
+														- var ratio = row.player_kills/row.player_deaths
+														tr
+															td 
+																span(class="btn btn-circle btn-xs bgm-lightblue")
+																	| #{i++}
+															td #{row.player_name}
+															td #{row.player_kills}
+															td #{row.player_deaths}
+															td 
+																if (row.player_deaths !=0 && row.player_kills!=0)
+																	| #{toFixedIfNecessary( ratio, 2 )}
+																else 
+																	| #{row.player_kills}
 	if (user)
 		if (check_admin == 1)
 			#openrcon.modal.fade

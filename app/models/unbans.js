@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const mongoosePaginate = require('mongoose-paginate');
 const BluebirdPromise = require("bluebird");
 BluebirdPromise.promisifyAll(require("mongoose"));
 const Schema = mongoose.Schema;
@@ -14,5 +13,5 @@ const UnbansSchema = new Schema({
     admin_name: {type: String},
     admin_id: {type: String}
 }, { timestamps: true });
-UnbansSchema.plugin(mongoosePaginate);
+
 module.exports = mongoose.model('Unbans', UnbansSchema);

@@ -23,6 +23,7 @@ module.exports = function(router, passport){
 	router.use(csrfProtection);
 	router.use(getLanguageForMoment);
 	router.post('/edit/update/screenshotnotification', isLoggedIn, user.ScreenshotNotificationUpdate);
+	router.post('/edit/ingame-visuals', isLoggedIn, user.updateVisuals);
 	router.post('/upload', isLoggedIn, user.uploadAvatar);
 	router.get('/delete-avatar', isLoggedIn, user.RemoveAvatar);
 	router.get('/login', notLoggedIn, user.getLogin);

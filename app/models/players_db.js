@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const BluebirdPromise = require("bluebird");
 BluebirdPromise.promisifyAll(require("mongoose"));
+const mongoosePaginate = require('mongoose-paginate-v2');
 const Schema = mongoose.Schema;
 
 const PlayersdataSchema = new Schema({
@@ -22,5 +23,7 @@ const PlayersdataSchema = new Schema({
     player_emblem_text: {type: String, default: "I love CoD4"},
     player_icon: {type: Number, default: 1},
 }, { timestamps: true });
+
+PlayersdataSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Playersdata', PlayersdataSchema);

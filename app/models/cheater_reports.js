@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const mongoosePaginate = require('mongoose-paginate');
 const BluebirdPromise = require("bluebird");
 BluebirdPromise.promisifyAll(require("mongoose"));
 const Schema = mongoose.Schema;
@@ -17,5 +16,4 @@ const CheaterreportsSchema = new Schema({
 	rcon_server: {type: Schema.Types.ObjectId, ref: 'Servers'},
 	report_status:  { type: Boolean, default:false}
 }, { timestamps: true });
-CheaterreportsSchema.plugin(mongoosePaginate);
 module.exports = mongoose.model('Cheaterreports', CheaterreportsSchema);

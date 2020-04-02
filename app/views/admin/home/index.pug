@@ -75,6 +75,8 @@ block content
 																			a(href='/admin/servers/edit/'+row._id) Edit
 																		li
 																			a(href='/admin/servers/rconconsole/'+row._id) Rcon Console
+																		li
+																			a(href="/admin/clear-player-stats/"+row.name_alias) Clear All Player Stats
 																		li.divider
 																		li
 																			a(href='/admin/servers/delete-local/'+row._id) Delete
@@ -95,6 +97,8 @@ block content
 																			a(href='/admin/servers/edit/'+row._id) Edit
 																		li
 																			a(href='/admin/servers/rconconsole/'+row._id) Rcon Console
+																		li
+																			a(href="/admin/clear-player-stats/"+row.name_alias) Clear All Player Stats
 																		li.divider
 																		li
 																			a(href='/admin/servers/delete/'+row._id) Delete
@@ -302,9 +306,9 @@ block content
 							.row
 								.col-sm-12.col-md-12
 									.card
-										.card-header.bgm-red
+										.card-header
 											h2
-												span.zmdi.zmdi-refresh-sync
+												span.zmdi.zmdi-delete
 												|  Clear Notifications
 										.card-body.card-padding
 											.m-b-20

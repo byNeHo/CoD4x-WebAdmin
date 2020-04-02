@@ -128,9 +128,14 @@ module.exports = {
 			pass: config.ssh_access.password,
 			baseDir: config.cod4x_compile.dir_root+'/plugins/'+req.body.name
 		});
+		if (req.body.name == "julia"){
+			var exec_cmd = "./makefile.sh && exit"
+		} else {
+			var exec_cmd = "make && exit"
+		}
 		ssh.exec('cd '+config.cod4x_compile.dir_root+'/plugins/'+req.body.name, {
 			out: console.log.bind('Entering the plugins directory')
-		}).exec('make && exit', {
+		}).exec(exec_cmd, {
 			pty: true,	
 			out: console.log.bind('Start CoD4x Plugin Compiling')
 		}).start();
@@ -184,7 +189,7 @@ module.exports = {
 
 	UseCoD4xGithubPlugin: function(req, res, next) {
 		BluebirdPromise.props({
-			cod4xfiles: Cod4xbinary.findOne({'id':req.params.id}).execAsync(),
+			cod4xfiles: Cod4xbinary.findOne({'_id':req.params.id}).execAsync(),
 			server: Servers.find({'external_ip':false, 'is_online':true}).execAsync()
 		}).then (function(results){
 			if (results.server.length > 0){

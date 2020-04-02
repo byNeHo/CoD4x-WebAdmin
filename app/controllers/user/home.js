@@ -17,6 +17,7 @@ const { validationResult } = require('express-validator/check');
 const config = require('../../config/config');
 const User = require("../../models/user");
 const Plugins = require("../../models/plugins");
+const PlayersData =  require("../../models/players_db");
 
 //Set dates for testing
 var start = new Date();
@@ -193,10 +194,43 @@ module.exports = {
 
 	getProfile: function(req, res, next) {
 		BluebirdPromise.props({
-			ssoauth: Plugins.find({'category' : 'sso', 'status':true}).execAsync()
+			ssoauth: Plugins.find({'category' : 'sso', 'status':true}).execAsync(),
+			playerinfo: PlayersData.findOne({'player_steam_id' : req.user.steam.id}).execAsync()
 		}).then (function(results){
 			var translation = req.t("pagetitles:pageTitle.my_profile");
 			res.render('auth/profile.pug', {title: translation, results: results, csrfToken: req.csrfToken()});
+		}).catch (function(err){
+			console.log(err);
+			res.redirect('/user/profile');
+		});
+	},
+
+	updateVisuals: function(req, res, next) {
+		BluebirdPromise.props({
+			playerinfo: PlayersData.findOne({'player_steam_id' : req.user.steam.id}).execAsync(),
+			user: User.findOne({'steam.id' : req.user.steam.id}).execAsync()
+		}).then (function(results){
+			if (results.user){
+				if (results.playerinfo){
+
+					results.playerinfo.player_fov = req.body.fov,
+					results.playerinfo.player_fps = req.body.fps,
+					results.playerinfo.player_promod = req.body.promod,
+					results.playerinfo.player_icon = req.body.icon
+					results.playerinfo.saveAsync()
+
+					req.flash('success_messages', 'Visual Settings succesfully edited');
+					res.redirect('back');
+				} else {
+					req.flash('error_messages', 'No player with this Steam ID found, make sure that you visit our game server(s) with runing Steam Client');
+					res.redirect('back');
+				}
+				
+			} else {
+				req.flash('error_messages', 'No player with this Steam ID found, make sure that you visit our game server(s) with runing Steam Client');
+				res.redirect('back');
+			}
+			
 		}).catch (function(err){
 			console.log(err);
 			res.redirect('/user/profile');

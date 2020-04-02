@@ -110,6 +110,9 @@ module.exports = function(router, passport){
 
 	/*###################### DELETE ALL ADMIN NOTIFICATIONS ##################################################*/
 	router.get('/clear-admin-notifications', requireRole(100), isLoggedIn, index.RemoveAllAdminNotifications);
+
+	/*###################### DELETE ALL PLAYER STATS ##################################################*/
+	router.get('/clear-player-stats/:name_alias', requireRole(100), isLoggedIn, index.RemoveAllPlayerStats);
 };
 
 /*RESTRICT ACCESS BY USER POWER*/

@@ -41,6 +41,7 @@ const AdminConversation = require("../../models/admin_conversation");
 const AdminConversationComment= require("../../models/admin_conversation_comments");
 const Usermaps = require("../../models/maps");
 const PlayersData = require("../../models/players_db");
+const Playerstat = require("../../models/player_stats");
 const Systemlogs = require("../../models/system_logs");
 const config = require('../../config/config');
 
@@ -82,7 +83,8 @@ module.exports = {
 			usermaps: Maps.find({}, 'map_name display_map_name').sort({map_name: 'asc'}).execAsync(),
 			rcon_extra: ExtraRcon.findOne({'name': 'extra_rcon'}, 'enable_map_change minimum_power_for_map_change enable_maprotate minimum_power_for_maprotate enable_screenshot_all minimum_admin_power_for_screenshots screenshots_for_users_enabled screenshots_enabled minimum_admin_power_for_screenshots enable_tempban_duration default_tempban_time').execAsync(),
 			plugins: Plugins.findOne({'category' : 'kgb', 'status':true}).execAsync(),
-			startstop: Plugins.findOne({'category': 'servers', 'name_alias':'start-stop-server'}, 'status min_power').execAsync()
+			startstop: Plugins.findOne({'category': 'servers', 'name_alias':'start-stop-server'}, 'status min_power').execAsync(),
+			top_players: Playerstat.find({'server_alias':req.params.name_alias}, 'player_score player_kills player_deaths player_name').sort({player_score: 'desc', player_kills: 'desc'}).limit(25).execAsync()
 		}).then (function(results){
 			if (results.server){
 				if (results.server.map_img!= null && results.server.map_img != '' && results.server.map_img){

@@ -72,7 +72,7 @@ var rmadminactions = schedule.scheduleJob('37 15 * * *', function(){
 		if (!error){
 			if (plugintempbandelete.status==true){
 				
-				var daysToDeletion = parseInt(plugintempbandelete.cron_job_time_intervals);
+				var daysToDeletion = parseInt(14);
 				var deletionDate = new Date(now.setDate(now.getDate() - daysToDeletion));
 
 				TempBans.deleteMany({'createdAt':{$lt : deletionDate}, 'expire':{$lt : start}}, function(err) {

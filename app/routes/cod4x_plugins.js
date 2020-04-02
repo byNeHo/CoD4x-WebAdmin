@@ -18,4 +18,8 @@ module.exports = function(app, passport){
 	app.get('/json/:julia_identkey/banlist/tempbans', cod4x_plugins.getTempBanList);
 
 	app.post('/json/:julia_identkey/player/info/update/:player_guid', cod4x_plugins.updatePlayerInfo);
+
+	//Julia Stats
+	app.get('/json/:julia_identkey/stats/top_players', cod4x_plugins.getTopPlayers);
+	app.get('/json/:julia_identkey/stats/rank/:player_guid', cod4x_plugins.getPlayerRank);
 };

@@ -18,7 +18,6 @@ const morgan       = require('morgan');
 const session      = require('express-session');
 const moment = require('moment');
 const formatNum = require('format-num');
-const mongoosePaginate = require('mongoose-paginate');
 const async = require("async");
 const cors = require('cors');
 const helmet = require('helmet');
@@ -49,7 +48,6 @@ app.use('/flags', express.static(__dirname + '/public/vendors/bower_components/f
 app.use('/js', express.static(__dirname + '/node_modules/markdown-it/dist')); // redirect JS
 // view engine setup
 app.set('views', path.join(__dirname, 'app/views'));
-
 
 app.locals.moment = require('moment');
 

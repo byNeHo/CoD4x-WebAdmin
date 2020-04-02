@@ -477,5 +477,21 @@ block content
 																				| Julia Stats
 																	#collapseFive.collapse(role='tabpanel', aria-labelledby='headingFive')
 																		.panel-body
-																			| Coming soon, the idea is to create similar stats as XLRStats in B3
-
+																			.list-group.lg-odd-black
+																				.list-group-item.media
+																					.pull-left
+																						span.btn.btn-success.btn-xs.waves-effect.m-r-10
+																							| G
+																					.media-body
+																						.lgi-heading
+																							a(href='/cod4x_plugins/json/'+results.servers.julia_identkey+'/stats/top_players', target='_blank')
+																								| #{websiteaddress}/cod4x_plugins/json/#{results.servers.julia_identkey}/stats/top_players
+																				.list-group-item.media
+																					.pull-left
+																						span.btn.btn-success.btn-xs.waves-effect.m-r-10
+																							| G
+																					.media-body
+																						.lgi-heading
+																							a(href='/cod4x_plugins/json/'+results.servers.julia_identkey+'/stats/rank/:player_guid', target='_blank')
+																								| #{websiteaddress}/cod4x_plugins/json/#{results.servers.julia_identkey}/stats/rank/
+																								span.c-red player_guid

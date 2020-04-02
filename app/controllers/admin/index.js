@@ -18,6 +18,7 @@ const Cod4xversion = require("../../models/cod4x_version");
 const Systemlogs = require("../../models/system_logs");
 const PlayersData = require("../../models/players_db");
 const Notifications = require("../../models/notifications");
+const Playerstat = require("../../models/player_stats");
 
 
 //Set dates for testing
@@ -109,8 +110,14 @@ module.exports = {
 		Notifications.deleteMany({'notification_type': 'unban-request'}).execAsync()
 		.then (function(result){
 			Notifications.deleteMany({'notification_type': 'admin-app'}).execAsync();
-			req.flash('success_messages', 'All Admin Notifications Deleted');
+			req.flash('success_messages', 'All Admin Notifications successfully Deleted');
 			res.redirect('back');
 		});
+	},
+
+	RemoveAllPlayerStats: function(req, res) {
+		Playerstat.deleteMany({server_alias:req.params.name_alias}).execAsync();
+			req.flash('success_messages', 'All Player Stats successfully Deleted');
+			res.redirect('back');
 	}
 };

@@ -26,6 +26,7 @@ const OnlinePlayers = require("../../models/online_players");
 const ExtraRcon = require("../../models/extra_rcon_commands");
 const TempbanDurations = require("../../models/tempban_duration");
 const PlayersData =  require("../../models/players_db");
+const Playerstat =  require("../../models/player_stats");
 const config = require("../../config/config");
 
 const { parse } = require('querystring');
@@ -34,7 +35,7 @@ module.exports = {
 	
 	getJulia:  function(req, res, next) {
 		BluebirdPromise.props({
-			selectedserver: Servers.findOne({'julia_identkey': req.params.julia_identkey}, 'julia_identkey ip port rcon_password name_alias slug_name').execAsync(),
+			selectedserver: Servers.findOne({'julia_identkey': req.params.julia_identkey}, 'julia_identkey ip port rcon_password name_alias slug_name id map_img').execAsync(),
 			default_servercommands: ServerCommands.find({'req_power': {$lte : 1}}, 'command_name req_power').execAsync(),
 			permanent_bans: Bans.findOne({'rcon_command':'permban', 'player_guid':req.body.playerid}).execAsync(),
 			permban_cmd: ServerCommands.findOne({'command_name': 'permban'}, 'command_name req_power').execAsync(),
@@ -121,9 +122,17 @@ module.exports = {
 																	} else {
 																		var save_player_name = uncolorize(req.body.playername);
 																	}
+																	
+																	// NEW Do not update steam ID if it is 0, let's keep steamID's stored
+																	if (req.body.steamid=="0"){
+																		var newsteamID = playerinfo.player_steam_id;
+																	} else {
+																		var newsteamID = req.body.steamid;
+																	}
+
 																	playerinfo.player_name = save_player_name,
 																	playerinfo.player_guid = req.body.playerid,
-																	playerinfo.player_steam_id = req.body.steamid,
+																	playerinfo.player_steam_id = newsteamID,
 																	playerinfo.player_ip = req.body.address,
 																	playerinfo.player_country = getName(cLoc.country),
 																	playerinfo.player_country_short = cLoc.country.toLowerCase(),
@@ -243,10 +252,10 @@ module.exports = {
 														  						admin_name: getadmin.local.user_name,
 														  						admin_id: getadmin._id,
 														  						admin_steam_id: getadmin.steam.id,
-																					admin_message: req.body.reason,
-																					rcon_command: 'permban',
-																					server_name: results.selectedserver.slug_name,
-																					rcon_admin: getadmin._id
+																				admin_message: req.body.reason,
+																				rcon_command: 'permban',
+																				server_name: results.selectedserver.slug_name,
+																				rcon_admin: getadmin._id
 														  					});
 																			newBan.saveAsync()
 																		}).then(function(disconnect){
@@ -279,10 +288,10 @@ module.exports = {
 														  			admin_name: getadmin.local.user_name,
 														  			admin_id: getadmin._id,
 														  			admin_steam_id: getadmin.steam.id,
-																		admin_message: req.body.reason,
-																		rcon_command: 'permban',
-																		server_name: results.selectedserver.slug_name,
-																		rcon_admin: getadmin._id
+																	admin_message: req.body.reason,
+																	rcon_command: 'permban',
+																	server_name: results.selectedserver.slug_name,
+																	rcon_admin: getadmin._id
 														  		});
 																newBan.saveAsync()
 															}).then(function(disconnect){
@@ -348,14 +357,14 @@ module.exports = {
 																				var save_player_name = uncolorize(playerinfo.player_name);
 																			}
 																			var newTempban = new TempBans ({
-														  					player_name: save_player_name,
-														  					player_guid: playerinfo.player_guid,
-														  					player_steam_id: playerinfo.player_steam_id,
-														  					player_ip: playerinfo.player_ip,
-														  					player_country_short: playerinfo.player_country_short,
-														  					admin_name: getadmin.local.user_name,
-														  					admin_id: getadmin._id,
-														  					admin_steam_id: getadmin.steam.id,
+																				player_name: save_player_name,
+																				player_guid: playerinfo.player_guid,
+																				player_steam_id: playerinfo.player_steam_id,
+																				player_ip: playerinfo.player_ip,
+																				player_country_short: playerinfo.player_country_short,
+																				admin_name: getadmin.local.user_name,
+																				admin_id: getadmin._id,
+																				admin_steam_id: getadmin.steam.id,
 																				admin_message: req.body.reason,
 																				admin_command: 'tempban',
 																				game_server: results.selectedserver.slug_name,
@@ -387,12 +396,12 @@ module.exports = {
 																	var save_player_name = uncolorize(req.body.playername);
 																}
 																var newTempban = new TempBans ({
-												  				player_name: save_player_name,
-												  				player_guid: req.body.playerid,
-												  				player_steam_id: req.body.steamid,
-												  				admin_name: getadmin.local.user_name,
-												  				admin_id: getadmin._id,
-												  				admin_steam_id: getadmin.steam.id,
+																	player_name: save_player_name,
+																	player_guid: req.body.playerid,
+																	player_steam_id: req.body.steamid,
+																	admin_name: getadmin.local.user_name,
+																	admin_id: getadmin._id,
+																	admin_steam_id: getadmin.steam.id,
 																	admin_message: req.body.reason,
 																	admin_command: 'tempban',
 																	game_server: results.selectedserver.slug_name,
@@ -442,11 +451,11 @@ module.exports = {
 																var save_player_name = uncolorize(delscreenshot.player_name);
 															}
 															var newUnban = new Unbans ({
-												  			player_name: save_player_name,
-												  			player_guid: delscreenshot.player_guid,
-												  			rcon_command: 'unban',
-												  			admin_name: checkifadmin.local.user_name,
-												  			admin_id: checkifadmin._id
+																player_name: save_player_name,
+																player_guid: delscreenshot.player_guid,
+																rcon_command: 'unban',
+																admin_name: checkifadmin.local.user_name,
+																admin_id: checkifadmin._id
 													  		});
 															newUnban.saveAsync()
 															if (delscreenshot.player_screenshot) {
@@ -492,7 +501,7 @@ module.exports = {
 														}).catch(function(err) {
 															console.log("There was an error: " +err);
 															console.log(err.stack);
-														});														
+														});													
 													}
 												})												
 											}
@@ -549,12 +558,6 @@ module.exports = {
 							})
 						}								
 					} else if (req.body.command == "serverstatus"){
-
-						/*
-							CREATE SOME PLAYERSTATS IF THE req.body.mapname do not match with results.selectedserver.map_img	
-						*/
-
-
 						if (req.body.players.length > 1){
 							var d = new Date();
 							d.setMinutes(d.getMinutes()-1);
@@ -582,6 +585,98 @@ module.exports = {
 						}else{
 							var new_name= req.body.hostname
 						}
+
+						/*CREATE SOME PLAYERSTATS*/
+
+						if (req.body.mapname!=results.selectedserver.map_img){
+							OnlinePlayers.find({'server_alias':results.selectedserver.name_alias}, 'player_name player_guid server_alias player_score player_kills player_deaths player_assists', function( err, getplayerscores ) {
+								if (getplayerscores.length > 0){
+									getplayerscores.forEach(function (player){
+										Playerstat.findOneAndUpdate({'player_guid': player.player_guid, 'server_alias':results.selectedserver.name_alias}, {
+											$set:{
+												player_name:player.player_name,
+												player_guid:player.player_guid,
+												server_id:results.selectedserver.id,
+												server_alias:player.server_alias
+											},						
+											$inc: {
+												player_score:player.player_score,
+												player_kills:player.player_kills,
+												player_deaths:player.player_deaths,
+												player_assists:player.player_assists
+											}
+										}, { upsert: true, new: true, setDefaultsOnInsert: true}, function(err){
+											if(err){
+												console.log(err);
+											}
+										});
+									})
+
+									OnlinePlayers.deleteMany({'server_alias': results.selectedserver.name_alias}).execAsync();
+									if (req.body.players.length > 0){			
+										req.body.players.forEach(function (player){
+											if (player.pid!='0'){
+												if (player.sid){
+												var player_steamid = player.sid;
+												} else {
+													var player_steamid = '0';
+												}
+
+												if (isEmpty(uncolorize(player.name))==true){
+													var save_player_name = 'CID';
+												} else {
+													var save_player_name = uncolorize(player.name);
+												}
+												var newOnlinePlayers = new OnlinePlayers ({
+													server_alias: results.selectedserver.name_alias,
+													player_slot: player.num,
+													player_name: save_player_name,
+													player_score: player.score,
+													player_guid: player.pid,
+													player_steam_id: player_steamid,
+													player_kills: player.kills,
+													player_deaths: player.deaths,
+													player_assists: player.assists,
+												});
+												newOnlinePlayers.saveAsync()
+											}
+										})
+									}
+								}
+							})
+						} else {
+							OnlinePlayers.deleteMany({'server_alias': results.selectedserver.name_alias}).execAsync();
+							if (req.body.players.length > 0){					
+								req.body.players.forEach(function (player){
+									if (player.pid!='0'){
+										if (player.sid){
+										var player_steamid = player.sid;
+										} else {
+											var player_steamid = '0';
+										}
+
+										if (isEmpty(uncolorize(player.name))==true){
+											var save_player_name = 'CID';
+										} else {
+											var save_player_name = uncolorize(player.name);
+										}
+										var newOnlinePlayers = new OnlinePlayers ({
+											server_alias: results.selectedserver.name_alias,
+											player_slot: player.num,
+											player_name: save_player_name,
+											player_score: player.score,
+											player_guid: player.pid,
+											player_steam_id: player_steamid,
+											player_kills: player.kills,
+											player_deaths: player.deaths,
+											player_assists: player.assists,
+										});
+										newOnlinePlayers.saveAsync()
+									}
+								})
+							}
+						}
+
 						results.selectedserver.name = uncolorize(req.body.hostname),
 						results.selectedserver.slug_name = uncolorize(new_name),
 						results.selectedserver.online_players = req.body.playercount+'/'+req.body.maxclients,
@@ -593,37 +688,13 @@ module.exports = {
 						results.selectedserver.map_img = req.body.mapname,
 						results.selectedserver.server_slots = req.body.maxclients,
 						results.selectedserver.saveAsync()
-						OnlinePlayers.deleteMany({'server_alias': results.selectedserver.name_alias}).execAsync();
-						if (req.body.players.length > 0){						
-							req.body.players.forEach(function (player){
-								if (player.pid!='0'){
-									if (player.sid){
-									var player_steamid = player.sid;
-									} else {
-										var player_steamid = '0';
-									}
 
-									if (isEmpty(uncolorize(player.name))==true){
-										var save_player_name = 'CID';
-									} else {
-										var save_player_name = uncolorize(player.name);
-									}
-									var newOnlinePlayers = new OnlinePlayers ({
-										server_alias: results.selectedserver.name_alias,
-										player_slot: player.num,
-										player_name: save_player_name,
-										player_score: player.score,
-										player_guid: player.pid,
-										player_steam_id: player_steamid,
-										player_kills: player.kills,
-										player_deaths: player.deaths,
-										player_assists: player.assists,
-									});
-									newOnlinePlayers.saveAsync()
-								}
-							})
-						}
+						/*
+							STATS ENDS HERE
+						*/
+
 						return res.status(200).send('status=okay');
+
 					} else if (req.body.command == "submitshot") {
 						if (!req.body.serverport && !req.body.data){
 							return res.status(400).send('Error: Empty serverport or data value');
@@ -853,11 +924,18 @@ module.exports = {
 			selectedserver: Servers.findOne({'julia_identkey': req.params.julia_identkey}, '_id').execAsync(),
 		}).then (function(results){
 			if (results.player && results.player.player_steam_id!=null){
-				User.countDocuments({'steam.id' : results.player.player_steam_id, 'local.admin_on_servers' : results.selectedserver._id , 'local.user_role' : {$gte : 20}},function(error, getadmin){	
+				User.findOne({'steam.id' : results.player.player_steam_id, 'local.admin_on_servers' : results.selectedserver._id},function(error, getadmin){	
 					if (error){
 						console.log(error);
 					} else {
-						res.json({is_admin:getadmin, status:"okay"});
+						if (getadmin){
+							var is_admin = 1;
+							var admin_power = getadmin.local.user_role;
+						} else {
+							var is_admin = 0;
+							var admin_power = 0;
+						}
+						res.json({is_admin:is_admin, juliapower: admin_power, status:"okay"});
 					}
 				})
 			} else {
@@ -903,6 +981,54 @@ module.exports = {
 		});
 	},
 
+	getTopPlayers: function(req, res, next) {
+		BluebirdPromise.props({
+			selectedserver: Servers.findOne({'julia_identkey': req.params.julia_identkey}, '_id name_alias').execAsync()
+		}).then (function(results){
+			Playerstat.find({'server_alias':results.selectedserver.name_alias}, 'player_name player_kills', function( err, top_players ) {
+				if( !err ) {
+					res.json({total:top_players.length, top_players:top_players, status:"okay"});
+				} else {
+					console.log( err );
+				}
+			}).limit(3).sort({'player_score':-1});
+		}).catch (function(err){
+			console.log(err);
+		});
+	},
+
+	getPlayerRank: function(req, res, next) {
+		BluebirdPromise.props({
+			selectedserver: Servers.findOne({'julia_identkey': req.params.julia_identkey}, 'name_alias').execAsync()
+		}).then (function(results){
+			Playerstat.findOne({'player_guid':req.params.player_guid, 'server_alias':results.selectedserver.name_alias}, 'player_score player_name player_kills player_deaths', function( err, get_player ) {
+				if( !err ) {
+					if (get_player.player_score){
+						Playerstat.countDocuments({'server_alias':results.selectedserver.name_alias, 'player_score':{$gt: get_player.player_score}}, function( err, rank ) {
+							if( !err ) {
+								if (get_player.player_kills != 0 && get_player.player_deaths != 0){
+									var calculate = get_player.player_kills/get_player.player_deaths;
+									var ratio = toFixedIfNecessary(calculate, 2);
+								} else {
+									var ratio = 0;
+								}
+								res.json({rank:rank+1, player_name:get_player.player_name, kills:get_player.player_kills, deaths:get_player.player_deaths, ratio: ratio, status:"okay"});
+							} else {
+								console.log( err );
+							}
+						});
+					} else {
+						res.json({rank:0, player_name:"New Player", kills:0, deaths:0, ratio: 0, status:"okay"});
+					}			
+				} else {
+					console.log( err );
+				}
+			});
+		}).catch (function(err){
+			console.log(err);
+		});
+	},
+
 	updatePlayerInfo: function(req, res, next) {
 		BluebirdPromise.props({
 			player: PlayersData.findOne({'player_guid': req.params.player_guid}, 'player_guid player_registered player_fov player_fps player_promod player_emblem_color player_emblem_text player_icon _id').execAsync()
@@ -921,7 +1047,7 @@ module.exports = {
 								req.on('end', () => {
 										var resultsplayer = stringToObject(body);
 
-										console.log(resultsplayer);
+										//console.log(resultsplayer);
 
 										if (resultsplayer.player_fov){
 											new_fov = resultsplayer.player_fov;	
@@ -1042,4 +1168,8 @@ function removeEmpty(obj) {
 
 function isEmpty(value) {
 	return typeof value == 'string' && !value.trim() || typeof value == 'undefined' || value === null;
+}
+
+function toFixedIfNecessary( value, dp ){
+	return +parseFloat(value).toFixed( dp );
 }

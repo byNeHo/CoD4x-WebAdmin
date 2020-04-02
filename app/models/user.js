@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const BluebirdPromise = require("bluebird");
 BluebirdPromise.promisifyAll(require("mongoose"));
+const mongoosePaginate = require('mongoose-paginate-v2');
 const bcrypt   = require('bcrypt-nodejs');
 const Schema = mongoose.Schema;
 
@@ -63,6 +64,8 @@ userSchema.methods.generateHash = function(password) {
 userSchema.methods.validPassword = function(password) {
     return bcrypt.compareSync(password, this.local.password);
 };
+
+userSchema.plugin(mongoosePaginate);
 
 // create the model for users and expose it to our app
 module.exports = mongoose.model('User', userSchema);
