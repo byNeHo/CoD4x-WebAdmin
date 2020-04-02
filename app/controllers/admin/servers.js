@@ -26,6 +26,7 @@ const Cheaterreports = require("../../models/cheater_reports");
 const Bans = require("../../models/bans");
 const OnlinePlayers = require("../../models/online_players");
 const Plugins = require("../../models/plugins");
+const Playerstat = require("../../models/player_stats");
 const config = require('../../config/config');
 
 
@@ -342,6 +343,7 @@ module.exports = {
 			Cheaterreports.find({ 'rcon_server': req.params.id }).deleteMany().exec();
 			ServerScreenshots.find({ 'get_server': req.params.id }).deleteMany().exec();
 			OnlinePlayers.find({ 'server_alias': results.servers.name_alias }).deleteMany().exec();
+			Playerstat.find({ 'server_alias': results.servers.name_alias }).deleteMany().exec();
 			//Remove admins from this server
 			User.updateOne({'local.admin_on_servers':req.params.id},{$pull:{'local.admin_on_servers':req.params.id}},function(err){
 				console.log(err);
