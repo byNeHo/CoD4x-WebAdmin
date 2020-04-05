@@ -1011,8 +1011,6 @@ module.exports = {
 			Playerstat.findOne({'player_guid':req.params.player_guid, 'server_alias':results.selectedserver.name_alias}, 'player_score player_name player_kills player_deaths', function( err, get_player ) {
 				if( !err ) {
 					if ( typeof get_player.player_score !== 'undefined' && get_player.player_score ){
-						res.json({rank:0, player_name:"New Player", kills:0, deaths:0, ratio: 0, status:"okay"});
-					} else {
 						Playerstat.countDocuments({'server_alias':results.selectedserver.name_alias, 'player_score':{$gt: get_player.player_score}}, function( err, rank ) {
 							if( !err ) {
 								if (get_player.player_kills != 0 && get_player.player_deaths != 0){
@@ -1026,6 +1024,8 @@ module.exports = {
 								console.log( err );
 							}
 						});
+					} else {
+						res.json({rank:0, player_name:"New Player", kills:0, deaths:0, ratio: 0, status:"okay"});
 					}			
 				} else {
 					console.log( err );
