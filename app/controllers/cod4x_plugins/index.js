@@ -129,17 +129,18 @@ module.exports = {
 																	} else {
 																		var newsteamID = req.body.steamid;
 																	}
-
-																	playerinfo.player_name = save_player_name,
-																	playerinfo.player_guid = req.body.playerid,
-																	playerinfo.player_steam_id = newsteamID,
-																	playerinfo.player_ip = req.body.address,
-																	playerinfo.player_country = getName(cLoc.country),
-																	playerinfo.player_country_short = cLoc.country.toLowerCase(),
-																	playerinfo.player_city = cLoc.city,
-																	playerinfo.server_id = results.selectedserver._id,
-																	playerinfo.sshack = playerinfo.sshack
-																	playerinfo.saveAsync()
+																	if (cLoc.country){
+																		playerinfo.player_name = save_player_name,
+																		playerinfo.player_guid = req.body.playerid,
+																		playerinfo.player_steam_id = newsteamID,
+																		playerinfo.player_ip = req.body.address,
+																		playerinfo.player_country = getName(cLoc.country),
+																		playerinfo.player_country_short = cLoc.country.toLowerCase(),
+																		playerinfo.player_city = cLoc.city,
+																		playerinfo.server_id = results.selectedserver._id,
+																		playerinfo.sshack = playerinfo.sshack
+																		playerinfo.saveAsync()
+																	}
 																}
 															});
 														}
@@ -695,6 +696,12 @@ module.exports = {
 
 						return res.status(200).send('status=okay');
 
+					} else if (req.body.command == "userchat"){
+
+						console.log('Client: '+req.body.client+' Message: '+req.body.message+' Time: '+req.body.time)
+
+						return res.status(200).send('status=okay');
+
 					} else if (req.body.command == "submitshot") {
 						if (!req.body.serverport && !req.body.data){
 							return res.status(400).send('Error: Empty serverport or data value');
@@ -1003,7 +1010,7 @@ module.exports = {
 		}).then (function(results){
 			Playerstat.findOne({'player_guid':req.params.player_guid, 'server_alias':results.selectedserver.name_alias}, 'player_score player_name player_kills player_deaths', function( err, get_player ) {
 				if( !err ) {
-					if (get_player.player_score){
+					if (get_player.player_score!= null && get_player.player_score != '' && get_player.player_score){
 						Playerstat.countDocuments({'server_alias':results.selectedserver.name_alias, 'player_score':{$gt: get_player.player_score}}, function( err, rank ) {
 							if( !err ) {
 								if (get_player.player_kills != 0 && get_player.player_deaths != 0){
