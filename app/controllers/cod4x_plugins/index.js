@@ -1010,8 +1010,13 @@ module.exports = {
 		}).then (function(results){
 			Playerstat.findOne({'player_guid':req.params.player_guid, 'server_alias':results.selectedserver.name_alias}, 'player_score player_name player_kills player_deaths', function( err, get_player ) {
 				if( !err ) {
-					if (get_player.player_score!= null && get_player.player_score != '' && get_player.player_score){
-						Playerstat.countDocuments({'server_alias':results.selectedserver.name_alias, 'player_score':{$gt: get_player.player_score}}, function( err, rank ) {
+					if (get_player.player_score!=null){
+						var pl_score=get_player.player_score;
+					} else {
+						var pl_score=0;
+					}
+					if (pl_score!= null && pl_score != '' && pl_score){
+						Playerstat.countDocuments({'server_alias':results.selectedserver.name_alias, 'player_score':{$gt: pl_score}}, function( err, rank ) {
 							if( !err ) {
 								if (get_player.player_kills != 0 && get_player.player_deaths != 0){
 									var calculate = get_player.player_kills/get_player.player_deaths;
