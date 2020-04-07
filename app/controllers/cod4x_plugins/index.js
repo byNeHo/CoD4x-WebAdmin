@@ -1010,23 +1010,27 @@ module.exports = {
 		}).then (function(results){
 			Playerstat.findOne({'player_guid':req.params.player_guid, 'server_alias':results.selectedserver.name_alias}, 'player_score player_name player_kills player_deaths', function( err, get_player ) {
 				if( !err ) {
-					if ( typeof get_player.player_score !== 'undefined' && get_player.player_score ){
-						Playerstat.countDocuments({'server_alias':results.selectedserver.name_alias, 'player_score':{$gt: get_player.player_score}}, function( err, rank ) {
-							if( !err ) {
-								if (get_player.player_kills != 0 && get_player.player_deaths != 0){
-									var calculate = get_player.player_kills/get_player.player_deaths;
-									var ratio = toFixedIfNecessary(calculate, 2);
+					if (get_player){
+						if ( typeof get_player.player_score !== 'undefined' && get_player.player_score  && get_player.player_score!=null ){
+							Playerstat.countDocuments({'server_alias':results.selectedserver.name_alias, 'player_score':{$gt: get_player.player_score}}, function( err, rank ) {
+								if( !err ) {
+									if (get_player.player_kills != 0 && get_player.player_deaths != 0){
+										var calculate = get_player.player_kills/get_player.player_deaths;
+										var ratio = toFixedIfNecessary(calculate, 2);
+									} else {
+										var ratio = 0;
+									}
+									res.json({rank:rank+1, player_name:get_player.player_name, kills:get_player.player_kills, deaths:get_player.player_deaths, ratio: ratio, status:"okay"});
 								} else {
-									var ratio = 0;
+									console.log( err );
 								}
-								res.json({rank:rank+1, player_name:get_player.player_name, kills:get_player.player_kills, deaths:get_player.player_deaths, ratio: ratio, status:"okay"});
-							} else {
-								console.log( err );
-							}
-						});
+							});
+						} else {
+							res.json({rank:0, player_name:"New Player", kills:0, deaths:0, ratio: 0, status:"okay"});
+						}
 					} else {
 						res.json({rank:0, player_name:"New Player", kills:0, deaths:0, ratio: 0, status:"okay"});
-					}			
+					}		
 				} else {
 					console.log( err );
 				}
