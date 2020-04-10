@@ -1041,65 +1041,54 @@ module.exports = {
 	},
 
 	updatePlayerInfo: function(req, res, next) {
-		BluebirdPromise.props({
-			player: PlayersData.findOne({'player_guid': req.params.player_guid}, 'player_guid player_registered player_fov player_fps player_promod player_emblem_color player_emblem_text player_icon _id').execAsync()
-		}).then (function(results){
-				if (results.player){
-					PlayersData.updateOne({'player_guid':req.params.player_guid},function(err){
-						if (err){
-							console.log(err);
-						} else {
-
-							if (req.method === 'POST') {
-								let body = '';
-								req.on('data', chunk => {
-										body += chunk;
-								});
-								req.on('end', () => {
-										var resultsplayer = stringToObject(body);
-
-										//console.log(resultsplayer);
-
-										if (resultsplayer.player_fov){
-											new_fov = resultsplayer.player_fov;	
-										} else {
-											new_fov = results.player.player_fov;
-										};
-
-										if (resultsplayer.player_fps){
-											new_fps = resultsplayer.player_fps;
-										} else {
-											new_fps = results.player.player_fps;
-										};
-
-										if (resultsplayer.player_promod){
-											new_promod = resultsplayer.player_promod;
-										} else {
-											new_promod = results.player.player_promod;
-										};
-
-										if (resultsplayer.player_icon){
-											new_icon = resultsplayer.player_icon;
-										} else {
-											new_icon = results.player.player_icon;
-										};
-
-										results.player.player_fov = new_fov,
-										results.player.player_fps = new_fps,
-										results.player.player_promod = new_promod,
-										results.player.player_icon = new_icon
-										
-								});
-								results.player.saveAsync()
-							}	
-						}
+		PlayersData.findOneAsync({'player_guid': req.params.player_guid}, 'player_guid player_registered player_fov player_fps player_promod player_emblem_color player_emblem_text player_icon _id')
+			.then (function(results){
+				if (req.method === 'POST') {
+					let body = '';
+					req.on('data', chunk => {
+						body += chunk;
 					});
-					return res.status(200).json({status:"okay"});
+					
+					req.on('end', () => {
+						var resultsplayer = stringToObject(body);
+						//console.log(resultsplayer);
+							if (resultsplayer.player_fov){
+							new_fov = resultsplayer.player_fov;	
+						} else {
+							new_fov = results.player_fov;
+						};
+							if (resultsplayer.player_fps){
+							new_fps = resultsplayer.player_fps;
+						} else {
+							new_fps = results.player_fps;
+						};
+							if (resultsplayer.player_promod){
+							new_promod = resultsplayer.player_promod;
+						} else {
+							new_promod = results.player_promod;
+						};
+							if (resultsplayer.player_icon){
+							new_icon = resultsplayer.player_icon;
+						} else {
+							new_icon = results.player_icon;
+						};
+							results.player_fov = new_fov,
+						results.player_fps = new_fps,
+						results.player_promod = new_promod,
+						results.player_icon = new_icon
+									
+					});
+					results.saveAsync()
 				}
-		}).catch (function(err){
-			console.log(err);
+			}).then(function(update) {
+				return res.status(200).json({status:"okay"});
+			}).catch(function(err) {
+				console.log("There was an error: " +err);
+				return res.status(200).json({status:"okay"});
 		});
 	},
+
+	
 
 
 
