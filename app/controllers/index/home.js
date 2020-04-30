@@ -21,7 +21,6 @@ const DiscordWebhook = require("discord-webhooks");
 const requestify = require('requestify');
 const SSH = require('simple-ssh');
 const Servers = require("../../models/servers");
-const OnlinePlayers = require("../../models/online_players");
 const User = require("../../models/user");
 const Plugins = require("../../models/plugins");
 const Maps = require("../../models/maps");
@@ -76,8 +75,7 @@ module.exports = {
 	getServer: function(req, res, next) {
 		var populateadmins = [{path:'admins_on_server', select:'local.avatar_60 local.user_name id'}];
 		BluebirdPromise.props({
-			server: Servers.findOne({'name_alias':req.params.name_alias}, 'name map_img map_playing ip port online_players map_started country_shortcode country max_players private_clients game_name shortversion admins_on_server is_stoped server_rules').populate(populateadmins).execAsync(),
-			online_players: OnlinePlayers.find({'server_alias':req.params.name_alias}, 'player_guid player_name player_score player_kills player_deaths player_assists player_steam_id').execAsync(),
+			server: Servers.findOne({'name_alias':req.params.name_alias}, 'name map_img map_playing ip port online_players map_started country_shortcode country max_players private_clients game_name shortversion admins_on_server is_stoped server_rules player_list').populate(populateadmins).execAsync(),
 			server_screenshots: ServerScreenshots.find({'server_name_alias':req.params.name_alias}, 'screenshot_img player_name map_name').execAsync(),
 			tempbans: Tempbandurations.find({}, 'short_label time_number long_label category_alias').sort({category_alias: 'desc', time_number: 'asc'}).execAsync(),
 			usermaps: Maps.find({}, 'map_name display_map_name').sort({map_name: 'asc'}).execAsync(),

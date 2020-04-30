@@ -35,7 +35,8 @@ const ServersSchema = new Schema({
     auto_restart_server: { type: Boolean, default: false},
     time_to_restart_server:  { type: Number},
     auto_restart_server_on_crash: { type: Boolean, default: false},
-    is_stoped: { type: Boolean}
+    is_stoped: { type: Boolean},
+    player_list: []
 }, { timestamps: true });
 
 module.exports = mongoose.model('Servers', ServersSchema);
