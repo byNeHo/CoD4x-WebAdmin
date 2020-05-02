@@ -53,3 +53,6 @@ Please visit our [Forum](https://forum.cirkus-serveri.com).
 CoD4x-WebAdmin is licensed under the GNU General Public License v3 (GPL-3) (http://www.gnu.org/copyleft/gpl.html).
 
 Interested in a sublicense agreement for use of CoD4x-WebAdmin in a non-free/restrictive environment? Contact us at nehogroup@gmail.com.
+
+## Donate
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://paypal.me/HorvatN?locale.x=en_US)
