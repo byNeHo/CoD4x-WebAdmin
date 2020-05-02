@@ -766,10 +766,10 @@ module.exports = {
 									  									admin_name: req.user.local.user_name,
 									  									admin_id: req.user._id,
 									  									admin_steam_id: req.user.steam.id,
-																			admin_message: setdefault_reason,
-																			rcon_command: 'permban',
-																			server_name: server_admins.slug_name,
-																			rcon_admin: req.user._id
+																		admin_message: setdefault_reason,
+																		rcon_command: 'permban',
+																		server_name: server_admins.slug_name,
+																		rcon_admin: req.user._id
 										  							});
 																	if (!fs.existsSync('./public/img/banned')){
 																		fs.mkdirSync('./public/img/banned');
@@ -921,10 +921,10 @@ module.exports = {
 									  							admin_name: req.user.local.user_name,
 									  							admin_id: req.user._id,
 									  							admin_steam_id: req.user.steam.id,
-																	admin_message: req.body.message,
-																	rcon_command: 'permban',
-																	server_name: results.servers.slug_name,
-																	rcon_admin: req.user._id
+																admin_message: req.body.message,
+																rcon_command: 'permban',
+																server_name: results.servers.slug_name,
+																rcon_admin: req.user._id
 															  });
 															req.flash('rconconsole_messages', req.t('rcon_commands:RconPermban.rconconsole_messages_on_ban', {get_PlayerName:req.body.rcon_player, get_Reason:req.body.message}));
 															req.flash('notify_messages', req.t('rcon_commands:general.info_msg_sent_to_server'));
@@ -963,11 +963,11 @@ module.exports = {
 									  					admin_name: req.user.local.user_name,
 									  					admin_id: req.user._id,
 									  					admin_steam_id: req.user.steam.id,
-															admin_message: req.body.message,
-															rcon_command: 'permban',
-															server_name: results.servers.slug_name,
-															rcon_admin: req.user._id
-														});
+														admin_message: req.body.message,
+														rcon_command: 'permban',
+														server_name: results.servers.slug_name,
+														rcon_admin: req.user._id
+													});
 													req.flash('rconconsole_messages', req.t('rcon_commands:RconPermban.rconconsole_messages_on_ban', {get_PlayerName:req.body.rcon_player, get_Reason:req.body.message}));
 													req.flash('notify_messages', req.t('rcon_commands:general.info_msg_sent_to_server'));
 													newBan.saveAsync();
@@ -1073,12 +1073,12 @@ module.exports = {
 												  						admin_name: req.user.local.user_name,
 												  						admin_id: req.user._id,
 												  						admin_steam_id: req.user.steam.id,
-																			admin_message: main_lng('rcon_commands:RconPermban.default_reason_for_report'),
-																			rcon_command: 'permban',
-																			server_name: server_admins.slug_name,
-																			rcon_admin: req.user._id,
-																			cheater_reporter_id: results.getreport.sender_id._id,
-																			cheater_reporter: main_lng('rcon_commands:RconPermbanOnReport.ty_to_reporter', {get_BannedName:results.getreport.player_name, get_ReporterName:results.getreport.sender_id.local.user_name })
+																		admin_message: main_lng('rcon_commands:RconPermban.default_reason_for_report'),
+																		rcon_command: 'permban',
+																		server_name: server_admins.slug_name,
+																		rcon_admin: req.user._id,
+																		cheater_reporter_id: results.getreport.sender_id._id,
+																		cheater_reporter: main_lng('rcon_commands:RconPermbanOnReport.ty_to_reporter', {get_BannedName:results.getreport.player_name, get_ReporterName:results.getreport.sender_id.local.user_name })
 													  				});
 																	var newGlobalnotifications = new Globalnotifications ({
 																		sender_id: req.user._id,
@@ -1135,12 +1135,12 @@ module.exports = {
 										  							admin_name: req.user.local.user_name,
 										  							admin_id: req.user._id,
 										  							admin_steam_id: req.user.steam.id,
-																		admin_message: main_lng('rcon_commands:RconPermban.default_reason_for_report'),
-																		rcon_command: 'permban',
-																		server_name: server_admins.slug_name,
-																		rcon_admin: req.user._id,
-																		cheater_reporter_id: results.getreport.sender_id._id,
-																		cheater_reporter:main_lng('rcon_commands:RconPermbanOnReport.ty_to_reporter', {get_BannedName:results.getreport.player_name, get_ReporterName:results.getreport.sender_id.local.user_name })
+																	admin_message: main_lng('rcon_commands:RconPermban.default_reason_for_report'),
+																	rcon_command: 'permban',
+																	server_name: server_admins.slug_name,
+																	rcon_admin: req.user._id,
+																	cheater_reporter_id: results.getreport.sender_id._id,
+																	cheater_reporter:main_lng('rcon_commands:RconPermbanOnReport.ty_to_reporter', {get_BannedName:results.getreport.player_name, get_ReporterName:results.getreport.sender_id.local.user_name })
 											  					});
 																var newGlobalnotifications = new Globalnotifications ({
 																	sender_id: req.user._id,
@@ -1294,7 +1294,7 @@ module.exports = {
 									player_guid: results.getban.player_guid,
 									rcon_command: 'unban',
 									admin_name: results.getban.admin_name,
-								  admin_id: results.getban.admin_id
+									admin_id: results.getban.admin_id
 								});
 								newUnban.saveAsync();
 

@@ -557,6 +557,8 @@ module.exports = {
 								}
 							})
 						}								
+					} else if (req.body.command == "userchat") {
+						return res.status(200).send('status=okay');
 					} else if (req.body.command == "serverstatus"){
 						if (req.body.players.length > 1){
 							var d = new Date();
@@ -585,8 +587,6 @@ module.exports = {
 						}else{
 							var new_name= req.body.hostname
 						}
-
-						/*CREATE SOME PLAYERSTATS*/
 
 						if (req.body.mapname!=results.selectedserver.map_img){
 							if (results.selectedserver.player_list.length > 0){
@@ -626,10 +626,6 @@ module.exports = {
 						results.selectedserver.server_slots = req.body.maxclients,
 						results.selectedserver.player_list = req.body.players,
 						results.selectedserver.saveAsync()
-
-						/*
-							STATS ENDS HERE
-						*/
 
 						return res.status(200).send('status=okay');
 
@@ -941,7 +937,7 @@ module.exports = {
 		}).then (function(results){
 			Playerstat.findOne({'player_guid':req.params.player_guid, 'server_alias':results.selectedserver.name_alias}, 'player_score player_name player_kills player_deaths', function( err, get_player ) {
 				if( !err ) {
-					if (get_player.player_score){
+					if (get_player.player_score && get_player.player_score!=null){
 						Playerstat.countDocuments({'server_alias':results.selectedserver.name_alias, 'player_score':{$gt: get_player.player_score}}, function( err, rank ) {
 							if( !err ) {
 								if (get_player.player_kills != 0 && get_player.player_deaths != 0){
