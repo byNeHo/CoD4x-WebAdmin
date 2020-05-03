@@ -27,6 +27,7 @@ const ExtraRcon = require("../../models/extra_rcon_commands");
 const TempbanDurations = require("../../models/tempban_duration");
 const PlayersData =  require("../../models/players_db");
 const Playerstat =  require("../../models/player_stats");
+const Chathistory =  require("../../models/chathistory");
 const config = require("../../config/config");
 
 const { parse } = require('querystring');
@@ -558,6 +559,15 @@ module.exports = {
 							})
 						}								
 					} else if (req.body.command == "userchat") {
+						if (S.include(req.body.message, "QUICKMESSAGE_")==false){
+							var newChathistory = new Chathistory ({
+								message: req.body.message,
+								pid: req.body.pid,
+								sid: req.body.sid,
+								server_name: results.selectedserver.slug_name
+							});
+							newChathistory.saveAsync()
+						}
 						return res.status(200).send('status=okay');
 					} else if (req.body.command == "serverstatus"){
 						if (req.body.players.length > 1){
@@ -937,7 +947,7 @@ module.exports = {
 		}).then (function(results){
 			Playerstat.findOne({'player_guid':req.params.player_guid, 'server_alias':results.selectedserver.name_alias}, 'player_score player_name player_kills player_deaths', function( err, get_player ) {
 				if( !err ) {
-					if (get_player.player_score && get_player.player_score!=null){
+					if (get_player.player_score && get_player.player_score!==null){
 						Playerstat.countDocuments({'server_alias':results.selectedserver.name_alias, 'player_score':{$gt: get_player.player_score}}, function( err, rank ) {
 							if( !err ) {
 								if (get_player.player_kills != 0 && get_player.player_deaths != 0){

@@ -42,6 +42,7 @@ const Usermaps = require("../../models/maps");
 const PlayersData = require("../../models/players_db");
 const Playerstat = require("../../models/player_stats");
 const Systemlogs = require("../../models/system_logs");
+const Chathistory = require("../../models/chathistory");
 const config = require('../../config/config');
 
 const mongoosePaginate = require('mongoose-paginate-v2');
@@ -211,8 +212,15 @@ module.exports = {
 			requiredpower: ExtraRcon.findOne({'name': 'extra_rcon'}).execAsync(),
 			player: PlayersData.findOne({'_id':req.params.id}).execAsync()
 		}).then (function(results){
-			var translation = req.t("pagetitles:pageTitle.get_players");
-			res.render('frontpage/playersdata/details.pug', {title: translation+' '+results.player.player_name, results:results, csrfToken: req.csrfToken()});				
+			Chathistory.find({'pid': results.player.player_guid}, function(error, chatmsg) {
+				if (error) {
+					console.log(error)
+					res.redirect('back');
+				} else {
+					var translation = req.t("pagetitles:pageTitle.get_players");
+					res.render('frontpage/playersdata/details.pug', {title: translation+' '+results.player.player_name, results:results, chatmsg:chatmsg, csrfToken: req.csrfToken()});
+				}
+			}).sort({'updatedAt': -1}).limit(50)	
 		}).catch (function(err){
 			console.log(err);
 			res.redirect('back');
