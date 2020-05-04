@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 
 const PlayerstatSchema = new Schema({
     player_name: { type: String, trim: true, default:'cid_0'},
-    player_guid: { type: String},
+    player_guid: { type: String, unique: true},
     server_id: [{type: Schema.Types.ObjectId, ref: 'Servers'}],
     server_alias:  { type: String},
     server_map: {type: String},

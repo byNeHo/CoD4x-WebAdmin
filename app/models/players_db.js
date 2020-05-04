@@ -6,7 +6,7 @@ const Schema = mongoose.Schema;
 
 const PlayersdataSchema = new Schema({
     player_name: { type: String, trim: true, default:'cid_0'},
-    player_guid: { type: String},
+    player_guid: { type: String, unique: true},
     player_steam_id: { type: String},
     player_ip: { type: String},
     player_country: { type: String},

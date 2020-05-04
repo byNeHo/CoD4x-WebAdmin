@@ -1,13 +1,9 @@
 {
   "name": "cod4x-webadmin",
-  "version": "3.0.0",
+  "version": "4.0.0",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node ./bin/www",
-    "preinstall": "npx npm-force-resolutions"
-  },
-  "resolutions": {
-    "minimist": "^1.2.5"
+    "start": "node ./bin/www"
   },
   "dependencies": {
     "@sendgrid/mail": "^6.5.5",
@@ -18,6 +14,7 @@
     "bcrypt-nodejs": "latest",
     "bluebird": "^3.5.1",
     "body-parser": "^1.18.3",
+    "chalk": "^4.0.0",
     "color-difference": "^0.3.4",
     "compression": "^1.7.3",
     "connect-flash": "^0.1.1",
@@ -47,7 +44,7 @@
     "i18next-node-fs-backend": "^2.1.2",
     "i18next-xhr-backend": "^2.0.0",
     "ipinfo": "^1.3.9",
-    "jimp": "^0.6.0",
+    "jimp": "^0.10.3",
     "jquery": "^3.4.1",
     "jsonfile": "^5.0.0",
     "moment": "^2.23.0",
@@ -76,11 +73,12 @@
     "passport-twitter": "~1.0.4",
     "pug": "^2.0.3",
     "query-string": "^6.11.1",
-    "replace": "^1.0.1",
+    "replace": "^1.2.0",
     "replace-string": "^2.0.0",
     "requestify": "^0.2.5",
     "sendgrid": "^5.1.0",
     "serve-favicon": "^2.5.0",
+    "shelljs": "^0.8.4",
     "simple-ssh": "^1.0.0",
     "sitemap": "^2.0.1",
     "sourcequery": "0.0.2",
@@ -109,8 +107,5 @@
     "url": "https://github.com/byNeHo/CoD4x-WebAdmin/issues"
   },
   "homepage": "https://github.com/byNeHo/CoD4x-WebAdmin",
-  "license": "ISC",
-  "devDependencies": {
-    "minimist": "^1.2.5"
-  }
+  "license": "ISC"
 }

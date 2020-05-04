@@ -4,10 +4,10 @@ BluebirdPromise.promisifyAll(require("mongoose"));
 const Schema = mongoose.Schema;
 
 const ChathistorySchema = new Schema({    
-    pid:  { type: String},
+    pid:  { type: String, unique: true},
     sid:  { type: String},
-    message:  { type: String},
-    server_name:  { type: String}
+    server_name:  { type: String},
+    message:  [{ type: String}]
 }, { timestamps: true });
 
 module.exports = mongoose.model('Chathistory', ChathistorySchema);
