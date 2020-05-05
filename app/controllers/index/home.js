@@ -212,7 +212,7 @@ module.exports = {
 			requiredpower: ExtraRcon.findOne({'name': 'extra_rcon'}).execAsync(),
 			player: PlayersData.findOne({'_id':req.params.id}).execAsync()
 		}).then (function(results){
-			Chathistory.find({'pid': results.player.player_guid}, function(error, chatmsg) {
+			Chathistory.findOne({'pid': results.player.player_guid}, function(error, chatmsg) {
 				if (error) {
 					console.log(error)
 					res.redirect('back');
@@ -220,7 +220,7 @@ module.exports = {
 					var translation = req.t("pagetitles:pageTitle.get_players");
 					res.render('frontpage/playersdata/details.pug', {title: translation+' '+results.player.player_name, results:results, chatmsg:chatmsg, csrfToken: req.csrfToken()});
 				}
-			}).sort({'updatedAt': -1}).limit(50)	
+			})
 		}).catch (function(err){
 			console.log(err);
 			res.redirect('back');
