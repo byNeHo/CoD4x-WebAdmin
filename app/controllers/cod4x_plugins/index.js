@@ -565,7 +565,7 @@ module.exports = {
 						}								
 					} else if (req.body.command == "userchat") {
 						if (S.include(req.body.message, "QUICKMESSAGE_")==false){
-							Chathistory.findOneAndUpdate({'player_guid': req.body.pid}, {
+							Chathistory.findOneAndUpdate({'pid': req.body.pid}, {
 								$set:{
 									pid:req.body.pid,
 									sid:req.body.sid
