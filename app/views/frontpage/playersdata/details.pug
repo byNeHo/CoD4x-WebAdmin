@@ -62,14 +62,14 @@ block content
 						.card-body
 							.pre-scrollable.p-15(style="height:300px")
 								.lg-odd-black
-									each row in chatmsg
+									each row in chatmsg.messages
 										.list-group-item
 											.m-b-15
 												.span.badge.bgm-green.f-12.m-r-15 #{row.server_name}
 												span.f-12
 													| #{row.message}
 											.c-gray.f-11.text-right
-												| #{moment(row.createdAt).format('MMMM Do YYYY, h:mm')}		
+												| #{moment(row.sent).format('MMMM Do YYYY, h:mm')}		
 						.clearfix
 				.col-md-4.col-sm-6
 					if (user)
