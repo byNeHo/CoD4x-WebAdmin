@@ -62,7 +62,7 @@ block content
 						.card-body
 							.pre-scrollable.p-15(style="height:300px")
 								.lg-odd-black
-									each row in chatmsg.messages
+									each row in chatmsg.messages.reverse()
 										.list-group-item
 											.m-b-15
 												.span.badge.bgm-green.f-12.m-r-15 #{row.server_name}
