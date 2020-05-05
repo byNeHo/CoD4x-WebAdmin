@@ -6,6 +6,8 @@ var fs = BluebirdPromise.promisifyAll(require("fs"));
 const chalk = require('chalk');
 const config = require('../app/config/config');
 
+const Chathistory =  require("../app/models/chathistory");
+
 const log = console.log;
 
 var dbURI = "mongodb://" + 
@@ -23,7 +25,6 @@ if (!shell.which('git')) {
     shell.exit(1);
 }
 
-// Throw an error if the connection fails
 mongoose.connection.on('error', function(err) {
 	if(err){
 		log(chalk.red('Your mongoDB Username, Password is wrong in file app/config/config.json. Could not connect to database! '+err));
@@ -77,6 +78,8 @@ obj.localmachine = {
     country_short: 'de' 
 };
 
+var done = 0;
+
 fs.writeFileAsync('../app/config/config.json', JSON.stringify(obj, null, 2), function (err){
     if (err) console.log(err);
     log(chalk.cyan('Adding new lines to') + chalk.white(' app/config/config.json'));
@@ -90,6 +93,9 @@ fs.writeFileAsync('../app/config/config.json', JSON.stringify(obj, null, 2), fun
     gitpull();
 }).then(function(gitfinished) {
     log(chalk.green('Finished'));
+}).then(function(deletefromDB) {
+    Chathistory.find().deleteMany().exec();
+    log(chalk.yellow('Delete old chat messages if they exist- Finished'));
 }).then(function(updatedb) {
     log(chalk.yellow('No DB updates needed'));
     /*
@@ -99,12 +105,15 @@ fs.writeFileAsync('../app/config/config.json', JSON.stringify(obj, null, 2), fun
             done++;
             if(done === plugins.length){
                 log(chalk.green(' Finished'));
-                exit();
+                //exit();
             }
         });
     }
     */
-   exit();
+   
+}).then(function(close) {
+    log(chalk.green('Update Finished, you can now start your application!'));
+    process.exit(1);
 }).catch(function(e) {
     console.error(e.stack);
 });
@@ -113,14 +122,13 @@ fs.writeFileAsync('../app/config/config.json', JSON.stringify(obj, null, 2), fun
 //######################################## FUNCTIONS ########################################//
 
 function exit(){
-	mongoose.connection.close();
-	log(chalk.green('Update Finished, you can now start your application!'));
+    mongoose.connection.close();
 }
 
 function gitpull() {
-    //if (shell.exec('git pull origin master').code !== 0) {
-    // new errors.GitError()
-    //}
+    if (shell.exec('git pull origin master').code !== 0) {
+        new errors.GitError()
+    }
     install();
 }
 

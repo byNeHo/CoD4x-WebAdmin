@@ -67,9 +67,14 @@ module.exports = {
 						} else if (!req.body.rcon){
 							return res.status(400).send('Error: Empty rcon value');
 						} else {
-							var geo = geoip.lookup(results.selectedserver.ip);
-							var short_county = geo.country.toLowerCase();
-							var country_name = countries.getName(geo.country);
+							if (config.localmachine.yes='1'){
+								var short_county = config.localmachine.country_short;
+								var country_name = config.localmachine.country;
+							} else {
+								var geo = geoip.lookup(results.selectedserver.ip);
+								var short_county = geo.country.toLowerCase();
+								var country_name = countries.getName(geo.country);
+							}
 							results.selectedserver.shortversion = req.body.version,
 							results.selectedserver.country = country_name,
 							results.selectedserver.country_shortcode = short_county,
@@ -560,13 +565,21 @@ module.exports = {
 						}								
 					} else if (req.body.command == "userchat") {
 						if (S.include(req.body.message, "QUICKMESSAGE_")==false){
-							var newChathistory = new Chathistory ({
-								message: uncolorize(req.body.message),
-								pid: req.body.pid,
-								sid: req.body.sid,
-								server_name: results.selectedserver.slug_name
+							Chathistory.findOneAndUpdate({'player_guid': req.body.pid}, {
+								$set:{
+									pid:req.body.pid,
+									sid:req.body.sid
+								},$push: {
+									messages: {
+										"message" : uncolorize(req.body.message),
+										"server_name" : results.selectedserver.slug_name
+									}
+								} 
+							}, { upsert: true, new: true, setDefaultsOnInsert: true}, function(err){
+								if(err){
+									console.log(err);
+								}
 							});
-							newChathistory.saveAsync()
 						}
 						return res.status(200).send('status=okay');
 					} else if (req.body.command == "serverstatus"){

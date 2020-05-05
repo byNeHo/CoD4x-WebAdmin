@@ -10,6 +10,7 @@ const formatNum = require('format-num');
 const S = require('underscore.string');
 const replaceString = require('replace-string');
 const geoip = require('geoip-lite');
+const countries = require('country-list');
 const BluebirdPromise = require('bluebird');
 const SSH = require('simple-ssh');
 const wget = require('wget-improved');
@@ -27,6 +28,7 @@ const Bans = require("../../models/bans");
 const OnlinePlayers = require("../../models/online_players");
 const Plugins = require("../../models/plugins");
 const Playerstat = require("../../models/player_stats");
+const Chathistory =  require("../../models/chathistory");
 const config = require('../../config/config');
 
 
@@ -52,11 +54,20 @@ module.exports = {
 					if(!error){
 						var private_clients = search("sv_privateClients", rules);
 						var max_clients = search("sv_maxclients", rules);
-						var location = search("_Location", rules);
 						var game_name = search("gamename", rules);
 						var gametype = search("g_gametype", rules);
 						var mapStartTime = search("g_mapStartTime", rules);
 						var shortversion = search("shortversion", rules);
+
+						if (config.localmachine.yes='1'){
+							var short_county = config.localmachine.country_short;
+							var country_name = config.localmachine.country;
+						} else {
+							var geo = geoip.lookup(req.body.ip);
+							var short_county = geo.country.toLowerCase();
+							var country_name = countries.getName(geo.country);
+						}
+
 						geo = geoip.lookup(req.body.ip);
 						short_country = geo.country.toLowerCase();
 						
@@ -80,8 +91,8 @@ module.exports = {
 											port: req.body.port,
 											name: info.name,
 											slug_name: new_name,
-											country: location.value,
-											country_shortcode: short_country,
+											country: country_name,
+											country_shortcode: short_county,
 											gametype: gametype.value,
 											shortversion: shortversion.value,
 											private_clients: private_clients.value,
@@ -142,8 +153,16 @@ module.exports = {
 					var serverport=req.body.port;
 					var homedir=config.cod4_server_plugin.servers_root+"/cod4-"+req.body.port;
 					var configfile="server.cfg";
-					var geo = geoip.lookup(config.ssh_access.host);
-					var short_country = geo.country.toLowerCase();
+
+					if (config.localmachine.yes='1'){
+						var short_county = config.localmachine.country_short;
+						var country_name = config.localmachine.country;
+					} else {
+						var geo = geo = geoip.lookup(config.ssh_access.host);
+						var short_county = geo.country.toLowerCase();
+						var country_name = countries.getName(geo.country);
+					}
+
 					var serverslots = req.body.server_slots;
 
 					var newServer = new Servers ({
@@ -151,8 +170,8 @@ module.exports = {
 						port: req.body.port,
 						name: 'SERVERNAME',
 						slug_name: 'SERVERNAME',
-						country: 'Germany',
-						country_shortcode: 'de',
+						country: country_name,
+						country_shortcode: short_county,
 						gametype: 'war',
 						shortversion: '1.8',
 						online_players: '0/'+serverslots,
@@ -344,7 +363,6 @@ module.exports = {
 			ServerScreenshots.find({ 'get_server': req.params.id }).deleteMany().exec();
 			OnlinePlayers.find({ 'server_alias': results.servers.name_alias }).deleteMany().exec();
 			Playerstat.find({ 'server_alias': results.servers.name_alias }).deleteMany().exec();
-			//Remove admins from this server
 			User.updateOne({'local.admin_on_servers':req.params.id},{$pull:{'local.admin_on_servers':req.params.id}},function(err){
 				console.log(err);
 			});
@@ -452,7 +470,7 @@ module.exports = {
 			out: console.log.bind('Entering the servers root directory')
 		}).exec('mkdir main-server-files', {
 			out: console.log.bind(console)
-		}).exec('wget -b http://files.linuxgsm.com/CallOfDuty4/cod4x18_dedrun.tar.bz2', {
+		}).exec('wget -b '+config.cod4_server_plugin.download_link, {
 			out: console.log.bind('Start CoD4 files download')
 		}).start();
 		req.flash('success_messages', 'Server files will be downloaded (4gb file download wait about 5 minutes before you take the next step). U need to do this only once, do not download for every server the files');
@@ -492,11 +510,12 @@ module.exports = {
 		BluebirdPromise.props({
 			servers: Servers.findOne({'_id': req.params.id, 'is_stoped': true}).execAsync()
 		}).then (function(results){
-			//Remove from DB everything related to this server
+
+			Bans.find({ 'rcon_server': req.params.id }).deleteMany().exec();
 			Cheaterreports.find({ 'rcon_server': req.params.id }).deleteMany().exec();
 			ServerScreenshots.find({ 'get_server': req.params.id }).deleteMany().exec();
 			OnlinePlayers.find({ 'server_alias': results.servers.name_alias }).deleteMany().exec();
-			//Remove admins from this server
+			Playerstat.find({ 'server_alias': results.servers.name_alias }).deleteMany().exec();
 			User.updateMany({'local.admin_on_servers':req.params.id},{$pull:{'local.admin_on_servers':req.params.id}},function(err){
 				if (err)
 					console.log(err);
