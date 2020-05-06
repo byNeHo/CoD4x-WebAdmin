@@ -105,6 +105,11 @@ html(lang=t('language:language.code'))
 						a(href='/')
 							i.zmdi.zmdi-home
 							|  #{t('navigation:main_navigation.home')}
+					if (forumlink_enabled=="1")
+						li
+							a(href=forumlink_url)
+								i.zmdi.zmdi-star-circle
+								|  #{forumlink_name}
 					if (user)
 						if (user.local.user_role >= requiredpower.minimum_cheater_reports)
 							if (cheater_reports.length > 0)

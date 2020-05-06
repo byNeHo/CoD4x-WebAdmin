@@ -114,6 +114,9 @@ app.use(function(req, res, next){
   res.locals.websiteaddress = config.website_url;
   res.locals.cur_language = req.language;
   res.locals.mainlanguage = config.website_language;
+  res.locals.forumlink_enabled = config.yes;
+  res.locals.forumlink_name = config.name;
+  res.locals.forumlink_url = config.url;
 	next();
 });
 
