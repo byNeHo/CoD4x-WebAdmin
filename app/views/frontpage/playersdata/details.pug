@@ -62,7 +62,7 @@ block content
 						.card-body
 							.pre-scrollable.p-15(style="height:300px")
 								.lg-odd-black
-									if chatmsg.messages
+									if chatmsg
 										each row in chatmsg.messages.reverse()
 											.list-group-item
 												.m-b-15
