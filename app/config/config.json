@@ -61,5 +61,10 @@
     "save_directory_path": "/var/www/mywebsite.com/html/public"
   },
   "website_language": "en",
-  "website_non_http_url": "localhost"
+  "website_non_http_url": "localhost",
+  "localmachine": {
+    "yes": "0",
+    "country": "Germany",
+    "country_short": "de"
+  }
 }
