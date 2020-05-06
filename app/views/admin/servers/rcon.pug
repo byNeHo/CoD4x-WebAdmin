@@ -32,6 +32,28 @@ block content
 								.pull-left
 									img.lgi-img(src='/img/cod4.gif', alt='cod4')
 								.media-body
+									.lgi-heading Load Julia
+									small.lgi-text Load Plugin Julia
+									input(type='hidden', name='rcon_cmd', value="loadplugin julia")
+									input(type='hidden', id="_csrf", name='_csrf', value=csrfToken)
+									small.ms-time
+										button.btn-xs.btn.bgm-lightgreen.btn-icon.waves-effect(type='submit')
+											i.zmdi.zmdi-mail-send
+							form.list-group-item.media(method='post', action='/admin/servers/rconconsole/send/'+results.server._id)
+								.pull-left
+									img.lgi-img(src='/img/cod4.gif', alt='cod4')
+								.media-body
+									.lgi-heading UnLoad Julia
+									small.lgi-text UnLoad Plugin Julia
+									input(type='hidden', name='rcon_cmd', value="unloadplugin julia")
+									input(type='hidden', id="_csrf", name='_csrf', value=csrfToken)
+									small.ms-time
+										button.btn-xs.btn.bgm-red.btn-icon.waves-effect(type='submit')
+											i.zmdi.zmdi-mail-send
+							form.list-group-item.media(method='post', action='/admin/servers/rconconsole/send/'+results.server._id)
+								.pull-left
+									img.lgi-img(src='/img/cod4.gif', alt='cod4')
+								.media-body
 									.lgi-heading Status
 									small.lgi-text Get Server Status
 									input(type='hidden', name='rcon_cmd', value="status")
@@ -45,7 +67,7 @@ block content
 								.media-body
 									.lgi-heading MiniStatus
 									small.lgi-text Get Server MiniStatus
-									input(type='hidden', name='rcon_cmd', value="miniStatus")
+									input(type='hidden', name='rcon_cmd', value="ministatus")
 									input(type='hidden', id="_csrf", name='_csrf', value=csrfToken)
 									small.ms-time
 										button.btn-xs.btn.bgm-lightgreen.btn-icon.waves-effect(type='submit')
