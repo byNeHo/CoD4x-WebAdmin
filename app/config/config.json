@@ -1,65 +1,65 @@
 {
-	"db": {
-		"username": "db_username",
-		"password": "db_password",
-		"host": "localhost",
-		"port": "27017",
-		"name": "cod4xwebadmin"
-	},
-	"sessionSecret": "somerandomsecrettext_change_it^{",
-	"website_name": "CoD4x Webadmin",
-	"website_url": "http://localhost:3000",
-	"contact_email": "myemail@email.com",
-	"facebookAuth" : {
-		"clientID"        : "client_id",
-		"clientSecret"    : "clientSecret",
-		"callbackURL"     : "http://localhost:3000/user/auth/facebook/callback",
-		"profileURL"      : "https://graph.facebook.com/v2.5/me?fields=first_name,last_name,email"
-	},
-	"twitterAuth" : {
-		"consumerKey"        : "consumerKey",
-		"consumerSecret"     : "consumerSecret",
-		"callbackURL"        : "http://localhost:3000/user/auth/twitter/callback"
-	},
-	"googleAuth" : {
-		"clientID"         : "clientID",
-		"clientSecret"     : "clientSecret",
-		"callbackURL"      : "http://localhost:3000/user/auth/google/callback"
-	},
-	"steamAuth" : {
-		"returnURL"         : "http://www.mywebsite.com/user/auth/steam/return",
-		"realm"     : "http://www.mywebsite.com",
-		"apiKey"      : "apiKey"
-	},
-	"discord_webhook": {
-		"webhook_url" : "webhook_url",
-		"webhook_displayname" : "CoD4x Webadmin",
-		"webhook_avatar" : "http://localhost:3000/img/profile-menu.png"
-	},
-	"g_recaptcha": {
-		"SITE_KEY" : "SITE_KEY",
-		"SECRET_KEY" : "SECRET_KEY"
-	},
-	"kgb_api": {
-		"kgb_link" : "http://www.kgb-hosting.com/gpanel/api/server_process.php",
-		"kgb_id" : "kgb_id",
-		"kgb_auth" : "kgb_auth"
-	},
-	"ssh_access": {
-		"host" : "your-server-ip",
-		"user" : "putty_username",
-		"password" : "putty_password"
-	},
-	"cod4_server_plugin": {
-		"download_link" : "http://linuxgsm.download/CallOfDuty4/cod4x18_1772_dedrun.tar.bz2",
-		"servers_root" : "/home/linux_user"
-	},
-	"cod4x_compile": {
-		"download_link" : "https://github.com/callofduty4x/CoD4x_Server/archive/master.zip",
-		"dir_root" : "/home/linux_user/CoD4x_Server-master",
-		"zip_file_name" : "master.zip",
-		"save_directory_path" : "/var/www/mywebsite.com/html/public"
-	},
-	"website_language": "en",
-	"website_non_http_url": "localhost"
+  "db": {
+    "username": "hnenad",
+    "password": "1596pp",
+    "host": "localhost",
+    "port": "27017",
+    "name": "cod4xwebadmin"
+  },
+  "sessionSecret": "somerandomsecrettext_change_it^{",
+  "website_name": "CoD4x Webadmin",
+  "website_url": "http://localhost:3000",
+  "contact_email": "myemail@email.com",
+  "facebookAuth": {
+    "clientID": "client_id",
+    "clientSecret": "clientSecret",
+    "callbackURL": "http://localhost:3000/user/auth/facebook/callback",
+    "profileURL": "https://graph.facebook.com/v2.5/me?fields=first_name,last_name,email"
+  },
+  "twitterAuth": {
+    "consumerKey": "consumerKey",
+    "consumerSecret": "consumerSecret",
+    "callbackURL": "http://localhost:3000/user/auth/twitter/callback"
+  },
+  "googleAuth": {
+    "clientID": "clientID",
+    "clientSecret": "clientSecret",
+    "callbackURL": "http://localhost:3000/user/auth/google/callback"
+  },
+  "steamAuth": {
+    "returnURL": "http://www.mywebsite.com/user/auth/steam/return",
+    "realm": "http://www.mywebsite.com",
+    "apiKey": "apiKey"
+  },
+  "discord_webhook": {
+    "webhook_url": "webhook_url",
+    "webhook_displayname": "CoD4x Webadmin",
+    "webhook_avatar": "http://localhost:3000/img/profile-menu.png"
+  },
+  "g_recaptcha": {
+    "SITE_KEY": "SITE_KEY",
+    "SECRET_KEY": "SECRET_KEY"
+  },
+  "kgb_api": {
+    "kgb_link": "http://www.kgb-hosting.com/gpanel/api/server_process.php",
+    "kgb_id": "kgb_id",
+    "kgb_auth": "kgb_auth"
+  },
+  "ssh_access": {
+    "host": "your-server-ip",
+    "user": "putty_username",
+    "password": "putty_password"
+  },
+  "cod4_server_plugin": {
+    "download_link": "http://files.linuxgsm.com/CallOfDuty4/cod4x18_dedrun.tar.bz2",
+    "servers_root": "/home/linux_user"
+  },
+  "cod4x_compile": {
+    "download_link": "https://github.com/callofduty4x/CoD4x_Server/archive/master.zip",
+    "dir_root": "/home/linux_user/CoD4x_Server-master",
+    "zip_file_name": "master.zip",
+    "save_directory_path": "/var/www/mywebsite.com/html/public"
+  },
+  "website_language": "en",
+  "website_non_http_url": "localhost"
 }
