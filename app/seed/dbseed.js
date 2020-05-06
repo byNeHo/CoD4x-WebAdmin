@@ -236,6 +236,16 @@ var plugins = [
 		require_cronjob:false,
 		cron_job_time_intervals:2,
 		status:false
+	}),
+	new Plugins({
+		name:'Remove old Game Chat',
+		category:'cronjobs',
+		description:'Remove older chat messages from the website',
+		instructions:'<p>Activate or Deactivate Plugin Remove old Game Chat on your application (Status checkbox)<br></p><p>This plugin will remove all older InGame chat Messages (then x days) from the website, enter a valid number for days, do not use commas, points. The plugin will run once a day at 03:07</p>',
+		min_power:1,
+		require_cronjob:true,
+		cron_job_time_intervals:7,
+		status:false
 	})
 ];
 
