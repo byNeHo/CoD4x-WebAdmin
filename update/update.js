@@ -4,9 +4,9 @@ const BluebirdPromise  = require('bluebird');
 mongoose.Promise = require('bluebird');
 var fs = BluebirdPromise.promisifyAll(require("fs"));
 const chalk = require('chalk');
-const config = require('../app/config/config');
+const config = require('app/config/config');
 
-const Chathistory =  require("../app/models/chathistory");
+const Chathistory =  require("app/models/chathistory");
 
 const log = console.log;
 
@@ -33,7 +33,7 @@ mongoose.connection.on('error', function(err) {
 
 
 
-const Plugins = require("../app/models/plugins");
+const Plugins = require("app/models/plugins");
 
 
 // ######################## Plugins ########################################### //
@@ -60,7 +60,7 @@ var plugins = [
 log(chalk.green('Update Cod4xWebadmin Application Started'));
 
 
-var obj = require('../app/config/config.json');
+var obj = require('app/config/config.json');
 
 obj.localmachine = { 
     yes: '0',
@@ -70,7 +70,7 @@ obj.localmachine = {
 
 var done = 0;
 
-fs.writeFileAsync('../app/config/config.json', JSON.stringify(obj, null, 2), function (err){
+fs.writeFileAsync('app/config/config.json', JSON.stringify(obj, null, 2), function (err){
     if (err) console.log(err);
     log(chalk.cyan('Adding new lines to') + chalk.white(' app/config/config.json'));
 }).then(function(filewritten) {
@@ -127,7 +127,7 @@ function gitpull() {
 }
 
 function install() {
-    shell.cd('../');
+    //shell.cd('');
     shell.echo('Installing package')
     if (shell.exec('npm install').code !== 0) {
         new erros.NpmOrNodeError();
