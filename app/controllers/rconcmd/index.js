@@ -277,7 +277,7 @@ module.exports = {
 									console.log(err)
 								} else{
 									if (checkplayerdata){
-										User.findOne({'steam.id':checkplayerdata.player_steam_id, 'local.user_role': {$gt: 1}, 'steam.id': { $ne: 0 }}, function( err, checkifimune ) {
+										User.findOne({'steam.id':checkplayerdata.player_steam_id, 'local.user_role': {$gt: 1}, 'steam.id': { $ne: '0' }}, function( err, checkifimune ) {
 											if (checkifimune){
 												req.flash('error_messages', req.t('rcon_commands:general.is_imune', { get_AdminName: checkifimune.local.user_name }));
 												res.redirect('back');
@@ -517,7 +517,7 @@ module.exports = {
 									console.log(err)
 								} else{
 									if (checkplayerdata){
-										User.findOne({'steam.id':checkplayerdata.player_steam_id, 'local.user_role': {$gt: 1}, 'steam.id': { $ne: 0 }}, function( err, checkifimune ) {
+										User.findOne({'steam.id':checkplayerdata.player_steam_id, 'local.user_role': {$gt: 1}, 'steam.id': { $ne: '0' }}, function( err, checkifimune ) {
 											if (checkifimune){
 												req.flash('error_messages', req.t('rcon_commands:general.is_imune', { get_AdminName: checkifimune.local.user_name }));
 												res.redirect('back');
@@ -746,7 +746,7 @@ module.exports = {
 													console.log(err)
 												} else{
 													if (checkplayerdata){
-														User.findOne({'steam.id':checkplayerdata.player_steam_id, 'local.user_role': {$gt: 1}, 'steam.id': { $ne: 0 }}, function( err, checkifimune ) {
+														User.findOne({'steam.id':checkplayerdata.player_steam_id, 'local.user_role': {$gt: 1}, 'steam.id': { $ne: '0' }}, function( err, checkifimune ) {
 															if (checkifimune){
 																//user is admin can not ban
 																req.flash('error_messages', req.t('rcon_commands:general.is_imune', {get_AdminName:checkifimune.local.user_name}));
@@ -900,7 +900,7 @@ module.exports = {
 										console.log(err)
 									} else{
 										if (checkplayerdata){
-											User.findOne({'steam.id':checkplayerdata.player_steam_id, 'local.user_role': {$gt: 1}, 'steam.id': { $ne: 0 }}, function( err, checkifimune ) {
+											User.findOne({'steam.id':checkplayerdata.player_steam_id, 'local.user_role': {$gt: 1}, 'steam.id': { $ne: '0' }}, function( err, checkifimune ) {
 												if (checkifimune){
 													//user is admin can not ban
 													req.flash('error_messages', req.t('rcon_commands:general.is_imune', {get_AdminName:checkifimune.local.user_name}));
@@ -1052,7 +1052,7 @@ module.exports = {
 													console.log(err)
 												} else{
 													if (checkplayerdata){
-														User.findOne({'steam.id':checkplayerdata.player_steam_id, 'local.user_role': {$gt: 1}, 'steam.id': { $ne: 0 }}, function( err, checkifimune ) {
+														User.findOne({'steam.id':checkplayerdata.player_steam_id, 'local.user_role': {$gt: 1}, 'steam.id': { $ne: '0' }}, function( err, checkifimune ) {
 															if (checkifimune){
 																req.flash('error_messages', req.t('rcon_commands:general.is_imune', {get_AdminName:checkifimune.local.user_name}));
 																res.redirect('back');
@@ -1224,7 +1224,7 @@ module.exports = {
 										console.log(err)
 									} else{
 										if (checkplayerdata){
-											User.findOne({'steam.id':checkplayerdata.player_steam_id, 'local.user_role': {$gt: 1}, 'steam.id': { $ne: 0 }}, function( err, checkifimune ) {
+											User.findOne({'steam.id':checkplayerdata.player_steam_id, 'local.user_role': {$gt: 1}, 'steam.id': { $ne: '0' }}, function( err, checkifimune ) {
 												if (checkifimune){
 													req.flash('error_messages', req.t('rcon_commands:general.is_imune', {get_AdminName:checkifimune.local.user_name}));
 													res.redirect('back');
