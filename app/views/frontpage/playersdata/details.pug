@@ -65,11 +65,9 @@ block content
 									if chatmsg
 										each row in chatmsg.messages.reverse()
 											.list-group-item
-												.m-b-15
-													.span.badge.bgm-green.f-12.m-r-15 #{row.server_name}
-													span.f-12
-														| #{row.message}
-												.c-gray.f-11.text-right
+												.m-b-15..f-12
+													| #{row.message}
+												.c-gray.f-11
 													| #{moment(row.sent).format('MMMM Do YYYY, h:mm')}
 						.clearfix
 				.col-md-4.col-sm-6
