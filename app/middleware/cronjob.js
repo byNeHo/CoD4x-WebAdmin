@@ -324,7 +324,7 @@ var rmadminactions = schedule.scheduleJob('5 3 * * *', function(){
 });
 
 // ################################ Plugin remove Old Game Chat ################################ //
-var rmadminactions = schedule.scheduleJob('5 4 * * *', function(){
+var rmadminactions = schedule.scheduleJob('15 4 * * *', function(){
 	var start = new Date();
 	Plugins.findOne({'name_alias':'remove-old-game-chat'},function(error, pluginchatdelete){	
 		if (!error){
