@@ -26,6 +26,7 @@ const Usermaps = require("../models/maps");
 const OnlinePlayers = require("../models/online_players");
 const Systemlogs = require("../models/system_logs");
 const PlayersData =  require("../models/players_db");
+const Chathistory =  require("../models/chathistory");
 const main_lng = i18next.getFixedT(config.website_language);
 
 var now = new Date();
@@ -316,6 +317,32 @@ var rmadminactions = schedule.scheduleJob('5 3 * * *', function(){
 						});
 						newSystemlogs.saveAsync()
 					}
+				});
+			}
+		}
+	});	
+});
+
+// ################################ Plugin remove Old Game Chat ################################ //
+var rmadminactions = schedule.scheduleJob('5 4 * * *', function(){
+	var start = new Date();
+	Plugins.findOne({'name_alias':'remove-old-game-chat'},function(error, pluginchatdelete){	
+		if (!error){
+			if (pluginchatdelete.status==true){
+				
+				var daysToDeletion = parseInt(pluginchatdelete.cron_job_time_intervals);
+				var deletionDate = new Date(now.setDate(now.getDate() - daysToDeletion));
+
+				Chathistory.updateMany({ messages: { $exists: true } },
+					{$pull: { 'messages': { sent: { $lt: deletionDate } } }
+				}).then (function(deleted){
+					var newSystemlogs = new Systemlogs ({
+						logline: 'Old Game Chat Messages removed',
+						successed: true
+					});
+					newSystemlogs.saveAsync()
+				}).catch (function(err){
+					console.log(err);
 				});
 			}
 		}

@@ -31,7 +31,7 @@ mongoose.connection.on('error', function(err) {
 	};
 });
 
-/*
+
 
 const Plugins = require("../app/models/plugins");
 
@@ -40,30 +40,20 @@ const Plugins = require("../app/models/plugins");
 
 var plugins = [
 	new Plugins({
-		name:'Emailer Sendgrid',
-		category:'emailer',
-		description:'An emailer plugin for Cod4xWebAdmin using SendGrid as a third party service',
-		instructions:'<p>Activate or Deactivate Plugin Sendgrid Emailer on your application (Status checkbox)<br></p><p>This Emailer plugin allows Cod4xWebAdmin to send emails to users through the third-party transactional email service Sendgrid.<br /><br /><strong>Do I need Sendgrid?</strong><br /> If you would like to send emails to users and for example be able to reset your password then yes. Password reset works only if you have configured and activated this plugin.<br /><br /><strong>Where do I get this API key?</strong><br />You get it on: <a href="https://sendgrid.com/" target="_blank">https://sendgrid.com/</a>. Sign up, make sure you activate your account after registration via your email, choose the free option it is more than enough for our purpose. After Logging in go to Settings -> API keys and create a new API key. <strong>After you get your API key insert it here in the API key field, save changes and activate the plugin</strong><br /><br />If everything is working as it should you will see on your Log In page a Forgot Password? link. You can test it out with your own account if it works.</p>',
-		min_power:1,
-		require_cronjob:false,
-		cron_job_time_intervals:2,
-		status:false
-	}),
-	new Plugins({
-		name:'Remove old Player Data',
+		name:'Remove old Game Chat',
 		category:'cronjobs',
-		description:'Remove older player data from the website',
-		instructions:'<p>Activate or Deactivate Plugin Remove old Player Data on your application (Status checkbox)<br></p><p>This plugin will remove all older not active Player Data (then x days) from the website, enter a valid number for days, do not use commas, points. The plugin will run once a day at 3:05</p>',
+		description:'Remove older chat messages from the website',
+		instructions:'<p>Activate or Deactivate Plugin Remove old Game Chat on your application (Status checkbox)<br></p><p>This plugin will remove all older InGame chat Messages (then x days) from the website, enter a valid number for days, do not use commas, points. The plugin will run once a day at 03:07</p>',
 		min_power:1,
 		require_cronjob:true,
-		cron_job_time_intervals:180,
+		cron_job_time_intervals:7,
 		status:false
-	}),
+	})
 ];
 
 
 
-*/
+
 
 //######################################## STARTING UPDATE ########################################//
 
@@ -97,24 +87,27 @@ fs.writeFileAsync('../app/config/config.json', JSON.stringify(obj, null, 2), fun
     Chathistory.find().deleteMany().exec();
     log(chalk.yellow('Delete old chat messages if they exist- Finished'));
 }).then(function(updatedb) {
-    log(chalk.yellow('No DB updates needed'));
-    /*
+    //log(chalk.yellow('No DB updates needed'));
+    
     var done = 0;
     for (var i = 0; i < plugins.length; i++){
         plugins[i].save(function (err, result){
             done++;
             if(done === plugins.length){
-                log(chalk.green(' Finished'));
-                //exit();
+                log(chalk.yellow('Adding New Plugin - Remove Old Chat Messages'));
+                log(chalk.green('DB Update Finished'));
+                exit();
             }
         });
-    }
-    */
-   
-}).then(function(close) {
+    }   
+})
+/*
+.then(function(close) {
     log(chalk.green('Update Finished, you can now start your application!'));
     process.exit(1);
-}).catch(function(e) {
+})
+*/
+.catch(function(e) {
     console.error(e.stack);
 });
 
@@ -122,6 +115,7 @@ fs.writeFileAsync('../app/config/config.json', JSON.stringify(obj, null, 2), fun
 //######################################## FUNCTIONS ########################################//
 
 function exit(){
+    log(chalk.green('Update Finished, you can now start your application!'));
     mongoose.connection.close();
 }
 
