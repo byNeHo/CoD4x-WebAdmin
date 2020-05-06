@@ -118,7 +118,7 @@ function exit(){
 
 function gitpull() {
     if (shell.exec('git pull origin master').code !== 0) {
-        new error.GitError()
+        console.log('There was an error');
     }
     install();
 }
