@@ -65,7 +65,11 @@ obj.localmachine = {
     country_short: 'de'
 };
 
-var done = 0;
+obj.forumlink = { 
+    yes: '0',
+    name: 'Forum',
+    url: 'https://www.myforum.com/'
+};
 
 fs.writeFileAsync('app/config/config.json', JSON.stringify(obj, null, 2), function (err){
     if (err) console.log(err);
