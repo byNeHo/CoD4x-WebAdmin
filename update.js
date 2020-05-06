@@ -4,9 +4,10 @@ const BluebirdPromise  = require('bluebird');
 mongoose.Promise = require('bluebird');
 var fs = BluebirdPromise.promisifyAll(require("fs"));
 const chalk = require('chalk');
-const config = require('app/config/config');
+const config = require('./app/config/config');
 
-const Chathistory =  require("app/models/chathistory");
+const Chathistory =  require("./app/models/chathistory");
+const Plugins = require("./app/models/plugins");
 
 const log = console.log;
 
@@ -30,10 +31,6 @@ mongoose.connection.on('error', function(err) {
 		log(chalk.red('Your mongoDB Username, Password is wrong in file app/config/config.json. Could not connect to database! '+err));
 	};
 });
-
-
-
-const Plugins = require("app/models/plugins");
 
 
 // ######################## Plugins ########################################### //
@@ -60,12 +57,12 @@ var plugins = [
 log(chalk.green('Update Cod4xWebadmin Application Started'));
 
 
-var obj = require('app/config/config.json');
+var obj = require('./app/config/config.json');
 
 obj.localmachine = { 
     yes: '0',
     country: 'Germany',
-    country_short: 'de' 
+    country_short: 'de'
 };
 
 var done = 0;
