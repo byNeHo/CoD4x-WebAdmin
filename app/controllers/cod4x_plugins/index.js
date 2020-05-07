@@ -565,21 +565,23 @@ module.exports = {
 						}								
 					} else if (req.body.command == "userchat") {
 						if (S.include(req.body.message, "QUICKMESSAGE_")==false){
-							Chathistory.findOneAndUpdate({'pid': req.body.pid}, {
-								$set:{
-									pid:req.body.pid,
-									sid:req.body.sid
-								},$push: {
-									messages: {
-										"message" : uncolorize(req.body.message),
-										"server_name" : results.selectedserver.slug_name
+							if (S.startsWith(req.body.message, "@")==false){
+								Chathistory.findOneAndUpdate({'pid': req.body.pid}, {
+									$set:{
+										pid:req.body.pid,
+										sid:req.body.sid
+									},$push: {
+										messages: {
+											"message" : uncolorize(req.body.message),
+											"server_name" : results.selectedserver.slug_name
+										}
+									} 
+								}, { upsert: true, new: true, setDefaultsOnInsert: true}, function(err){
+									if(err){
+										console.log(err);
 									}
-								} 
-							}, { upsert: true, new: true, setDefaultsOnInsert: true}, function(err){
-								if(err){
-									console.log(err);
-								}
-							});
+								});
+							}
 						}
 						return res.status(200).send('status=okay');
 					} else if (req.body.command == "serverstatus"){
