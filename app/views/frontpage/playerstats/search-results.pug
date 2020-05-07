@@ -1,0 +1,99 @@
+extends ../../layout/home
+
+block content
+	ol.breadcrumb
+		li
+			a(href='/') #{t('navigation:main_navigation.home')}
+		li
+			a(href='/'+results.server.name_alias) #{results.server.name}
+		li
+			a(href='/'+results.server.name_alias+'/players-stats') Players Stats
+		li.active Players Stats - Search Results
+	section#content
+		.container.container-alt
+				.block-header
+					h2
+						| #{results.server.name}
+						small #{t('frontpages:server.server_current_map')} #{results.server.map_playing}
+				#profile-main.card
+					.pm-overview.c-overflow
+						.pmo-pic
+							.p-relative
+								img.img-responsive(src='/img/maps/'+current_map_image, alt='cod4')
+								.dropdown.pmop-message
+									a.btn.bgm-white.btn-float.z-depth-1(href='cod4://'+results.server.ip+':'+results.server.port, data-toggle="tooltip", data-placement="top", title="", data-original-title=t('frontpages:server.server_join_server'))
+										i.zmdi.zmdi-tv-play
+							.pmo-stat
+								h2.m-0.c-white #{results.server.online_players}
+								| #{results.server.map_playing}
+						.col-md-12.text-center.m-b-25
+							| #{t('frontpages:server.server_map_started')}
+							br
+							| #{results.server.map_started}
+						.pmo-block.pmo-contact.hidden-xs
+							h2 #{t('frontpages:server.server_server_details')}
+							ul
+								li
+									i.zmdi.zmdi-globe
+									span(class='flag-icon flag-icon-'+results.server.country_shortcode)
+									|  #{results.server.country}
+								li
+									i.zmdi.zmdi-account
+									|  #{results.server.max_players} #{t('frontpages:server.server_slots')}
+									if(results.server.private_clients > 0)
+										|  (#{results.server.private_clients} #{t('frontpages:server.server_private_slots')})
+								li
+									i.zmdi.zmdi-cast-connected
+									|  #{results.server.ip}:#{results.server.port}
+								li
+									i.zmdi.zmdi-keyboard-hide
+									|  #{results.server.game_name} #{t('frontpages:server.server_version')} #{results.server.shortversion}
+						.pmo-block.pmo-items.hidden-xs
+							h2 #{t('frontpages:server.server_admins')}
+							.pmob-body
+								.row
+									each row in results.server.admins_on_server
+										a.col-xs-2(href='/members/'+row._id, data-toggle="tooltip", data-placement="top", title="", data-original-title=row.local.user_name)
+											img.img-circle(src=row.local.avatar_60, alt='')
+					.pm-body.clearfix
+						.action-header.clearfix
+							.ah-label.hidden-xs Search Player
+							.ah-search
+								form(method='get', action='/'+results.server.name_alias+'/players-stats/search/player')
+									input.ahs-input(type='text', name='sq', placeholder=t('frontpages:players_data.players_data_name'))
+									i.ahs-close(data-ma-action='action-header-close') ×
+							ul.actions
+								li
+									a(href='', data-ma-action='action-header-open')
+										i.zmdi.zmdi-search
+						.table-responsive.no-padding
+							table.table.table-striped
+								thead
+									tr
+										th #
+										th Name
+										th Kills
+										th Deaths
+										th Score
+										th Ratio
+								tbody
+									if (results.paginated.docs)
+										- var i = (results.paginated.page*results.paginated.docs.length)-(results.paginated.docs.length-1)
+										- function toFixedIfNecessary( value, dp ){return +parseFloat(value).toFixed( dp );}
+										each row in results.paginated.docs
+											- var uncolor_player_name = row.player_name.replace( /[\^][0-9]/g,"");
+											- var ratio = row.player_kills/row.player_deaths
+											tr
+												td 
+													span(class="btn btn-circle btn-xs bgm-lightblue")
+														| #{i++}
+												td #{uncolor_player_name}
+												td.c-green #{row.player_kills}
+												td.c-red #{row.player_deaths}
+												td.c-lightblue #{row.player_score}
+												td 
+													if (row.player_deaths !=0 && row.player_kills!=0)
+														| #{toFixedIfNecessary( ratio, 2 )}
+													else 
+														| #{row.player_kills}
+						include ../../partials/pagination.pug

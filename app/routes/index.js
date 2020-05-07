@@ -30,6 +30,8 @@ module.exports = function(app, passport, io){
 	app.post('/admin-application/delete/admin-app', isLoggedIn, home.AdminAppRemove);
 	app.post('/admin-application/accept/admin-app', isLoggedIn, home.AdminAppAccept);
 	app.get('/admin-conversations', isLoggedIn ,home.getConversations);
+	app.get('/:name_alias/players-stats',home.getPlayerStats);
+	app.get('/:name_alias/players-stats/search/player?:sq',home.getSearchPlayerStats);
 	app.get('/:name_alias',home.getServer);
 	app.get('/kgb-plugin/:id/:task', isLoggedIn, home.getKGBplugin);
 	app.get('/server-plugin/start-local-server/:id', isLoggedIn, home.PluginLocalServerStart);

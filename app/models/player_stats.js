@@ -1,6 +1,7 @@
 const mongoose = require('mongoose');
 const BluebirdPromise = require("bluebird");
 BluebirdPromise.promisifyAll(require("mongoose"));
+const mongoosePaginate = require('mongoose-paginate-v2');
 const Schema = mongoose.Schema;
 
 const PlayerstatSchema = new Schema({
@@ -15,5 +16,7 @@ const PlayerstatSchema = new Schema({
     player_deaths:  { type: Number, default:0},
     player_assists:  { type: Number, default:0},
 }, { timestamps: true });
+
+PlayerstatSchema.plugin(mongoosePaginate);
 
 module.exports = mongoose.model('Playerstat', PlayerstatSchema);

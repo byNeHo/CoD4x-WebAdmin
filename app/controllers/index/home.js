@@ -76,7 +76,7 @@ module.exports = {
 	getServer: function(req, res, next) {
 		var populateadmins = [{path:'admins_on_server', select:'local.avatar_60 local.user_name id'}];
 		BluebirdPromise.props({
-			server: Servers.findOne({'name_alias':req.params.name_alias}, 'name map_img map_playing ip port online_players map_started country_shortcode country max_players private_clients game_name shortversion admins_on_server is_stoped server_rules player_list').populate(populateadmins).execAsync(),
+			server: Servers.findOne({'name_alias':req.params.name_alias}, 'name name_alias map_img map_playing ip port online_players map_started country_shortcode country max_players private_clients game_name shortversion admins_on_server is_stoped server_rules player_list').populate(populateadmins).execAsync(),
 			server_screenshots: ServerScreenshots.find({'server_name_alias':req.params.name_alias}, 'screenshot_img player_name map_name').execAsync(),
 			tempbans: Tempbandurations.find({}, 'short_label time_number long_label category_alias').sort({category_alias: 'desc', time_number: 'asc'}).execAsync(),
 			usermaps: Maps.find({}, 'map_name display_map_name').sort({map_name: 'asc'}).execAsync(),
@@ -982,6 +982,76 @@ module.exports = {
 	  		res.redirect('back');
 	  	});
 	},
+
+	//top_players: Playerstat.find({'server_alias':req.params.name_alias}, 'player_score player_kills player_deaths player_name').sort({player_score: 'desc', player_kills: 'desc'}).limit(25).execAsync()
+	// 'server_alias':req.params.name_alias
+	
+	getPlayerStats: function(req, res, next) {
+		const curpage = +req.query.page || 1;
+		var query   = {};
+		var options = {
+			page: curpage,
+			limit: 20,
+			select: 'player_score player_kills player_deaths player_name',
+			sort: {player_score: 'desc'}
+		};
+		var populateadmins = [{path:'admins_on_server', select:'local.avatar_60 local.user_name id'}];
+		BluebirdPromise.props({
+			server: Servers.findOne({'name_alias':req.params.name_alias}, 'name name_alias map_img map_playing ip port online_players map_started country_shortcode country max_players private_clients game_name shortversion admins_on_server is_stoped').populate(populateadmins).execAsync(),
+			paginated: Playerstat.paginate({'server_alias':req.params.name_alias}, options)
+		}).then (function(results){
+			if (results.server.map_img!= null && results.server.map_img != '' && results.server.map_img){
+				if (fileExists('./public/img/maps/'+results.server.map_img+'.jpg')===true){
+					var current_map_image = results.server.map_img+'.jpg';
+				} else {
+					var current_map_image = 'no-photo.jpg';
+				}
+			} else {
+				var current_map_image = 'no-photo.jpg';
+			}
+			var translation = 'Player Stats';
+			var paginationlinks = pagination(results.paginated.page, results.paginated.totalPages);
+			res.render('frontpage/playerstats/index.pug', {title: translation, results:results, paginationlinks:paginationlinks, current_map_image:current_map_image});
+		}).catch (function(err){
+			console.log(err);
+			res.redirect('back');
+		});
+	},
+
+	
+	getSearchPlayerStats: function(req, res, next) {
+		var sw = new RegExp(req.query.sq, 'i');
+		var search = {'player_name':sw};
+		const curpage = +req.query.page || 1;
+		var options = {
+			page: curpage,
+			limit: 20,
+			select: 'player_score player_kills player_deaths player_name',
+			sort: {player_score: 'desc'}
+		};
+		var populateadmins = [{path:'admins_on_server', select:'local.avatar_60 local.user_name id'}];
+		BluebirdPromise.props({
+			server: Servers.findOne({'name_alias':req.params.name_alias}, 'name name_alias map_img map_playing ip port online_players map_started country_shortcode country max_players private_clients game_name shortversion admins_on_server is_stoped').populate(populateadmins).execAsync(),
+			paginated: Playerstat.paginate(search,{'server_alias':req.params.name_alias}, options)
+		}).then (function(results){
+			if (results.server.map_img!= null && results.server.map_img != '' && results.server.map_img){
+				if (fileExists('./public/img/maps/'+results.server.map_img+'.jpg')===true){
+					var current_map_image = results.server.map_img+'.jpg';
+				} else {
+					var current_map_image = 'no-photo.jpg';
+				}
+			} else {
+				var current_map_image = 'no-photo.jpg';
+			}
+			var translation = req.t("pagetitles:pageTitle.get_players");
+			var paginationlinks = pagination(results.paginated.page, results.paginated.totalPages);
+			res.render('frontpage/playerstats/search-results.pug', {title: translation, results:results, paginationlinks:paginationlinks, current_map_image:current_map_image});
+		}).catch (function(err){
+			console.log(err);
+			res.redirect('back');
+		});
+	},
+	
 
 	SiteMapCreate: function(req, res) {
 		BluebirdPromise.props({
