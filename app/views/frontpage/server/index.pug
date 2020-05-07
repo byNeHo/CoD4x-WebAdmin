@@ -164,6 +164,7 @@ block content
 													th #
 											tbody
 												each row in results.server.player_list
+													- var uncolor_name = row.name.replace( /[\^][0-9]/g,"");
 													tr
 														td
 															if (user)
@@ -172,9 +173,9 @@ block content
 																		form.pull-left.m-r-15(method='post', action='/rconcmd/'+results.server._id+'/getss')
 																			input(type='hidden', name='rcon_cmd', value="getss")
 																			input(type='hidden', name='player_slot', value=row.pid)
-																			input(type='hidden', name='rcon_player', value=row.name)
+																			input(type='hidden', name='rcon_player', value=uncolor_name)
 																			input(type='hidden', name='_csrf', value=csrfToken)
-																			button.btn.btn-xs.bgm-bluegray.waves-effect(type='submit', data-toggle="tooltip", data-placement="top", title="", data-original-title=t('frontpages:server.server_ss_camera_icon_btn')+' '+row.name)
+																			button.btn.btn-xs.bgm-bluegray.waves-effect(type='submit', data-toggle="tooltip", data-placement="top", title="", data-original-title=t('frontpages:server.server_ss_camera_icon_btn')+' '+uncolor_name)
 																				span.zmdi.zmdi-camera
 																if (check_admin == 1)
 																	if ( typeof results.rcon_extra.screenshots_enabled !== 'undefined' && results.rcon_extra.screenshots_enabled )
@@ -182,14 +183,14 @@ block content
 																			form.pull-left.m-r-15(method='post', action='/rconcmd/'+results.server._id+'/getss')
 																				input(type='hidden', name='rcon_cmd', value="getss")
 																				input(type='hidden', name='player_slot', value=row.pid)
-																				input(type='hidden', name='rcon_player', value=row.name)
+																				input(type='hidden', name='rcon_player', value=uncolor_name)
 																				input(type='hidden', name='_csrf', value=csrfToken)
-																				button.btn.btn-xs.bgm-bluegray.waves-effect(type='submit', data-toggle="tooltip", data-placement="top", title="", ata-original-title=t('frontpages:server.server_ss_camera_icon_btn')+' '+row.name)
+																				button.btn.btn-xs.bgm-bluegray.waves-effect(type='submit', data-toggle="tooltip", data-placement="top", title="", ata-original-title=t('frontpages:server.server_ss_camera_icon_btn')+' '+uncolor_name)
 																					span.zmdi.zmdi-camera
-																	a(data-toggle="modal" data-rconcommand='tell', data-playerslot=row.pid, data-playername=row.name, class="openmodal pull-left m-r-15 btn btn-xs waves-effect bgm-lightblue", data-target="#openrcon", data-remote="false") PM
-																	a(data-toggle="modal" data-rconcommand='screentell', data-playerslot=row.pid, data-playername=row.name, class="openmodal pull-left m-r-15 btn btn-xs waves-effect bgm-lightgreen", data-target="#openrcon", data-remote="false") ST
+																	a(data-toggle="modal" data-rconcommand='tell', data-playerslot=row.pid, data-playername=uncolor_name, class="openmodal pull-left m-r-15 btn btn-xs waves-effect bgm-lightblue", data-target="#openrcon", data-remote="false") PM
+																	a(data-toggle="modal" data-rconcommand='screentell', data-playerslot=row.pid, data-playername=uncolor_name, class="openmodal pull-left m-r-15 btn btn-xs waves-effect bgm-lightgreen", data-target="#openrcon", data-remote="false") ST
 														td
-															|  #{row.name}															
+															| #{uncolor_name}
 														td
 															span.pull-left
 																| #{row.score}
@@ -199,12 +200,12 @@ block content
 														td
 															if (user)
 																if (check_admin == 1)
-																	a(data-toggle="modal" data-rconcommand='kick', data-playerslot=row.pid, data-playername=row.name, class="openmodal pull-left m-l-15 btn btn-xs waves-effect bgm-bluegray", data-target="#openrcon", data-remote="false") K
-																	a(data-toggle="modal" data-rconcommand='tempban', data-playerslot=row.pid, data-playersteam=row.sid, data-playername=row.name, class="openmodal pull-left m-l-15 btn btn-xs waves-effect bgm-deeporange", data-target="#opentempban", data-remote="false") TB
-																	a(data-toggle="modal" data-rconcommand='permban', data-playerslot=row.pid, data-playersteam=row.sid, data-playername=row.name, class="openmodal pull-left m-l-15 btn btn-xs waves-effect bgm-red", data-target="#openpermban", data-remote="false") PB
-																	a(data-toggle="modal" data-rconcommand='mute', data-playerslot=row.pid, data-playersteam=row.sid, data-playername=row.name, class="openmodal pull-left m-l-15 btn btn-xs waves-effect bgm-indigo", data-target="#openmute", data-remote="false")
+																	a(data-toggle="modal" data-rconcommand='kick', data-playerslot=row.pid, data-playername=uncolor_name, class="openmodal pull-left m-l-15 btn btn-xs waves-effect bgm-bluegray", data-target="#openrcon", data-remote="false") K
+																	a(data-toggle="modal" data-rconcommand='tempban', data-playerslot=row.pid, data-playersteam=row.sid, data-playername=uncolor_name, class="openmodal pull-left m-l-15 btn btn-xs waves-effect bgm-deeporange", data-target="#opentempban", data-remote="false") TB
+																	a(data-toggle="modal" data-rconcommand='permban', data-playerslot=row.pid, data-playersteam=row.sid, data-playername=uncolor_name, class="openmodal pull-left m-l-15 btn btn-xs waves-effect bgm-red", data-target="#openpermban", data-remote="false") PB
+																	a(data-toggle="modal" data-rconcommand='mute', data-playerslot=row.pid, data-playersteam=row.sid, data-playername=uncolor_name, class="openmodal pull-left m-l-15 btn btn-xs waves-effect bgm-indigo", data-target="#openmute", data-remote="false")
 																		span.zmdi.zmdi-volume-off
-																	a(data-toggle="modal" data-rconcommand='chat', data-playerslot=row.pid, data-playersteam=row.sid, data-playername=row.name, class="openmodal pull-left m-l-15 btn btn-xs waves-effect bgm-lightblue", data-target="#openchat", data-remote="false")
+																	a(data-toggle="modal" data-rconcommand='chat', data-playerslot=row.pid, data-playersteam=row.sid, data-playername=uncolor_name, class="openmodal pull-left m-l-15 btn btn-xs waves-effect bgm-lightblue", data-target="#openchat", data-remote="false")
 																		span.zmdi.zmdi-comment-alert
 								#screenshots.tab-pane.animated.fadeIn(role='tabpanel')
 									.pmb-block
@@ -253,12 +254,13 @@ block content
 													- var i = 1
 													- function toFixedIfNecessary( value, dp ){return +parseFloat(value).toFixed( dp );}
 													each row in results.top_players
+														- var uncolor_player_name = row.player_name.replace( /[\^][0-9]/g,"");
 														- var ratio = row.player_kills/row.player_deaths
 														tr
 															td 
 																span(class="btn btn-circle btn-xs bgm-lightblue")
 																	| #{i++}
-															td #{row.player_name}
+															td #{uncolor_player_name}
 															td #{row.player_kills}
 															td #{row.player_deaths}
 															td 
