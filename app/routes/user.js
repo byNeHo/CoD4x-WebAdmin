@@ -173,10 +173,16 @@ module.exports = function(router, passport){
 	// steam ---------------------------------
 	router.get('/unlink/steam', isLoggedIn, function(req, res) {
 		var user = req.user;
-		user.steam.id = undefined;
-		user.save(function(err) {
-			res.redirect('/user/profile');
-		});
+		//Server Admins can not Unlink Steam
+		if (user.local.user_role > 1){
+			req.flash('error_messages', "Server Admins Can Not Unlink Steam, ask any Admin with Power 100 to remove you as Admin before you Unlink your Steam Account");
+			res.redirect('back');
+		} else {
+			user.steam.id = undefined;
+			user.save(function(err) {
+				res.redirect('/user/profile');
+			});
+		}
 	});
 	// process the login form
 	router.post('/login', passport.authenticate('local-login', {

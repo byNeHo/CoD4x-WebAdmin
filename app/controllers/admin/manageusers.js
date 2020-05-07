@@ -69,35 +69,41 @@ module.exports = {
 	ManageUsersUpdateServers: function(req, res, next) {
 		User.findOneAsync({'_id' : req.params.id})
 		.then (function(result){
-			result.local.admin_on_servers = req.body.admin_on_servers,
-			result.saveAsync()
-			var userID = req.params.id;
-			var selected_servers = req.body.admin_on_servers;
-			Servers.updateMany({},{$pull:{'admins_on_server':result.id}}, {multi: true},function(error){	
-				if (!error){
-					if (typeof req.body.admin_on_servers !== 'undefined' && req.body.admin_on_servers){
-						//loop trough array req.body.admin_on_servers and add the user to the newly selected servers
-						if ( Array.isArray(req.body.admin_on_servers) ) {
-							for (var i =0; i < selected_servers.length; i++) {
-							    var currentServer = selected_servers[i];
-							    Servers.updateOne({'_id':currentServer},{$push:{'admins_on_server':result.id}},function(err){
+			//Check if user has linked steam before proceed
+			if (!result.steam && result.local.user_role < 2){
+				req.flash('error_messages', 'Only users with Linked Steam Account can be added as Admins');
+			} else {
+				result.local.admin_on_servers = req.body.admin_on_servers,
+				result.saveAsync()
+				var userID = req.params.id;
+				var selected_servers = req.body.admin_on_servers;
+
+				Servers.updateMany({},{$pull:{'admins_on_server':result.id}}, {multi: true},function(error){	
+					if (!error){
+						if (typeof req.body.admin_on_servers !== 'undefined' && req.body.admin_on_servers){
+							//loop trough array req.body.admin_on_servers and add the user to the newly selected servers
+							if ( Array.isArray(req.body.admin_on_servers) ) {
+								for (var i =0; i < selected_servers.length; i++) {
+									var currentServer = selected_servers[i];
+									Servers.updateOne({'_id':currentServer},{$push:{'admins_on_server':result.id}},function(err){
+										if (err){
+											console.log(err);
+										}
+									});
+								}
+							} else {
+								Servers.updateOne({'_id':selected_servers},{$push:{'admins_on_server':result.id}},function(err){
 									if (err){
 										console.log(err);
 									}
 								});
 							}
-						} else {
-							Servers.updateOne({'_id':selected_servers},{$push:{'admins_on_server':result.id}},function(err){
-								if (err){
-									console.log(err);
-								}
-							});
 						}
 					}
-				}
-			});
+				});
+				req.flash('success_messages', 'Server List successfully edited');
+			}			
 		}).then(function(success) {
-			req.flash('success_messages', 'Server List successfully edited');
 			res.redirect('back');
 		}).catch(function(err) {
 			console.log("There was an error: " +err);
