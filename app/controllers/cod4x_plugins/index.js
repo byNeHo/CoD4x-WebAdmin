@@ -565,7 +565,7 @@ module.exports = {
 						}								
 					} else if (req.body.command == "userchat") {
 						if (S.include(req.body.message, "QUICKMESSAGE_")==false){
-							if (S.startsWith(req.body.message, "@")==false){
+							if (S.startsWith(req.body.message, "@")==true){
 								Chathistory.findOneAndUpdate({'pid': req.body.pid}, {
 									$set:{
 										pid:req.body.pid,
