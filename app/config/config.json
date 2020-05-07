@@ -1,7 +1,7 @@
 {
   "db": {
-    "username": "hnenad",
-    "password": "1596pp",
+    "username": "db_username",
+    "password": "db_password",
     "host": "localhost",
     "port": "27017",
     "name": "cod4xwebadmin"
