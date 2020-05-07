@@ -564,16 +564,16 @@ module.exports = {
 							})
 						}								
 					} else if (req.body.command == "userchat") {
-						console.log(req.body.message);
-						if (S.include(req.body.message, "QUICKMESSAGE_")==false){
-							if (S.startsWith(req.body.message, "@")==false){
+						var msg = S.trim(req.body.message);
+						if (S.include(msg, "QUICKMESSAGE_")==false){
+							if (S.startsWith(msg, "@")==false){
 								Chathistory.findOneAndUpdate({'pid': req.body.pid}, {
 									$set:{
 										pid:req.body.pid,
 										sid:req.body.sid
 									},$push: {
 										messages: {
-											"message" : uncolorize(req.body.message),
+											"message" : uncolorize(msg),
 											"server_name" : results.selectedserver.slug_name
 										}
 									} 
