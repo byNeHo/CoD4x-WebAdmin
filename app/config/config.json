@@ -66,5 +66,10 @@
     "yes": "0",
     "country": "Germany",
     "country_short": "de"
+  },
+  "forumlink": {
+    "yes": "0",
+    "name": "Forum",
+    "url": "https://www.myforumwebsite.com"
   }
 }

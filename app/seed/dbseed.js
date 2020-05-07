@@ -30,6 +30,7 @@ const Plugins = require("../models/plugins");
 const Appversion = require("../models/app_version");
 const Cod4xversion = require("../models/cod4x_version");
 const ServerCommands = require("../models/server_commands");
+const Chathistory =  require("../models/chathistory");
 
 // ######################## Create Default Admin User ########################################### //
 
