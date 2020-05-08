@@ -136,16 +136,18 @@ module.exports = {
 																		var newsteamID = req.body.steamid;
 																	}
 
-																	playerinfo.player_name = save_player_name,
-																	playerinfo.player_guid = req.body.playerid,
-																	playerinfo.player_steam_id = newsteamID,
-																	playerinfo.player_ip = req.body.address,
-																	playerinfo.player_country = getName(cLoc.country),
-																	playerinfo.player_country_short = cLoc.country.toLowerCase(),
-																	playerinfo.player_city = cLoc.city,
-																	playerinfo.server_id = results.selectedserver._id,
-																	playerinfo.sshack = playerinfo.sshack
-																	playerinfo.saveAsync()
+																	if (cLoc.country && cLoc.city){
+																		playerinfo.player_name = save_player_name,
+																		playerinfo.player_guid = req.body.playerid,
+																		playerinfo.player_steam_id = newsteamID,
+																		playerinfo.player_ip = req.body.address,
+																		playerinfo.player_country = getName(cLoc.country),
+																		playerinfo.player_country_short = cLoc.country.toLowerCase(),
+																		playerinfo.player_city = cLoc.city,
+																		playerinfo.server_id = results.selectedserver._id,
+																		playerinfo.sshack = playerinfo.sshack
+																		playerinfo.saveAsync()
+																	}
 																}
 															});
 														}
@@ -159,19 +161,21 @@ module.exports = {
 													} else {
 														var new_player_name = req.body.playername.trim();
 														if (isEmpty(new_player_name) == false){
-															var newPlayersData = new PlayersData ({
-																player_name: uncolorize(new_player_name),
-																player_guid: req.body.playerid,
-																player_steam_id: req.body.steamid,
-																player_ip: req.body.address,
-																player_country: getName(cLoc.country),
-																player_country_short: cLoc.country.toLowerCase(),
-																player_city: cLoc.city,
-																player_name_aliases: uncolorize(req.body.playername),
-																server_id : results.selectedserver._id,
-																sshack:true
-															});
-															newPlayersData.saveAsync()
+															if (cLoc.country && cLoc.city){
+																var newPlayersData = new PlayersData ({
+																	player_name: uncolorize(new_player_name),
+																	player_guid: req.body.playerid,
+																	player_steam_id: req.body.steamid,
+																	player_ip: req.body.address,
+																	player_country: getName(cLoc.country),
+																	player_country_short: cLoc.country.toLowerCase(),
+																	player_city: cLoc.city,
+																	player_name_aliases: uncolorize(req.body.playername),
+																	server_id : results.selectedserver._id,
+																	sshack:true
+																});
+																newPlayersData.saveAsync()
+															}
 														}
 													}
 												});											
