@@ -33,7 +33,7 @@ mongoose.connection.on('error', function(err) {
     log(chalk.cyan('Checking NodeJS Version'));
     nodeVersion();
     log(chalk.cyan('Getting Latest Files from GitHub and Installing npm Files'));
-    gitpull();
+    install();
     log(chalk.green('Finished'));
     log(chalk.green('Update Finished, you can now start your application!'));
     process.exit(1);
