@@ -36,7 +36,7 @@ mongoose.connection.on('error', function(err) {
     install();
     log(chalk.green('Finished'));
     log(chalk.green('Update Finished, you can now start your application!'));
-    process.exit(1);
+    exit();
 
 
 //######################################## FUNCTIONS ########################################//
