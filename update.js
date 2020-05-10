@@ -35,7 +35,6 @@ mongoose.connection.on('error', function(err) {
     log(chalk.cyan('Getting Latest Files from GitHub and Installing npm Files'));
     install();
     log(chalk.green('Finished'));
-    log(chalk.green('Update Finished, you can now start your application!'));
     exit();
 
 
