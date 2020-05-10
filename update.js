@@ -6,9 +6,6 @@ var fs = BluebirdPromise.promisifyAll(require("fs"));
 const chalk = require('chalk');
 const config = require('./app/config/config');
 
-const Chathistory =  require("./app/models/chathistory");
-const Plugins = require("./app/models/plugins");
-
 const log = console.log;
 
 var dbURI = "mongodb://" + 
@@ -32,51 +29,8 @@ mongoose.connection.on('error', function(err) {
 	};
 });
 
-
-// ######################## Plugins ########################################### //
-
-var plugins = [
-	new Plugins({
-		name:'Remove old Game Chat',
-		category:'cronjobs',
-		description:'Remove older chat messages from the website',
-		instructions:'<p>Activate or Deactivate Plugin Remove old Game Chat on your application (Status checkbox)<br></p><p>This plugin will remove all older InGame chat Messages (then x days) from the website, enter a valid number for days, do not use commas, points. The plugin will run once a day at 03:07</p>',
-		min_power:1,
-		require_cronjob:true,
-		cron_job_time_intervals:7,
-		status:false
-	})
-];
-
-
-
-
-
-//######################################## STARTING UPDATE ########################################//
-
-log(chalk.green('Update Cod4xWebadmin Application Started'));
-
-
-var obj = require('./app/config/config.json');
-
-obj.localmachine = { 
-    yes: '0',
-    country: 'Germany',
-    country_short: 'de'
-};
-
-obj.forumlink = { 
-    yes: '0',
-    name: 'Forum',
-    url: 'https://www.myforum.com/'
-};
-
-fs.writeFileAsync('app/config/config.json', JSON.stringify(obj, null, 2), function (err){
-    if (err) console.log(err);
-    log(chalk.cyan('Adding new lines to') + chalk.white(' app/config/config.json'));
-}).then(function(filewritten) {
-    log(chalk.green('Finished'));
-}).then(function(checknode) {
+log(chalk.green('Update Cod4xWebadmin Application Started'))
+.then(function(checknode) {
     log(chalk.cyan('Checking NodeJS Version'));
     nodeVersion();
 }).then(function(gtp) {
@@ -84,31 +38,10 @@ fs.writeFileAsync('app/config/config.json', JSON.stringify(obj, null, 2), functi
     gitpull();
 }).then(function(gitfinished) {
     log(chalk.green('Finished'));
-}).then(function(deletefromDB) {
-    Chathistory.find().deleteMany().exec();
-    log(chalk.yellow('Delete old chat messages if they exist- Finished'));
-}).then(function(updatedb) {
-    //log(chalk.yellow('No DB updates needed'));
-    
-    var done = 0;
-    for (var i = 0; i < plugins.length; i++){
-        plugins[i].save(function (err, result){
-            done++;
-            if(done === plugins.length){
-                log(chalk.yellow('Adding New Plugin - Remove Old Chat Messages'));
-                log(chalk.green('DB Update Finished'));
-                exit();
-            }
-        });
-    }   
-})
-/*
-.then(function(close) {
+}).then(function(close) {
     log(chalk.green('Update Finished, you can now start your application!'));
     process.exit(1);
-})
-*/
-.catch(function(e) {
+}).catch(function(e) {
     console.error(e.stack);
 });
 
