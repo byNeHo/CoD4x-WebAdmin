@@ -59,7 +59,7 @@ module.exports = {
 						var mapStartTime = search("g_mapStartTime", rules);
 						var shortversion = search("shortversion", rules);
 
-						if (config.localmachine.yes='1'){
+						if (config.localmachine.yes=="1"){
 							var short_county = config.localmachine.country_short;
 							var country_name = config.localmachine.country;
 						} else {
@@ -154,7 +154,7 @@ module.exports = {
 					var homedir=config.cod4_server_plugin.servers_root+"/cod4-"+req.body.port;
 					var configfile="server.cfg";
 
-					if (config.localmachine.yes='1'){
+					if (config.localmachine.yes=="1"){
 						var short_county = config.localmachine.country_short;
 						var country_name = config.localmachine.country;
 					} else {

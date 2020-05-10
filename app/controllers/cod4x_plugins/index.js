@@ -67,7 +67,7 @@ module.exports = {
 						} else if (!req.body.rcon){
 							return res.status(400).send('Error: Empty rcon value');
 						} else {
-							if (config.localmachine.yes='1'){
+							if (config.localmachine.yes=="1"){
 								var short_county = config.localmachine.country_short;
 								var country_name = config.localmachine.country;
 							} else {
