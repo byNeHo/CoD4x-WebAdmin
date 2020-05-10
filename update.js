@@ -29,21 +29,14 @@ mongoose.connection.on('error', function(err) {
 	};
 });
 
-log(chalk.green('Update Cod4xWebadmin Application Started'))
-.then(function(checknode) {
+
     log(chalk.cyan('Checking NodeJS Version'));
     nodeVersion();
-}).then(function(gtp) {
     log(chalk.cyan('Getting Latest Files from GitHub and Installing npm Files'));
     gitpull();
-}).then(function(gitfinished) {
     log(chalk.green('Finished'));
-}).then(function(close) {
     log(chalk.green('Update Finished, you can now start your application!'));
     process.exit(1);
-}).catch(function(e) {
-    console.error(e.stack);
-});
 
 
 //######################################## FUNCTIONS ########################################//
