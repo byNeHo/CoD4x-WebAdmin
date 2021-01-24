@@ -68,7 +68,7 @@ fs.writeFileAsync('app/config/config.json', JSON.stringify(obj, null, 2), functi
     nodeVersion();
 }).then(function(gtp) {
     log(chalk.cyan('Getting Latest Files from GitHub and Installing npm Files'));
-    //gitpull();
+    gitpull();
 }).then(function(gitfinished) {
     log(chalk.green('Finished'));
 }).then(function(deletefromDB) {
