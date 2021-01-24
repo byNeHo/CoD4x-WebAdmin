@@ -30,7 +30,7 @@ $(function(){
 	
 	socket.on('today users', function(todayusers){
 		$('#todayusers').empty().append('');
-		$todayusers.append('<strong>Todays Visitors: </strong>');
+		//$todayusers.append('');
 		todayusers.forEach(function (userstoday) {
 			getUsersToday(userstoday);
 			//console.log('Today: '+userstoday._id)

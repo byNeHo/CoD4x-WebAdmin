@@ -19,6 +19,44 @@ block content
 							.col-sm-12.col-md-12.m-t-30
 								.alert.alert-danger
 									| #{error_messages}
+					if (user)
+						if (results.checkshoutboxdisplay)
+							if (user.local.user_role >= results.checkshoutboxdisplay.min_power)
+								.card
+									.card-header
+										h2
+											span.zmdi.zmdi-comments.m-r-5
+											| #{t('frontpages:socketio.shoutbox_h2')}
+											small #{t('frontpages:socketio.shoutbox_h2_small')} (
+												span.c-blue #{results.checkshoutboxdisplay.min_power}
+												| )
+										if (user.local.user_role > 99)
+											ul.actions
+												li
+													a(href='/admin/shoutbox/delete-all')
+														i.zmdi.zmdi-delete
+									.card-body
+										.pre-scrollable.p-15#shoutbox
+											each message in results.shoutbox.reverse()
+												.mblm-item.mblm-item-left.w-100
+													a.pull-left.m-r-15(href='/members/'+message.shout_user_id)
+														img.lgi-img(src=message.shout_user_avatar, alt='avatar')
+													div
+														strong
+															| #{message.shout_user_name}
+														span.small.p-l-10.c-gray
+															| #{moment(message.createdAt).fromNow()}
+														span!=message.shout_user_msg
+										.row
+											.col-md-12.m-t-10.m-b-10
+												form(id='messageForm')
+													.input-group.p-10
+														.fg-line
+															input.form-control(id='message', type='text', placeholder=t('frontpages:socketio.shoutbox_input')+'...', autocomplete="off", required)
+														.input-group-btn
+															button.btn.bgm-lightblue.m-l-5#send(type='submit')
+																i.zmdi.zmdi-mail-send
+												.small.typing.p-l-15.p-b-15#typing
 					.row
 						each row in results.servers
 							.col-sm-6.col-md-4.animated.flipInX.forum-categories-block
@@ -37,8 +75,12 @@ block content
 												br
 												span.zmdi.zmdi-pin
 												|  #{t('frontpages:home.home_map')} #{row.map_playing}
-										a.bgm-lightblue.btn.btn-default.bg.btn-float.waves-effect.waves-circle.waves-float(href="/"+row.name_alias)
-											i.zmdi.zmdi-plus
+										if(theme=='dark')
+											a.bgm-black.btn.btn-default.bg.btn-float.waves-effect.waves-circle.waves-float(href="/"+row.name_alias)
+												i.zmdi.zmdi-plus
+										else
+											a.bgm-lightblue.btn.btn-default.bg.btn-float.waves-effect.waves-circle.waves-float(href="/"+row.name_alias)
+												i.zmdi.zmdi-plus
 									.card-body.forum-categories-block-body.card-padding
 										span.lgi-heading.pull-left.m-r-5
 											span.zmdi.zmdi-refresh
@@ -159,8 +201,14 @@ block content
 										.list-group-item
 											ul.lgi-attrs
 												li
-													i(class='m-r-5 flag-icon flag-icon-'+country.player_country_short)
-													| #{country._id}
+													i.m-r-5.pull-lef(class='m-r-5 flag-icon flag-icon-'+country.player_country_short)
+													a.pull-right(href='/players-data/search/'+country.player_country_short) #{country._id}
 												li
 													span.zmdi.zmdi-accounts.m-r-5
 													| #{country.count}
+block extrajs
+	if (user)
+		if (results.checkshoutboxdisplay)
+			script(src='/js/markdown-it.min.js')
+			script.
+				function scrollToBottom() {$('#shoutbox').scrollTop($('#shoutbox')[0].scrollHeight);}scrollToBottom();

@@ -261,5 +261,12 @@
 
     "unban_requests": {
         "unban_new_unban_request_model": "Neue unban Anfrage"
+    },
+
+    "socketio": {
+        "visitors_today": "Besucher heute",
+        "shoutbox_h2": "Shoutbox für unsere Mitglieder",
+        "shoutbox_h2_small": "Erforderliche Power für die Verwendung von Shoutbox",
+        "shoutbox_input": "Geben Sie eine Nachricht ein"
     }
 }

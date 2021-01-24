@@ -15,13 +15,14 @@ html(lang=t('language:language.code'))
 		link(rel='stylesheet', href='/vendors/bower_components/bootstrap-select/dist/css/bootstrap-select.css')
 		link(rel='stylesheet', href='/css/app_1.min.css')
 		link(rel='stylesheet', href='/css/app_2.min.css')
+		link(rel='stylesheet', href='/css/'+theme+'/theme.min.css')
 		link(rel='stylesheet', href='/css/custom.css')
 		link(href='/vendors/bower_components/chosen/chosen.css', rel='stylesheet')
 		link(href='/vendors/summernote/dist/summernote.css', rel='stylesheet')
 		link(href='/vendors/bower_components/flag-icon-css/css/flag-icon.min.css', rel='stylesheet')
 		block extrastuff
 	body
-		header#header.clearfix(data-ma-theme='blue')
+		header#header.clearfix(data-ma-theme=skin)
 			ul.h-inner
 				li.hi-trigger.ma-trigger(data-ma-action='sidebar-open', data-ma-target='#sidebar')
 					.line-wrap
@@ -37,6 +38,9 @@ html(lang=t('language:language.code'))
 						include ../partials/notifications.pug
 						li.dropdown
 							include ../partials/languages.pug
+						li.hidden-xs.ma-trigger(data-ma-action='sidebar-open', data-ma-target='#chat')
+							a(href='')
+								i.him-icon.zmdi.zmdi-tv-play
 						li.dropdown
 							a(data-toggle='dropdown', href='')
 								i.him-icon.zmdi.zmdi-more-vert
@@ -130,11 +134,17 @@ html(lang=t('language:language.code'))
 							a(href='/players-data')
 								i.zmdi.zmdi-accounts
 								|  #{t('navigation:main_navigation.players_data')}
+			aside#chat.sidebar
+				.lg-body.c-overflow
+					.chat-search
+						span.zmdi.zmdi-arrow-right.c-green
+						|  #{t('frontpages:server.server_join_server')}
+					.list-group
+						#serverjoins
 			block content
 		footer#footer.p-b-25
-			.container.container-alt
-				.col-md-12
-					ul#todayusers.list-inline.commaseparated.pull-left
+			.col-md-12
+				ul#todayusers.list-inline.commaseparated
 			| #{websitename} #{moment().format('YYYY')} #{t('general:footer.footer_rights')}
 			br
 			| Powered &amp; Designed by NeHo
@@ -161,12 +171,16 @@ html(lang=t('language:language.code'))
 			script(src='/vendors/bower_components/lightgallery/lib/lightgallery-all.min.js')
 			//if lt IE 9
 				script(src='/vendors/bower_components/jquery-placeholder/jquery.placeholder.min.js')
+			script(src='/js/socket.io.js')
 			script(src='/vendors/bower_components/sweetalert2/dist/sweetalert2.min.js')
 			block dropzonejs
 			script(src='/vendors/summernote/dist/summernote-updated.min.js')
 			script(src='/vendors/bower_components/chosen/chosen.jquery.js')
 			
 			script(src='/js/app.min.js')
+			script(src='/js/markdown-it.min.js')
+			if (user)
+				script(src='/js/client.js')
 			block extrajs
 			if (user)
 				block userjs

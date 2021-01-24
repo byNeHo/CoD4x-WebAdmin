@@ -5,6 +5,7 @@
  */
 
 var server = require('../server');
+const io = require('../app/socket/io');
 const cronjobs = require('../app/middleware/cronjob');
 const debug = require('debug')('localhost:server');
 const http = require('http');
@@ -29,6 +30,7 @@ var server = http.createServer(server);
  */
 
 server.listen(port);
+io.attach(server);
 server.on('error', onError);
 server.on('listening', onListening);
 

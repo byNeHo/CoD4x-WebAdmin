@@ -1,0 +1,51 @@
+extends ../../layout/home
+
+block content
+	ol.breadcrumb
+		li
+			a(href='/') #{t('navigation:main_navigation.home')}
+		li.active #{t('navigation:main_navigation.players_data')}
+	section#content
+		.container.container-alt
+			.card
+				.list-group.lg-odd-black
+					.action-header.clearfix
+						.ah-label.hidden-xs #{t('navigation:main_navigation.players_data')}
+						.ah-search
+							form(method='get', action='/players-data/search/player')
+								input.ahs-input(type='text', name='sq', placeholder=t('frontpages:players_data.players_data_name')+', '+t('frontpages:players_data.players_data_guid'))
+								i.ahs-close(data-ma-action='action-header-close') ×
+						ul.actions
+							li
+								a(href='', data-ma-action='action-header-open')
+									i.zmdi.zmdi-search
+					each player in results.paginated.docs
+						.list-group-item.media
+							.pull-left
+								span(class='flag-icon flag-icon-'+player.player_country_short)
+							.pull-right
+								.actions.dropdown
+									a(href='', data-toggle='dropdown', aria-expanded='true')
+										i.zmdi.zmdi-more-vert
+									ul.dropdown-menu.dropdown-menu-right
+										li
+											a(href="/players-data/"+player.id) #{player.player_name}
+										if (user.local.user_role > 99)
+											li
+												a(href="/admin/players-data/delete/"+player.id) #{t('frontpages:players_data.players_data_delete')}
+							.media-body
+								.lgi-heading
+									a(href="/players-data/"+player.id) #{player.player_name}
+								small.lgi-text
+									if (user.local.user_role > 1)
+										span.c-amber.zmdi.zmdi-star-circle.m-r-5
+										| #{player.player_guid}
+										span.m-l-15.c-grey.zmdi.zmdi-steam.m-r-5
+										| #{player.player_steam_id}
+									else
+										span.c-amber.zmdi.zmdi-star-circle.m-r-5
+										| #{t('frontpages:players_data.players_data_only_for_server_admins')}
+									span.c-green.zmdi.zmdi-circle.m-l-15.m-r-5
+									| #{moment(player.updatedAt).fromNow()}
+				include ../../partials/pagination.pug
+				.clearfix

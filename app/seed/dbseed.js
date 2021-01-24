@@ -247,6 +247,16 @@ var plugins = [
 		require_cronjob:true,
 		cron_job_time_intervals:7,
 		status:false
+	}),
+	new Plugins({
+		name:'Shoutbox',
+		category:'shoutbox',
+		description:'Shoutbox is a chat-like feature that allows people to quickly leave messages on the website, visible on the Home page',
+		instructions:'Shoutbox is a chat-like feature that allows people to quickly leave messages on the website, visible on the Home page. If the minimum power is set higher than 1 then only users with enough power will be able to read/use the shoutbox.',
+		min_power:1,
+		require_cronjob:false,
+		cron_job_time_intervals:2,
+		status:false
 	})
 ];
 

@@ -23,6 +23,7 @@ module.exports = function(app, passport, io){
 	app.get('/banlist',home.getBanned);
 	app.get('/players-data',isLoggedIn, home.getPlayers);
 	app.get('/players-data/search/player?:sq',isLoggedIn, home.getSearchPlayers);
+	app.get('/players-data/search/:player_country_short',isLoggedIn, home.getSearchPlayersbyCountry);
 	app.get('/players-data/:id',isLoggedIn, home.getplayerById);
 	app.get('/admin-applications', isLoggedIn, home.getAdminApp);
 	app.post('/admin-applications', isLoggedIn, home.InsertNewAdminApp);

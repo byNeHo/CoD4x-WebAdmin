@@ -43,6 +43,7 @@ const PlayersData = require("../../models/players_db");
 const Playerstat = require("../../models/player_stats");
 const Systemlogs = require("../../models/system_logs");
 const Chathistory = require("../../models/chathistory");
+const Shoutboxes = require("../../models/shoutbox");
 const config = require('../../config/config');
 
 const mongoosePaginate = require('mongoose-paginate-v2');
@@ -62,6 +63,8 @@ module.exports = {
 			tempbans: Tempbans.find({$or:[ {'admin_command':'tempban'}, {'admin_command':'chat'}, {'admin_command':'mute'} ]}, 'admin_id player_name admin_name createdAt admin_command').sort({ 'createdAt': -1}).limit(3).execAsync(),
 			serverbans: Bans.find({}, 'player_name admin_name createdAt').sort({ 'createdAt': -1}).limit(3).execAsync(),
 			serverunbans: Unbans.find({}, 'player_name admin_name createdAt').sort({ 'createdAt': -1}).limit(3).execAsync(),
+			shoutbox: Shoutboxes.find({}).sort({ 'createdAt': -1}).limit(30).execAsync(),
+			checkshoutboxdisplay: Plugins.findOne({'status':true, 'name_alias': 'shoutbox'}).execAsync(),
 			adminconversations: AdminConversation.countDocuments().execAsync(),
 			getcountries: PlayersData.aggregate(aggregatorOpts).execAsync()
 		}).then (function(results){
@@ -201,6 +204,26 @@ module.exports = {
 			var translation = req.t("pagetitles:pageTitle.get_players");
 			var paginationlinks = pagination(results.paginated.page, results.paginated.totalPages);
 			res.render('frontpage/playersdata/search-results.pug', {title: translation, results:results, paginationlinks:paginationlinks});
+		}).catch (function(err){
+			console.log(err);
+			res.redirect('back');
+		});
+	},
+
+	getSearchPlayersbyCountry: function(req, res, next) {
+		const curpage = +req.query.page || 1;
+		var options = {
+			page: curpage,
+			limit: 20,
+			select: 'player_name updatedAt player_country_short player_guid player_steam_id',
+			sort: {'updatedAt': -1}
+		};
+		BluebirdPromise.props({
+			paginated: PlayersData.paginate({'player_country_short':req.params.player_country_short}, options)
+		}).then (function(results){
+			var translation = req.t("pagetitles:pageTitle.get_players");
+			var paginationlinks = pagination(results.paginated.page, results.paginated.totalPages);
+			res.render('frontpage/playersdata/search-results-country.pug', {title: translation, results:results, paginationlinks:paginationlinks});
 		}).catch (function(err){
 			console.log(err);
 			res.redirect('back');
@@ -983,9 +1006,6 @@ module.exports = {
 	  	});
 	},
 
-	//top_players: Playerstat.find({'server_alias':req.params.name_alias}, 'player_score player_kills player_deaths player_name').sort({player_score: 'desc', player_kills: 'desc'}).limit(25).execAsync()
-	// 'server_alias':req.params.name_alias
-	
 	getPlayerStats: function(req, res, next) {
 		const curpage = +req.query.page || 1;
 		var query   = {};

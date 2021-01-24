@@ -14,11 +14,17 @@ module.exports = function(router, passport){
 	const tempbandurations = require('../controllers/admin/tempbandurations');
 	const servercommands = require('../controllers/admin/servercommands');
 	const cod4x = require('../controllers/admin/cod4x');
+	const skin = require('../controllers/admin/skin');
+	const shoutbox = require( '../controllers/admin/shoutbox' );
 	
 	
 
 	router.use(csrfProtection);
 	router.use(getLanguageForMoment);
+	
+	/*###################### SHOUTBOX ##################################################*/
+
+	router.get('/shoutbox/delete-all', requireRole(100), isLoggedIn, shoutbox.ShoutboxRemoveAll);
 
 	/*###################### SERVERS ##################################################*/
 
@@ -113,6 +119,10 @@ module.exports = function(router, passport){
 
 	/*###################### DELETE ALL PLAYER STATS ##################################################*/
 	router.get('/clear-player-stats/:name_alias', requireRole(100), isLoggedIn, index.RemoveAllPlayerStats);
+
+	/*###################### SKIN ##################################################*/
+	router.get('/skin', requireRole(100), isLoggedIn, skin.getSkin);
+	router.post('/skin', requireRole(100), isLoggedIn, skin.UpdateSkin);
 };
 
 /*RESTRICT ACCESS BY USER POWER*/

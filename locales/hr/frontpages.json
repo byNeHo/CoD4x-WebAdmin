@@ -221,7 +221,7 @@
 
     "server": {
         "server_current_map": "Trenutna mapa",
-        "server_join_server": "Poveći se na Server, CoD4x potreban",
+        "server_join_server": "Poveži se na Server, CoD4x potreban",
         "server_map_started": "Mapa startana",
         "server_server_details": "Server Detalji",
         "server_slots": "Slotova",
@@ -261,5 +261,12 @@
 
     "unban_requests": {
         "unban_new_unban_request_model": "Novi Unban Zahtjev"
+    },
+
+    "socketio": {
+        "visitors_today": "Posjetitelji danas",
+        "shoutbox_h2": "Shoutbox za Naše članove",
+        "shoutbox_h2_small": "Potrebna snaga za upotrebu Shoutboxa",
+        "shoutbox_input": "Upišite poruku"
     }
 }

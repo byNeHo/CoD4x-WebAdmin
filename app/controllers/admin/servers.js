@@ -257,6 +257,8 @@ module.exports = {
 							out: console.log.bind('Symlink main/localized_english_iw06.iwd')
 						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/xbase_00.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/xbase_00.iwd', {
 							out: console.log.bind('Symlink main/xbase_00.iwd')
+						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/main/jcod4x_00.iwd '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/main/jcod4x_00.iwd', {
+							out: console.log.bind('Symlink main/jcod4x_00.iwd')
 						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/miles '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/miles', {
 							out: console.log.bind('Symlink miles directory')
 						}).exec('ln -s '+config.cod4_server_plugin.servers_root+'/main-server-files/zone '+config.cod4_server_plugin.servers_root+'/cod4-'+req.body.port+'/zone', {

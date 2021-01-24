@@ -1,0 +1,54 @@
+extends ../../layout/home
+
+block content
+		ol.breadcrumb
+			li
+				a(href='/') #{t('navigation:main_navigation.home')}
+			li
+				a(href='/admin/home') Admin
+			li.active Skin Settings
+		section#content
+			.container.container-alt
+				.text-center
+					h2.f-400 Skin Settings 
+				.clearfix
+				.row.m-t-25
+					.col-md-12
+						if (success_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-success
+										| #{success_messages}
+						if (error_messages.length > 0)
+							.row
+								.col-sm-12.col-md-12.m-t-30
+									.alert.alert-danger
+										| #{error_messages}
+						.row
+							.col-md-12
+								form(method='post', action='/admin/skin')
+									.card
+										.card-header
+											h2 Theme and Header Background
+										.card-body.card-padding
+												.row
+													.col-md-12
+														h5 Choose Skin and Header color
+														.row
+															.col-md-4
+																.select.fg-line
+																	select.form-control(name='theme', required)
+																		option(value='') Theme
+																		option(value='dark') Dark
+																		option(value='light') Light
+															.col-md-4
+																.select.fg-line
+																	select.form-control(name='header', required)
+																		option(value='') Header
+																		each row in results
+																			option(value=row.name) #{row.name}
+									.row.m-t-15
+										.col-md-12
+											input(type='hidden', name='_csrf', value=csrfToken)
+											button.btn.btn-primary.btn-block.waves-effect(type='submit') Save Settings
+										.clearfix

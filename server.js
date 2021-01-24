@@ -45,6 +45,7 @@ mongoose.connection.on('error', function(err) {
 });
 require('./app/config/passport')(passport);
 app.use('/flags', express.static(__dirname + '/public/vendors/bower_components/flag-icon-css/flags')); // redirect CSS
+app.use('/js', express.static(__dirname + '/node_modules/socket.io/client-dist')); // redirect JS
 app.use('/js', express.static(__dirname + '/node_modules/markdown-it/dist')); // redirect JS
 // view engine setup
 app.set('views', path.join(__dirname, 'app/views'));
@@ -117,9 +118,12 @@ app.use(function(req, res, next){
   res.locals.forumlink_enabled = config.forumlink.yes;
   res.locals.forumlink_name = config.forumlink.name;
   res.locals.forumlink_url = config.forumlink.url;
+  res.locals.skin = config.skin.header;
+  res.locals.theme = config.skin.theme;
 	next();
 });
 
+const io = require('./app/socket/io');
 
 // Routes ======================================================================
 const rconcmd = express.Router();
