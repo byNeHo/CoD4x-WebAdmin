@@ -24,14 +24,13 @@ const Servers = require("../../models/servers");
 const User = require("../../models/user");
 const Plugins = require("../../models/plugins");
 const Maps = require("../../models/maps");
-const Rconcommand = require("../../models/server_commands");
+const ServerCommands = require("../../models/server_commands");
 const ExtraRcon = require("../../models/extra_rcon_commands");
-const Tempbandurations = require("../../models/tempban_duration");
 const Tempbans = require("../../models/tempbans");
+const Tempbandurations = require("../../models/tempban_duration");
 const ServerScreenshots = require("../../models/server_new_screenshots");
 const Bans = require("../../models/bans");
 const Unbans = require("../../models/unbans");
-const TempBans = require("../../models/tempbans");
 const Cheaterreports = require("../../models/cheater_reports");
 const Notifications = require("../../models/notifications");
 const Globalnotifications = require("../../models/global_notifications");
@@ -134,19 +133,6 @@ module.exports = {
 		});
 	},
 
-	getBanned: function(req, res, next) {
-		BluebirdPromise.props({
-			serverbans: Bans.find({}, 'player_name createdAt admin_name').sort({ 'updatedAt': -1}).execAsync(),
-			servertempbans: TempBans.find({}, 'admin_command player_name createdAt admin_name expire').sort({ 'updatedAt': -1}).execAsync()
-		}).then (function(results){
-			var translation = req.t("pagetitles:pageTitle.banlist");
-			res.render('frontpage/banned/index.pug', {title: translation, results:results});
-		}).catch (function(err){
-			console.log(err);
-			res.redirect('back');
-		});
-	},
-
 	getBanById: function(req, res, next) {
 		BluebirdPromise.props({
 			getbanned: Bans.findOne({'_id':req.params.id}).execAsync(),
@@ -160,6 +146,98 @@ module.exports = {
 				req.flash('error_messages', req.t("notifications:global.error_page_removed"));
 				res.redirect('back');
 			}				
+		}).catch (function(err){
+			console.log(err);
+			res.redirect('back');
+		});
+	},
+
+	getPermbans: function(req, res, next) {
+		const curpage = +req.query.page || 1;
+		var query   = {};
+		var options = {
+			page: curpage,
+			limit: 20,
+			select: 'player_name createdAt admin_name',
+			sort: {'updatedAt': -1}
+		};
+
+		BluebirdPromise.props({
+			power: ServerCommands.findOne({'command_name': 'unban'}, 'req_power'),
+			paginated: Bans.paginate({}, options)
+		}).then (function(results){
+			var translation = req.t("frontpages:banned.banned_tab_permanentbans");
+			var paginationlinks = pagination(results.paginated.page, results.paginated.totalPages);
+			res.render('frontpage/banned/permbans.pug', {title: translation, results:results, paginationlinks:paginationlinks});
+		}).catch (function(err){
+			console.log(err);
+			res.redirect('back');
+		});
+	},
+
+	getSearchPermbans: function(req, res, next) {
+		var sw = new RegExp(req.query.sq, 'i');
+		var search = {$or:[ {'player_name':sw}, {'player_guid':sw}]};
+		const curpage = +req.query.page || 1;
+		var options = {
+			page: curpage,
+			limit: 20,
+			select: 'player_name createdAt admin_name',
+			sort: {'updatedAt': -1}
+		};
+		BluebirdPromise.props({
+			power: ServerCommands.findOne({'command_name': 'unban'}, 'req_power'),
+			paginated: Bans.paginate(search, {}, options)
+		}).then (function(results){
+			var translation = req.t("frontpages:banned.banned_tab_permanentbans");
+			var paginationlinks = pagination(results.paginated.page, results.paginated.totalPages);
+			res.render('frontpage/banned/search-permbans.pug', {title: translation, results:results, paginationlinks:paginationlinks});
+		}).catch (function(err){
+			console.log(err);
+			res.redirect('back');
+		});
+	},
+
+	getTempbans: function(req, res, next) {
+		const curpage = +req.query.page || 1;
+		var query   = {};
+		var options = {
+			page: curpage,
+			limit: 20,
+			select: 'admin_command player_name createdAt admin_name expire admin_message',
+			sort: {'updatedAt': -1}
+		};
+
+		BluebirdPromise.props({
+			power: ServerCommands.findOne({'command_name': 'unban'}, 'req_power'),
+			paginated: Tempbans.paginate({}, options)
+		}).then (function(results){
+			var translation = req.t("frontpages:banned.banned_tab_temp_bans");
+			var paginationlinks = pagination(results.paginated.page, results.paginated.totalPages);
+			res.render('frontpage/banned/tempbans.pug', {title: translation, results:results, paginationlinks:paginationlinks});
+		}).catch (function(err){
+			console.log(err);
+			res.redirect('back');
+		});
+	},
+
+	getSearchTempbans: function(req, res, next) {
+		var sw = new RegExp(req.query.sq, 'i');
+		var search = {$or:[ {'player_name':sw}, {'player_guid':sw}]};
+		const curpage = +req.query.page || 1;
+		var options = {
+			page: curpage,
+			limit: 20,
+			select: 'admin_command player_name createdAt player_guid admin_name expire admin_message',
+			sort: {'updatedAt': -1}
+		};
+		BluebirdPromise.props({
+			power: ServerCommands.findOne({'command_name': 'unban'}, 'req_power'),
+			paginated: Tempbans.paginate(search, {}, options)
+		}).then (function(results){
+			var translation = req.t("frontpages:banned.banned_tab_temp_bans");
+			var paginationlinks = pagination(results.paginated.page, results.paginated.totalPages);
+			res.render('frontpage/banned/search-tempbans.pug', {title: translation, results:results, paginationlinks:paginationlinks});
 		}).catch (function(err){
 			console.log(err);
 			res.redirect('back');
@@ -254,7 +332,7 @@ module.exports = {
 		BluebirdPromise.props({
 			user: User.findOne({'_id': req.params.id}).populate('local.admin_on_servers', 'name _id name_alias').execAsync(),
 			permbans: Bans.find({'admin_id': req.params.id}).sort({ 'createdAt': -1}).limit(10).execAsync(),
-			tempbans: TempBans.find({'admin_id': req.params.id}).sort({ 'createdAt': -1}).limit(10).execAsync(),
+			tempbans: Tempbans.find({'admin_id': req.params.id}).sort({ 'createdAt': -1}).limit(10).execAsync(),
 			unbans: Unbans.find({'admin_id': req.params.id}).sort({ 'createdAt': -1}).limit(10).execAsync()
 		}).then (function(results){
 			if (results.user.steam.id){
@@ -1085,6 +1163,7 @@ module.exports = {
 				urls: [config.website_url,
 					{ url: '/members', changefreq: 'daily', priority: 0.3 },
 					{ url: '/banlist', changefreq: 'daily',  priority: 0.7 },
+					{ url: '/tempbans', changefreq: 'daily',  priority: 0.7 },
 				],
 			});
 			results.sitemap_servers.forEach(function(server) {

@@ -1,0 +1,59 @@
+extends ../../layout/home
+
+block content
+	ol.breadcrumb
+		li
+			a(href='/') #{t('navigation:main_navigation.home')}
+		li.active #{t('frontpages:banned.banned_tab_temp_bans')}
+	section#content
+		.container.container-alt
+			.card
+				.list-group.lg-odd-black
+					.action-header.clearfix
+						.ah-label.hidden-xs #{t('frontpages:banned.banned_tab_temp_bans')}
+						.ah-search
+							form(method='get', action='/tempbans/search')
+								input.ahs-input(type='text', name='sq', placeholder=t('frontpages:players_data.players_data_name')+', '+t('frontpages:players_data.players_data_guid'))
+								i.ahs-close(data-ma-action='action-header-close') ×
+						ul.actions
+							li
+								a(href='', data-ma-action='action-header-open')
+									i.zmdi.zmdi-search
+					each tempban in results.paginated.docs
+						.list-group-item.media
+							.pull-left
+								if (tempban.admin_command=='chat')
+									span.label.label-default #{t('frontpages:banned.banned_card_cm')}
+								else if (tempban.admin_command=='mute')
+									span.label.label-info #{t('frontpages:banned.banned_card_vm')}
+								else
+									span.label.label-warning #{t('frontpages:banned.banned_card_tb')}
+							.pull-right
+								if (user)
+									if (user.local.user_role >= results.power.req_power)
+										.actions.dropdown
+											a(href='', data-toggle='dropdown', aria-expanded='true')
+												i.zmdi.zmdi-more-vert
+											ul.dropdown-menu.dropdown-menu-right
+												if (moment()>tempban.expire)
+													li
+														a(href='#') #{t('frontpages:banned.banned_card_no_action_needed')}
+												else
+													li
+														a(href='/rconcmd/unban-tempban/'+tempban._id) #{t('frontpages:banned.banned_card_unban')}
+							.media-body
+								.lgi-heading
+									span.c-blue #{tempban.player_name}
+								small.lgi-text
+									span.c-grey.zmdi.zmdi-account.m-r-5
+									| #{tempban.admin_name}
+									if (moment()>tempban.expire)
+										span.m-l-15.c-gray #{t('frontpages:banned.banned_card_expired')}
+									else
+										span.m-l-15.c-red #{moment(tempban.expire).format('MMMM Do YYYY, h:mm')}
+									else
+										span.c-amber.zmdi.zmdi-star-circle.m-r-5
+										| #{t('frontpages:players_data.players_data_only_for_server_admins')}
+									span.c-orange.zmdi.zmdi-comment-text.m-l-15.m-r-5
+									| #{tempban.admin_message}
+				.clearfix

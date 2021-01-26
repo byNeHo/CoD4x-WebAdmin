@@ -20,7 +20,10 @@ module.exports = function(app, passport, io){
 	app.get('/banlist/:id',isLoggedIn, home.getBanById);
 	app.get('/members/:id',isLoggedIn, home.getMemberById);
 	app.get('/members',home.getMembers);
-	app.get('/banlist',home.getBanned);
+	app.get('/banlist',home.getPermbans);
+	app.get('/banlist/player/search?:sq',isLoggedIn, home.getSearchPermbans);
+	app.get('/tempbans',home.getTempbans);
+	app.get('/tempbans/search?:sq',isLoggedIn, home.getSearchTempbans);
 	app.get('/players-data',isLoggedIn, home.getPlayers);
 	app.get('/players-data/search/player?:sq',isLoggedIn, home.getSearchPlayers);
 	app.get('/players-data/search/:player_country_short',isLoggedIn, home.getSearchPlayersbyCountry);

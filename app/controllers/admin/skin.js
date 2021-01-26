@@ -36,7 +36,7 @@ module.exports = {
                 if (err) return console.log(err);
             });
 		}).then(function(success) {
-			req.flash('success_messages', 'Skin successfully edited');
+			req.flash('success_messages', 'Skin successfully edited, restart your application to take effect');
 			res.redirect('back');
 		}).catch(function(err) {
 			console.log("There was an error: " +err);

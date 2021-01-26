@@ -3,6 +3,7 @@ const BluebirdPromise = require("bluebird");
 BluebirdPromise.promisifyAll(require("mongoose"));
 const Schema = mongoose.Schema;
 const slug = require('mongoose-slug-generator');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 mongoose.plugin(slug);
 
@@ -20,5 +21,5 @@ const TempBansSchema = new Schema({
     admin_steam_id: {type: String, required: true},
     expire: { type: Date}
 }, { timestamps: true });
-
+TempBansSchema.plugin(mongoosePaginate);
 module.exports = mongoose.model('TempBans', TempBansSchema);

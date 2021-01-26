@@ -1,0 +1,43 @@
+extends ../../layout/home
+
+block content
+	ol.breadcrumb
+		li
+			a(href='/') #{t('navigation:main_navigation.home')}
+		li.active #{t('frontpages:banned.banned_tab_permanentbans')}
+	section#content
+		.container.container-alt
+			.card
+				.list-group.lg-odd-black
+					.action-header.clearfix
+						.ah-label.hidden-xs #{t('frontpages:banned.banned_tab_permanentbans')}
+						.ah-search
+							form(method='get', action='/banlist/player/search')
+								input.ahs-input(type='text', name='sq', placeholder=t('frontpages:players_data.players_data_name')+', '+t('frontpages:players_data.players_data_guid'))
+								i.ahs-close(data-ma-action='action-header-close') ×
+						ul.actions
+							li
+								a(href='', data-ma-action='action-header-open')
+									i.zmdi.zmdi-search
+					each permban in results.paginated.docs
+						.list-group-item.media
+							.pull-left
+								span.label.label-danger PB
+							.pull-right
+								if (user)
+									if (user.local.user_role >= results.power.req_power)
+										.actions.dropdown
+											a(href='', data-toggle='dropdown', aria-expanded='true')
+												i.zmdi.zmdi-more-vert
+											ul.dropdown-menu.dropdown-menu-right
+												li
+													a(href='/rconcmd/unban/'+permban._id) #{t('frontpages:banned.banned_card_unban')} #{permban.player_name}
+							.media-body
+								.lgi-heading
+									a(href="/banlist/"+permban.id) #{permban.player_name}
+								small.lgi-text
+									span.zmdi.zmdi-account.m-r-5
+									| #{permban.admin_name}
+									span.m-l-15.c-grey #{moment(permban.createdAt).format('MMMM Do YYYY, h:mm')}
+				include ../../partials/pagination.pug
+				.clearfix

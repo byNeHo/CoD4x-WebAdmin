@@ -3,6 +3,7 @@ const BluebirdPromise = require("bluebird");
 BluebirdPromise.promisifyAll(require("mongoose"));
 const Schema = mongoose.Schema;
 const slug = require('mongoose-slug-generator');
+const mongoosePaginate = require('mongoose-paginate-v2');
 
 mongoose.plugin(slug);
 
@@ -24,5 +25,5 @@ const BansSchema = new Schema({
     cheater_reporter_id:  {type: String},
     unban_request_denied: { type: Boolean}
 }, { timestamps: true });
-
+BansSchema.plugin(mongoosePaginate);
 module.exports = mongoose.model('Bans', BansSchema);

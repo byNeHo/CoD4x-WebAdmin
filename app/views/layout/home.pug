@@ -128,7 +128,11 @@ html(lang=t('language:language.code'))
 					li
 						a(href='/banlist')
 							i.zmdi.zmdi-thumb-down
-							|  #{t('navigation:main_navigation.banlist')}
+							|  #{t('frontpages:banned.banned_tab_permanentbans')}
+					li
+						a(href='/tempbans')
+							i.zmdi.zmdi-time
+							|  #{t('frontpages:banned.banned_tab_temp_bans')}
 					if (user)
 						li
 							a(href='/players-data')
@@ -143,8 +147,9 @@ html(lang=t('language:language.code'))
 						#serverjoins
 			block content
 		footer#footer.p-b-25
-			.col-md-12
-				ul#todayusers.list-inline.commaseparated
+			if (user)
+				.col-md-12
+					ul#todayusers.list-inline.commaseparated
 			| #{websitename} #{moment().format('YYYY')} #{t('general:footer.footer_rights')}
 			br
 			| Powered &amp; Designed by NeHo
@@ -179,8 +184,7 @@ html(lang=t('language:language.code'))
 			
 			script(src='/js/app.min.js')
 			script(src='/js/markdown-it.min.js')
-			if (user)
-				script(src='/js/client.js')
+			script(src='/js/client.js')
 			block extrajs
 			if (user)
 				block userjs
