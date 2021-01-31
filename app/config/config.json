@@ -71,5 +71,9 @@
     "yes": "0",
     "name": "Forum",
     "url": "https://www.myforumwebsite.com"
+  },
+  "skin": {
+    "theme": "light",
+    "header": "lightblue"
   }
 }
