@@ -51,7 +51,7 @@
     "password": "putty_password"
   },
   "cod4_server_plugin": {
-    "download_link": "http://files.linuxgsm.com/CallOfDuty4/cod4x18_dedrun.tar.bz2",
+    "download_link": "https://cod4.ax-servers.hu/cod4x18_dedrun.tar.bz2",
     "servers_root": "/home/linux_user"
   },
   "cod4x_compile": {
