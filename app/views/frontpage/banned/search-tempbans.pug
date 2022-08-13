@@ -51,9 +51,6 @@ block content
 										span.m-l-15.c-gray #{t('frontpages:banned.banned_card_expired')}
 									else
 										span.m-l-15.c-red #{moment(tempban.expire).format('MMMM Do YYYY, h:mm')}
-									else
-										span.c-amber.zmdi.zmdi-star-circle.m-r-5
-										| #{t('frontpages:players_data.players_data_only_for_server_admins')}
 									span.c-orange.zmdi.zmdi-comment-text.m-l-15.m-r-5
 									| #{tempban.admin_message}
 				.clearfix
