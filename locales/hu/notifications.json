@@ -1,0 +1,61 @@
+{
+    "global": {
+        "error_page_removed": "Sorry, that page does not exist, it may be removed in the mean time!",
+        "error_script": "There was an error, please try again or Contact the script Owner",
+        "error_no_permission": "You have no Permission to visit this page. Required power is:"
+    },
+
+    "index": {
+        "ScreenshotsRemove_error": "Screenshots not deleted! There was an error: {{display_error}}",
+        "ScreenshotsRemove_success": "Screenshots successfully deleted!",
+        "ScreenshotsRemove_error_permission":"Screenshots not deleted! Minimum power for screenshots delete is: {{req_power}}",
+
+        "InsertNewCheaterReport_error_already_banned": "is already banned!",
+        "InsertNewCheaterReport_error_already_reported": "is already reported! Please be patient until one of our Admins check the existing Cheater Report!",
+        "InsertNewCheaterReport_success_report_sent": "Cheater Report for {{getPlayer}} successfully sent!",
+        "InsertNewCheaterReport_error_no_screenshot": "This Screenshot does not exist, it may be removed in the mean time or the player is already banned.",
+
+        "InsertNewunbanRequest_success_sent": "Unban Request for {{getPlayer}} successfully sent!",
+        "InsertNewunbanRequest_error_ban_not_found": "This Ban doesnt exist, it may be removed in the mean time or the player is already unbanned.",
+        "InsertNewunbanRequest_error_already_sent": "Unban Request already sent, wait until Server Admins make a decision, you will be informed!",
+
+        "CheaterReportRemove_declined_msg": "Cheater Report successfully deleted. Player is not banned, cheater reporter has been informed on our decision!",
+        
+        "UnbanRequestRemove_declined_msg": "Unban Request Declined, Player is not Unbanned! Reporter will be informed on our decision!",
+
+        "GlobalNotificationsRemove_cleaned": "Notifications successfully cleaned!",
+
+        "getAdminApp_already_admin": "You Are already an Admin!",
+        "InsertNewAdminApp": "New Admin Application",
+
+        "InsertNewAdminApp_already_admin": "You Are already an Admin!",
+        "InsertNewAdminApp_cheater_reports_count_error": "You need at least {{count_CheaterReports}} cheater Reports!",
+        "InsertNewAdminApp_success_sent": "Admin Application Successfully Sent. You will be informed on our decision within 7 days!",
+
+        "AdminAppRemove_declined": "Admin Application Declined. Player is informed about our Decision!",
+
+        "AdminAppAccept_accepted": "Admin Application Accepted. Player is informed about our Decision!",
+
+        "AdminAppConversationStart_started": "Admin Application Discussion Started Successfully!",
+
+        "getConversations_restricted_access": "Only Server Admins can Visit this page!",
+
+        "getKGBplugin_restricted_access": "You have no Admin rights on this Server!",
+        "getKGBplugin_restricted_access_low_power": "Higher Admin Power required to use KGB Host Plugin!",
+        "getKGBplugin_restricted_access_plugin_disabled": "KGB Host Plugin is disabled!",
+
+        "PluginLocalServerStart_success_server_started": "Server successfully started!",
+        "PluginLocalServerStart_restricted_access": "You have no Admin rights on this Server!",
+        "PluginLocalServerStart_restricted_access_low_power": "Higher Admin Power required to use Start-Stop-Server Plugin!",
+        "PluginLocalServerStart_restricted_access_only_local_server": "Start-Stop-Server Plugin can be only used on Local CoD4x Servers!",
+        "PluginLocalServerStart_restricted_access_plugin_disabled": "Start-Stop-Server Plugin is disabled!",
+        "PluginLocalServerStart_admin_logs": "{{get_ServerName}} started by {{get_UserName}}",
+
+        "PluginLocalServerStop_success_server_started": "Server successfully stopped!",
+        "PluginLocalServerStop_restricted_access": "You have no Admin rights on this Server!",
+        "PluginLocalServerStop_restricted_access_low_power": "Higher Admin Power required to use Start-Stop-Server Plugin!",
+        "PluginLocalServerStop_restricted_access_only_local_server": "Start-Stop-Server Plugin can be only used on Local CoD4x Servers!",
+        "PluginLocalServerStop_restricted_access_plugin_disabled": "Start-Stop-Server Plugin is disabled!",
+        "PluginLocalServerStop_admin_logs": "{{get_ServerName}} stopped by {{get_UserName}}"
+    }
+}
