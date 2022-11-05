@@ -7,7 +7,6 @@ const Rcon = require('srcds-rcon');
 const csrf = require('csurf');
 const S = require('underscore.string');
 const replaceString = require('replace-string');
-const array = require('array');
 const fs = require('fs');
 const multiparty = require('multiparty');
 const uniqueString = require('unique-string');
