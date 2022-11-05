@@ -13,7 +13,7 @@ const options = {
 			  config.db.host + ":" + 
 			  config.db.port + "/" + 
 			  config.db.name;
-  mongoose.connect(dbURI, options);
+  mongoose.connect(dbURI);
   
   // Throw an error if the connection fails
   mongoose.connection.on('error', function(err) {
