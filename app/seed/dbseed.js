@@ -1,22 +1,26 @@
 const mongoose = require('mongoose');
 mongoose.BluebirdPromise = require('bluebird');
 const config = require('../config/config');
-var dbURI = "mongodb://" + 
-			encodeURIComponent(config.db.username) + ":" + 
-			encodeURIComponent(config.db.password) + "@" + 
-			config.db.host + ":" + 
-			config.db.port + "/" + 
-			config.db.name;
-mongoose.connect(dbURI, {useNewUrlParser:true, useUnifiedTopology: true});
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
 
-// Throw an error if the connection fails
-mongoose.connection.on('error', function(err) {
-	if(err){
-		console.log('Your mongoDB Username, Password is wrong in file app/config/config.json . Could not connect to database! '+err);
-	};
-});
+
+const options = {
+	useNewUrlParser:true,
+	useUnifiedTopology: true
+  };
+  var dbURI = "mongodb://" + 
+			  encodeURIComponent(config.db.username) + ":" + 
+			  encodeURIComponent(config.db.password) + "@" + 
+			  config.db.host + ":" + 
+			  config.db.port + "/" + 
+			  config.db.name;
+  mongoose.connect(dbURI, options);
+  
+  // Throw an error if the connection fails
+  mongoose.connection.on('error', function(err) {
+	  if(err){
+		  console.log('Your mongoDB Username, Password is wrong in file app/config/config.json . Could not connect to database! '+err);
+	  };
+  });
 
 const User = require("../models/user");
 const ExtraRcon = require("../models/extra_rcon_commands");
@@ -193,6 +197,16 @@ var plugins = [
 		category:'julia',
 		description:'Kick Screenshot Blockers and Black SS',
 		instructions:'<p>Activate or Deactivate Plugin Julia SS Check on your application (Status checkbox)<br></p><p>This plugin will kick players with Black SS and will create a screenshot for every player on first server visit. Once we recive a screenshot this player will not be checked further. If they leave before we have the screenshot they will be again SS-ed, also they will be kicked if they have a black SS and checked again when they rejoin.</p>',
+		min_power:1,
+		require_cronjob:false,
+		cron_job_time_intervals:2,
+		status:false
+	}),
+	new Plugins({
+		name:'Julia VPN Detection',
+		category:'julia',
+		description:'Kick VPN Clients',
+		instructions:'<p>Activate or Deactivate Plugin Julia VPN Detection on your application (Status checkbox)<br></p><p>This plugin will detect and kick clients with vpn connection. The VPN address will be added to the database, and in the future that IP address will be blacklisted, this way we dont need to check same IPs again. In one minute, a maximum of 45 IP addresses can be checked for free, therefore, at the start, server administrators will not be checked, nor will players who have already been checked once with the same IP address.</p>',
 		min_power:1,
 		require_cronjob:false,
 		cron_job_time_intervals:2,
