@@ -1,9 +1,9 @@
 {
     "footer": {
-        "footer_rights": "© All rights reserved"
+        "footer_rights": "© Minden jog fenntartva"
     },
 
     "loading": {
-        "loading_message": "Please wait"
+        "loading_message": "Kérlek várj"
     }
 }

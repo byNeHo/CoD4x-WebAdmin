@@ -1,17 +1,17 @@
 {  
     "main_navigation": {
-        "home": "Home",
-        "members": "Members",
-        "banlist": "Banlist",
-        "players_data": "Players Data",
-        "latest_notifications":"Latest Notifications",
-        "view_all":"View All",
-        "login":"Login",
-        "register":"Register",
+        "home": "Kezdőlap",
+        "members": "Tagok",
+        "banlist": "Eltiltottak listája",
+        "players_data": "Játékosok adatai",
+        "latest_notifications":"Legújabb értesítések",
+        "view_all":"Összes megtekintése",
+        "login":"Bejelentkezés",
+        "register":"Regisztráció",
         "admin":"Admin",
-        "profile":"Profile",
-        "logout":"Logout",
-        "my_profile":"My Profile",
-        "cheater_reports":"Cheater Reports"
+        "profile":"Profil",
+        "logout":"Kijelentkezés",
+        "my_profile":"Profilom",
+        "cheater_reports":"Csallójelentések"
     }
 }
