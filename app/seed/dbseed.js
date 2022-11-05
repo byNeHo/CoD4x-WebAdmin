@@ -4,8 +4,8 @@ const config = require('../config/config');
 
 
 const options = {
-	useNewUrlParser:true,
-	useUnifiedTopology: true
+	useNewUrlParser:false,
+	useUnifiedTopology: false
   };
   var dbURI = "mongodb://" + 
 			  encodeURIComponent(config.db.username) + ":" + 
@@ -13,7 +13,7 @@ const options = {
 			  config.db.host + ":" + 
 			  config.db.port + "/" + 
 			  config.db.name;
-  mongoose.connect(dbURI);
+  mongoose.connect(dbURI, options);
   
   // Throw an error if the connection fails
   mongoose.connection.on('error', function(err) {
