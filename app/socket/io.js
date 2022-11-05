@@ -5,7 +5,7 @@ mongoose.BluebirdPromise = require('bluebird');
 const passport = require('passport');
 const passportSocketIo = require("passport.socketio");
 const flash    = require('connect-flash');
-const validator = require('express-validator');
+const { check, oneOf, validationResult } = require('express-validator');
 const morgan       = require('morgan');
 const cookieParser = require('cookie-parser');
 const bodyParser   = require('body-parser');
@@ -17,7 +17,7 @@ const NotificationsSender = require("../models/notificationssender");
 
 
 const Shoutbox = require("../models/shoutbox");
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo');
 const config = require('../config/config');
 //Models
 const Users = require("../models/user");
@@ -33,11 +33,22 @@ const md = require('markdown-it')({
 	typographer: true
 });
 
+var dbURI = "mongodb://" + 
+			encodeURIComponent(config.db.username) + ":" + 
+			encodeURIComponent(config.db.password) + "@" + 
+			config.db.host + ":" + 
+			config.db.port + "/" + 
+			config.db.name;
+			const options = {
+				useNewUrlParser:true,
+				useUnifiedTopology: true
+			  };
+			  mongoose.connect(dbURI, options); 
 io.use(passportSocketIo.authorize({
   cookieParser: cookieParser,
   key:'connect.sid',
   secret:config.sessionSecret,
-  store: new MongoStore({ mongooseConnection: mongoose.connection, ttl: 2 * 24 * 60 * 60 }),
+  store: MongoStore.create({ mongoUrl: dbURI, ttl: 2 * 24 * 60 * 60 }),
 }));
 
 //Connect

@@ -13,7 +13,7 @@ const BluebirdPromise  = require('bluebird');
 mongoose.Promise = require('bluebird');
 const passport = require('passport');
 const flash    = require('connect-flash');
-const validator = require('express-validator');
+const { check, oneOf, validationResult } = require('express-validator');
 const morgan       = require('morgan');
 const session      = require('express-session');
 const moment = require('moment');
@@ -26,17 +26,20 @@ const app = express();
 
 app.use(cors());
 
-const MongoStore = require('connect-mongo')(session);
+const MongoStore = require('connect-mongo');
 const config = require('./app/config/config');
+const options = {
+  useNewUrlParser:true,
+  useUnifiedTopology: true
+};
 var dbURI = "mongodb://" + 
 			encodeURIComponent(config.db.username) + ":" + 
 			encodeURIComponent(config.db.password) + "@" + 
 			config.db.host + ":" + 
 			config.db.port + "/" + 
 			config.db.name;
-mongoose.connect(dbURI, {useNewUrlParser:true, useUnifiedTopology: true});
-mongoose.set('useFindAndModify', false);
-mongoose.set('useCreateIndex', true);
+mongoose.connect(dbURI, options);
+
 // Throw an error if the connection fails
 mongoose.connection.on('error', function(err) {
 	if(err){
@@ -95,8 +98,7 @@ app.use(morgan('dev'));
 app.use(cookieParser());
 app.use(bodyParser.json({limit: '5mb'}));
 app.use(bodyParser.urlencoded({ limit: '5mb', extended: false }));
-app.use(validator());
-app.use(session({secret: config.sessionSecret,resave: false,cookie: { maxAge: (24 * 3600 * 1000 * 14)},saveUninitialized: false,store: new MongoStore({ mongooseConnection: mongoose.connection,ttl: 2 * 24 * 60 * 60 })}));
+app.use(session({secret: config.sessionSecret,resave: false,cookie: { maxAge: (24 * 3600 * 1000 * 14)},saveUninitialized: false,store: MongoStore.create({ mongoUrl: dbURI,ttl: 2 * 24 * 60 * 60 })}));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(passport.authenticate('remember-me'));
