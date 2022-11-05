@@ -4,8 +4,8 @@ const config = require('../config/config');
 
 
 const options = {
-	useNewUrlParser:true,
-	useUnifiedTopology: true
+	//useNewUrlParser:true,
+	//useUnifiedTopology: true
   };
   var dbURI = "mongodb://" + 
 			  encodeURIComponent(config.db.username) + ":" + 
@@ -60,6 +60,9 @@ var done = 0;
 for (var i = 0; i < users.length; i++){
 	users[i].save(function (err, result){
 		done++;
+		if(done === users.length){
+			exit();
+		}
 	});
 }
 
@@ -78,6 +81,9 @@ var done = 0;
 for (var i = 0; i < appversions.length; i++){
 	appversions[i].save(function (err, result){
 		done++;
+		if(done === appversions.length){
+			exit();
+		}
 	});
 }
 
@@ -95,6 +101,9 @@ var done = 0;
 for (var i = 0; i < cod4xservers.length; i++){
 	cod4xservers[i].save(function (err, result){
 		done++;
+		if(done === cod4xservers.length){
+			exit();
+		}
 	});
 }
 
@@ -270,6 +279,9 @@ var done = 0;
 for (var i = 0; i < plugins.length; i++){
 	plugins[i].save(function (err, result){
 		done++;
+		if(done === plugins.length){
+			exit();
+		}
 	});
 }
 
@@ -301,6 +313,9 @@ var done = 0;
 for (var i = 0; i < extrarcons.length; i++){
 	extrarcons[i].save(function (err, result){
 		done++;
+		if(done === extrarcons.length){
+			exit();
+		}
 	});
 }
 
@@ -428,6 +443,9 @@ var done = 0;
 for (var i = 0; i < tembandurations.length; i++){
 	tembandurations[i].save(function (err, result){
 		done++;
+		if(done === tembandurations.length){
+			exit();
+		}
 	});
 }
 
@@ -501,6 +519,9 @@ var done = 0;
 for (var i = 0; i < colors.length; i++){
 	colors[i].save(function (err, result){
 		done++;
+		if(done === colors.length){
+			exit();
+		}
 	});
 }
 
@@ -598,6 +619,9 @@ var done = 0;
 for (var i = 0; i < usermaps.length; i++){
 	usermaps[i].save(function (err, result){
 		done++;
+		if(done === usermaps.length){
+			exit();
+		}
 	});
 }
 
@@ -635,6 +659,9 @@ var done = 0;
 for (var i = 0; i < admingroups.length; i++){
 	admingroups[i].save(function (err, result){
 		done++;
+		if(done === admingroups.length){
+			exit();
+		}
 	});
 }
 
