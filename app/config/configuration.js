@@ -1,5 +1,5 @@
 const flash    = require('connect-flash');
-const validator = require('express-validator');
+const { check, oneOf, validationResult } = require('express-validator');
 const morgan       = require('morgan');
 const session      = require('express-session');
 const formatNum = require('format-num');

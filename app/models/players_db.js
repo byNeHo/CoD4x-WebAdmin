@@ -22,6 +22,7 @@ const PlayersdataSchema = new Schema({
     player_emblem_color: {type: Number, default: 0},
     player_emblem_text: {type: String, default: "I love CoD4"},
     player_icon: {type: Number, default: 1},
+    is_vpn:  { type: Boolean, default:false}
 }, { timestamps: true });
 
 PlayersdataSchema.plugin(mongoosePaginate);

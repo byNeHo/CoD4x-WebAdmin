@@ -2,7 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const csrf = require('csurf');
-const validator = require('express-validator');
+const { check, oneOf, validationResult } = require('express-validator');
 const Token = require('../models/token');
 const auth = require('./authentication');
 const async = require('async');
