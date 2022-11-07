@@ -61,7 +61,8 @@ for (var i = 0; i < users.length; i++){
 	users[i].save(function (err, result){
 		done++;
 		if(done === users.length){
-			exit();
+			console.log('Default User Done');
+			//exit();
 		}
 	});
 }
@@ -72,7 +73,8 @@ for (var i = 0; i < users.length; i++){
 
 var appversions = [
 	new Appversion({
-			'name': 'CoD4x-WebAdmin'
+			'name': 'CoD4x-WebAdmin',
+			'local_version': 'v1.0.0'
 	})
 ];
 
@@ -82,7 +84,8 @@ for (var i = 0; i < appversions.length; i++){
 	appversions[i].save(function (err, result){
 		done++;
 		if(done === appversions.length){
-			exit();
+			console.log('App version Done');
+			//exit();
 		}
 	});
 }
@@ -102,7 +105,8 @@ for (var i = 0; i < cod4xservers.length; i++){
 	cod4xservers[i].save(function (err, result){
 		done++;
 		if(done === cod4xservers.length){
-			exit();
+			console.log('Cod4X version Done');
+			//exit();
 		}
 	});
 }
@@ -280,7 +284,8 @@ for (var i = 0; i < plugins.length; i++){
 	plugins[i].save(function (err, result){
 		done++;
 		if(done === plugins.length){
-			exit();
+			console.log('Plugins Done');
+			//exit();
 		}
 	});
 }
@@ -314,7 +319,8 @@ for (var i = 0; i < extrarcons.length; i++){
 	extrarcons[i].save(function (err, result){
 		done++;
 		if(done === extrarcons.length){
-			exit();
+			console.log('Extra Rcon Done');
+			//exit();
 		}
 	});
 }
@@ -444,7 +450,8 @@ for (var i = 0; i < tembandurations.length; i++){
 	tembandurations[i].save(function (err, result){
 		done++;
 		if(done === tembandurations.length){
-			exit();
+			console.log('TB Durations Done');
+			//exit();
 		}
 	});
 }
@@ -520,7 +527,8 @@ for (var i = 0; i < colors.length; i++){
 	colors[i].save(function (err, result){
 		done++;
 		if(done === colors.length){
-			exit();
+			console.log('Colors Done');
+			//exit();
 		}
 	});
 }
@@ -620,7 +628,8 @@ for (var i = 0; i < usermaps.length; i++){
 	usermaps[i].save(function (err, result){
 		done++;
 		if(done === usermaps.length){
-			exit();
+			console.log('Maps Done');
+			//exit();
 		}
 	});
 }
@@ -660,7 +669,8 @@ for (var i = 0; i < admingroups.length; i++){
 	admingroups[i].save(function (err, result){
 		done++;
 		if(done === admingroups.length){
-			exit();
+			console.log('Admin Groups Done');
+			//exit();
 		}
 	});
 }
@@ -791,6 +801,7 @@ for (var i = 0; i < server_commands.length; i++){
 	server_commands[i].save(function (err, result){
 		done++;
 		if(done === server_commands.length){
+			console.log('Server Commands Done');
 			exit();
 		}
 	});
