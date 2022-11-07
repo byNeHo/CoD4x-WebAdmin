@@ -1,4 +1,5 @@
 // load all the things we need
+const { check, oneOf, validationResult } = require('express-validator');
 const LocalStrategy    = require('passport-local').Strategy;
 const FacebookStrategy = require('passport-facebook').Strategy;
 const TwitterStrategy  = require('passport-twitter').Strategy;
@@ -88,10 +89,10 @@ module.exports = function(passport) {
         process.nextTick(function() {
             // if the user is not already logged in:
             if (!req.user) {
-                req.check('user_name', req.t("passport:input_validation.user_name")).notEmpty();
-                req.check('email', req.t("passport:input_validation.email")).notEmpty().isEmail();
-                req.check('password', req.t("passport:input_validation.password")).notEmpty().isLength({min:6});
-                req.check('confirmPassword', req.t("passport:input_validation.confirmPassword")).equals(req.body.password);
+                req.checkBody('user_name', req.t("passport:input_validation.user_name")).notEmpty();
+                req.checkBody('email', req.t("passport:input_validation.email")).notEmpty().isEmail();
+                req.checkBody('password', req.t("passport:input_validation.password")).notEmpty().isLength({min:6});
+                req.checkBody('confirmPassword', req.t("passport:input_validation.confirmPassword")).equals(req.body.password);
 
 
                 var errors =  req.getValidationResult()
