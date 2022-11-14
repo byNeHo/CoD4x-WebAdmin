@@ -238,9 +238,10 @@ module.exports = {
 	},
 
 	getLogout: function(req, res, next) {
-		res.clearCookie('rememberMe');
-        req.logout();
-        res.redirect('/user/login');
+		req.session.destroy(function() {
+			res.clearCookie('rememberMe');
+			res.redirect('/user/login');
+		});      
 	},
 
 	ScreenshotNotificationUpdate: function(req, res, next) {

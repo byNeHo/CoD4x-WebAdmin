@@ -2,7 +2,7 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const csrf = require('csurf');
-const { check, oneOf, validationResult } = require('express-validator');
+const { check } = require("express-validator");
 const Token = require('../models/token');
 const auth = require('./authentication');
 const async = require('async');
@@ -27,14 +27,13 @@ module.exports = function(router, passport){
 	router.post('/upload', isLoggedIn, user.uploadAvatar);
 	router.get('/delete-avatar', isLoggedIn, user.RemoveAvatar);
 	router.get('/login', notLoggedIn, user.getLogin);
-	router.get('/signup', notLoggedIn, user.getSignup);
+	router.get('/signup', notLoggedIn, validate.NewSignUp, user.getSignup);
 	router.get('/profile', isLoggedIn, user.getProfile);
 	router.get('/logout', isLoggedIn, user.getLogout);
 	router.get('/reset-password', notLoggedIn, user.getResetPassword);
 	router.post('/reset-password', notLoggedIn, user.ResetPasswordUpdate);
 	router.get('/update-password/:token', notLoggedIn, user.getNewPassword);
 	router.post('/update-password', notLoggedIn, validate.NewPasswordUpdate, user.NewPasswordUpdate);
-
 	// facebook -------------------------------
 	// send to facebook to do the authentication
 	router.get('/auth/facebook', passport.authenticate('facebook', { scope : 'email' }));
@@ -186,9 +185,9 @@ module.exports = function(router, passport){
 	});
 	// process the login form
 	router.post('/login', passport.authenticate('local-login', {
-		successRedirect : '/user/profile', // redirect to the secure profile section
+		successReturnToOrRedirect : '/user/profile', // redirect to the secure profile section
 		failureRedirect : '/user/login', // redirect back to the signup page if there is an error
-		failureFlash : true // allow flash messages
+		failureMessage : true // allow flash messages
 		}),auth.issueCookie,
 			function(req, res) {
 			res.redirect('/');
@@ -218,7 +217,8 @@ function captchaVerification(req, res, next) {
 function isLoggedIn(req, res, next) {
 	if (req.isAuthenticated())
 		return next();
-
+	else
+		res.redirect('/');
 	
 }
 
