@@ -1,14 +1,14 @@
 {
     "local_login": {
-        "error_no_user": "There is no user with this Email!",
-        "error_wrong_password": "Oops! Wrong password!",
-        "error_user_exist": "There is already an account with this Email!"
+        "error_no_user": "Nincs felhasználó ezzel az e-mail-címmel!",
+        "error_wrong_password": "Hoppá! Rossz jelszó!",
+        "error_user_exist": "Már van fiók ezzel az e-mail címmel!"
     },
 
     "input_validation": {
-        "user_name": "Enter a username!",
-        "email": "Invalid email!",
-        "password": "Invalid password, at least 6 characters!",
-        "confirmPassword": "Passwords do not match!"
+        "user_name": "Adj meg egy felhasználónevet!",
+        "email": "Érvénytelen e-mail!",
+        "password": "Érvénytelen jelszó, legalább 6 karakter!",
+        "confirmPassword": "A jelszavak nem egyeznek!"
     }
 }
